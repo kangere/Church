@@ -20,7 +20,7 @@ public class YouthMinistry extends AppCompatActivity {
         //toolbar initisialization
         toolbar = (Toolbar) findViewById(R.id.youthToolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Youth");
+        toolbar.setTitle("Youth Ministry");
         toolbar.setTitleTextColor(Color.WHITE);
 
         //drawerlayout init

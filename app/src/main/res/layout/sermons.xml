@@ -1,0 +1,37 @@
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sermons_drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="material.kangere.com.tandaza.Sermons">
+
+        <include
+            android:id="@+id/sermonsToolbar"
+            layout="@layout/app_bar" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hello_world" />
+
+    </LinearLayout>
+
+    <fragment
+        android:id="@+id/sermons_fragment_navigation_drawer"
+        android:name="material.kangere.com.tandaza.NavigationFragment"
+
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:layout="@layout/navigation_fragment"
+        tools:layout="@layout/navigation_fragment" />
+</android.support.v4.widget.DrawerLayout>

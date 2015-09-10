@@ -8,16 +8,19 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
 import it.neokree.materialtabs.MaterialTabListener;
 
 
-public class About extends ActionBarActivity implements MaterialTabListener {
+public class About extends AppCompatActivity implements MaterialTabListener {
 
     private Toolbar toolbar;
     private MaterialTabHost materialTabHost;
@@ -52,6 +55,7 @@ public class About extends ActionBarActivity implements MaterialTabListener {
         materialTabHost = (MaterialTabHost) findViewById(R.id.aboutTabHost);
         pager = (ViewPager) findViewById(R.id.aboutviewPager);
 
+
         //init view pager
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(adapter);
@@ -64,7 +68,7 @@ public class About extends ActionBarActivity implements MaterialTabListener {
 
             @Override
             public void onPageSelected(int position) {
-                materialTabHost.setSelectedNavigationItem(position);
+               materialTabHost.setSelectedNavigationItem(position);
             }
 
             @Override
@@ -82,7 +86,12 @@ public class About extends ActionBarActivity implements MaterialTabListener {
                             .setTabListener(this)
             );
         }
-        //about fragment init
+
+
+        /*SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.aboutTabs);
+        viewPagerTab.setViewPager(pager);*/
+
+
 
     }
 
@@ -134,7 +143,19 @@ public class About extends ActionBarActivity implements MaterialTabListener {
 
         public Fragment getItem(int num) {
 
-                     return  new AboutTandaza();
+            switch (num) {
+                case 0:
+                    // About fragment
+                    return new AboutTandaza();
+                case 1:
+                    // Games fragment activity
+                    return new Vision();
+                case 2:
+                    // Movies fragment activity
+                    return new Team();
+            }
+
+            return null;
 
 
 

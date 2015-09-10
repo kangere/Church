@@ -61,20 +61,25 @@ public class Ministries extends AppCompatActivity implements MinistryRecyclerAda
     public void itemClicked(View v,int position){
         switch(position){
             case 0:
-                startActivity(new Intent(this,YouthMinistry.class));
+                startClass(YouthMinistry.class);
                 break;
             case 1:
-                startActivity(new Intent(this, ChildrenMinistry.class));
+                startClass(ChildrenMinistry.class);
                 break;
             case 2:
-                Toast.makeText(this,"Chosen " + position,Toast.LENGTH_LONG).show();
+                startClass(SarahsTreasure.class);
                 break;
             case 3:
-                Toast.makeText(this,"Chosen " + position,Toast.LENGTH_LONG).show();
+                startClass(KingsMen.class);
                 break;
             
         }
 
+    }
+
+    //method to start class from selected card, takes in the class name as parameter
+    public void startClass(Class classes){
+        startActivity(new Intent(this, classes));
     }
 
     @Override

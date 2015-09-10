@@ -8,11 +8,14 @@
     <string name="title_activity_ministries">Ministries</string>
     <string name="title_activity_sermons">Sermons</string>
     <string name="title_activity_connect">Connect</string>
-    <string name="title_activity_upcoming_events">UpcomingEvents</string>
+    <string name="title_activity_upcoming_events">Upcoming Events</string>
     <string name="title_activity_past_events">PastEvents</string>
     <string name="title_activity_give">Give</string>
     <string name="title_activity_media">Media</string>
     <string name="title_activity_contact">Contact</string>
-    <string name="title_activity_youth_ministry">YouthMinistry</string>
-    <string name="title_activity_children_ministry">ChildrenMinistry</string>
+    <string name="title_activity_youth_ministry">Youth Ministry</string>
+    <string name="title_activity_children_ministry">Children Ministry</string>
+    <string name="title_activity_sarahs_treasure">Sarah\'s Treasure</string>
+    <string name="title_activity_kings_men">Kingsmen</string>
+    <string name="dev">Application in Development </string>
 </resources>

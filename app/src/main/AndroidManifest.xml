@@ -60,6 +60,14 @@
             android:name=".ChildrenMinistry"
             android:label="@string/title_activity_children_ministry" >
         </activity>
+        <activity
+            android:name=".SarahsTreasure"
+            android:label="@string/title_activity_sarahs_treasure" >
+        </activity>
+        <activity
+            android:name=".KingsMen"
+            android:label="@string/title_activity_kings_men" >
+        </activity>
     </application>
 
 </manifest>

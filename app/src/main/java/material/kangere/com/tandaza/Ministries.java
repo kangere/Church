@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Ministries extends ActionBarActivity implements MinistryRecyclerAdapter.ClickListener {
+public class Ministries extends AppCompatActivity implements MinistryRecyclerAdapter.ClickListener {
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
@@ -63,7 +64,7 @@ public class Ministries extends ActionBarActivity implements MinistryRecyclerAda
                 startActivity(new Intent(this,YouthMinistry.class));
                 break;
             case 1:
-                Toast.makeText(this,"Chosen " + position,Toast.LENGTH_LONG).show();
+                startActivity(new Intent(this, ChildrenMinistry.class));
                 break;
             case 2:
                 Toast.makeText(this,"Chosen " + position,Toast.LENGTH_LONG).show();

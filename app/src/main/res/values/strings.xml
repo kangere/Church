@@ -14,4 +14,5 @@
     <string name="title_activity_media">Media</string>
     <string name="title_activity_contact">Contact</string>
     <string name="title_activity_youth_ministry">YouthMinistry</string>
+    <string name="title_activity_children_ministry">ChildrenMinistry</string>
 </resources>

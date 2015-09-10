@@ -56,6 +56,10 @@
             android:name=".YouthMinistry"
             android:label="@string/title_activity_youth_ministry" >
         </activity>
+        <activity
+            android:name=".ChildrenMinistry"
+            android:label="@string/title_activity_children_ministry" >
+        </activity>
     </application>
 
 </manifest>

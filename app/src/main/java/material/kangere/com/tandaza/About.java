@@ -1,5 +1,6 @@
 package material.kangere.com.tandaza;
 
+import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,9 +11,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
 import it.neokree.materialtabs.MaterialTab;
@@ -52,8 +55,11 @@ public class About extends AppCompatActivity implements MaterialTabListener {
         aboutArray = getResources().getStringArray(R.array.About);
 
         //tabs initialization
-        materialTabHost = (MaterialTabHost) findViewById(R.id.aboutTabHost);
         pager = (ViewPager) findViewById(R.id.aboutviewPager);
+        /*PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        tabs.setViewPager(pager);*/
+        materialTabHost = (MaterialTabHost) findViewById(R.id.aboutTabHost);
+
 
 
         //init view pager
@@ -145,8 +151,10 @@ public class About extends AppCompatActivity implements MaterialTabListener {
 
             switch (num) {
                 case 0:
+                    Log.d("About"," populates about fragment");
                     // About fragment
-                    return new AboutTandaza();
+                    AboutTandaza ab = new AboutTandaza();
+                    return ab;
                 case 1:
                     // Games fragment activity
                     return new Vision();

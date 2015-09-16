@@ -17,12 +17,17 @@ public class AboutTandaza extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //View layout = inflater.inflate(R.layout.about_fragment,container);
+        View layout = inflater.inflate(R.layout.about_fragment,null);
         TextView text = new TextView(container.getContext());
         text.setText("This is in beta testing");
         text.setGravity(Gravity.CENTER);
 
 
-        return text;
+        return layout;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 }

@@ -18,4 +18,12 @@
     <string name="title_activity_sarahs_treasure">Sarah\'s Treasure</string>
     <string name="title_activity_kings_men">Kingsmen</string>
     <string name="dev">Application in Development </string>
+   <string name="aboutText">Our Beliefs\n
+    We believe \n
+    1.In the unity of the Father, the Son and the Holy Spirit in the Godhead \n
+    2.The incarnation, sinless life, atoning death, bodily resurrection, ascension to the right hand of the Father and the personal return in glory of Jesus Christ\n
+    3.The agency of the Holy Spirit in the conversion of sinners, the sanctification of believers, and the ministry of the Church\n
+     4.The universal sinfulness and guilt of man, and that salvation is only by the Grace of God through repentance from sin and faith in Jesus Christ.\n
+    5.The Bible as an inspired inerrant word of God, authoritative inall matters of faith and practice for the believers\n
+    6.The priesthood of the believers</string>
 </resources>

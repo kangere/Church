@@ -12,7 +12,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.HashMap;
+
+import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
 
 /**
  * Created by user on 7/2/2015.
@@ -25,6 +30,8 @@ public class NavigationFragment extends Fragment {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout drawerLayout;
     private ListView listView;
+    private TextView tvname,tvemail;
+    private SQLiteHandler db;
 
     public NavigationFragment(){
 
@@ -49,6 +56,20 @@ public class NavigationFragment extends Fragment {
 
         //Custom Array Adapter
         NavAdapter navAdapter = new NavAdapter(getActivity(), icons, navigationArray);
+
+        //name email init
+        tvname = (TextView)layout.findViewById(R.id.name_nav);
+        tvemail = (TextView) layout.findViewById(R.id.email_nav);
+        db = new SQLiteHandler(getActivity());
+        HashMap<String, String> user = db.getUserDetails();
+
+        String name = user.get("name");
+        String email = user.get("email");
+
+        tvname.setText(name);
+        tvemail.setText(email);
+
+
 
         //attach adapter to listview
         listView.setAdapter(navAdapter);

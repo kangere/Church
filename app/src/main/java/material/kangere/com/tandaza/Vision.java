@@ -15,9 +15,7 @@ public class Vision extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        TextView text = new TextView(container.getContext());
-        text.setText("This is the Vision");
-        text.setGravity(Gravity.CENTER);
-        return text;
+       View Layout = inflater.inflate(R.layout.vision,null);
+        return Layout;
     }
 }

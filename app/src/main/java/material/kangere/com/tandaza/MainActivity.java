@@ -12,10 +12,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -27,6 +32,10 @@ public class MainActivity extends ActionBarActivity {
     private ListView mList;
     private ActionBarDrawerToggle mDrawerToggle;
     Toolbar toolbar;
+    private Button btnLogout;
+    private TextView txtName,txtEmail;
+    private SQLiteHandler db;
+    private SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +53,38 @@ public class MainActivity extends ActionBarActivity {
         NavigationFragment navigationFragment = (NavigationFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         navigationFragment.setup(mDrawer,toolbar);
 
+        txtName = (TextView) findViewById(R.id.name);
+        txtEmail = (TextView) findViewById(R.id.email);
+        btnLogout = (Button) findViewById(R.id.btnLogout);
+
+        // SqLite database handler
+        db = new SQLiteHandler(getApplicationContext());
+
+        // session manager
+        session = new SessionManager(getApplicationContext());
+
+        if (!session.isLoggedIn()) {
+            logoutUser();
+        }
+
+        // Fetching user details from sqlite
+        HashMap<String, String> user = db.getUserDetails();
+
+        String name = user.get("name");
+        String email = user.get("email");
+
+        // Displaying the user details on the screen
+        txtName.setText(name);
+        txtEmail.setText(email);
+
+        // Logout button click event
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                logoutUser();
+            }
+        });
     }
 
     @Override
@@ -66,5 +107,15 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    private void logoutUser() {
+        session.setLogin(false);
+
+        db.deleteUsers();
+
+        // Launching the login activity
+        Intent intent = new Intent(MainActivity.this, Login.class);
+        startActivity(intent);
+        finish();
     }
 }

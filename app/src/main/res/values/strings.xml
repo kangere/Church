@@ -26,4 +26,26 @@
      4.The universal sinfulness and guilt of man, and that salvation is only by the Grace of God through repentance from sin and faith in Jesus Christ.\n
     5.The Bible as an inspired inerrant word of God, authoritative inall matters of faith and practice for the believers\n
     6.The priesthood of the believers</string>
+    <string name="vision">
+
+A community of transformed persons connected through small groups and courageous witnesses of Christ in every sphere of society\n
+
+Loving God, Connecting with People, Transforming Communities.
+    </string>
+    <string name="visionHeader">
+        Vision And Mission
+    </string>
+    <string name="title_activity_register">Register</string>
+    <string name="title_activity_login">Login</string>
+    <string name="btn_link_to_register">Not a member? Sign up now.</string>
+    <string name="btn_link_to_login">Already registred! Login Me.</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_confirmpassword">Confirm Password</string>
+    <string name="hint_name">First Name</string>
+    <string name="hint_lname">Last Name</string>
+    <string name="btn_login">LOGIN</string>
+    <string name="btn_register">REGISTER</string>
+    <string name="title_activity_notifications_settings">Notifications_settings</string>
+    <string name="btn_logout">Log Out</string>
 </resources>

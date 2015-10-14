@@ -28,5 +28,31 @@
         <item>Team</item>
 
     </string-array>
+    <string-array name="team">
+        <item>Ken Kamau-Senior Pastor(On Sabbatical)</item>
+        <item>David Obuki-Senior Pastor Ag</item>
+        <item>Peter Mwangi- Associate Pastor Ag</item>
+        <item>Emmah Nungari-Pastoral Trainee</item>
+        <item>Esther Opiyo-District CoordinationTeam</item>
+        <item>Jackson Kamau-District Coordination Team</item>
+        <item>Arnold Omondi-Creative Arts</item>
+        <item>Yvonne Karongo- Worship and Missions</item>
+        <item>Peter Mwanzia-Children’s Ministry</item>
+        <item>Beryl Karabilo-Children’s Ministry</item>
+        <item>Mirriam Wangeci-Youth Ministry</item>
+        <item>Moses Musau-Youth Ministry</item>
+        <item>Linda Waweru-HR and Administration</item>
+        <item>Grace Makandi-Finance</item>
+        <item>Carol Muthoni-Administration</item>
+        <item>Mary Minayo-Administration</item>
+        <item>Denis Ochieng – Tandaza Celebration Centre</item>
+        <item>Monica Minani-Tandaza Celebration Centre</item>
+        <item>Paul Juma-Tandaza Celebration Centre</item>
+        <item>Sam Kimiti-Tandaza Celebration Centre</item>
+        <item>Wacuka Kamau-Tandaza Trust</item>
+        <item>John Ndubai-Tandaza Trust</item>
+    </string-array>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

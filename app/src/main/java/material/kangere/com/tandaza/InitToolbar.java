@@ -25,7 +25,7 @@ public class InitToolbar {
     public InitToolbar(AppCompatActivity a){
         this.a = a;
     }
-    public void ClassInitisialisation(int navigation_fragment_id,int toolbarID,int drawerlayout_id){
+    public  void ClassInitisialisation(int navigation_fragment_id,int toolbarID,int drawerlayout_id){
         Toolbar  toolbar = (Toolbar) a.findViewById(toolbarID);
         a.setSupportActionBar(toolbar);
         toolbar.setTitle("Youth Ministry");

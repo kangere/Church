@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/toolBarMakeNote"
+        layout="@layout/app_bar" />
+
+    <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+        android:id="@+id/Make_Note_drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolBarMakeNote"
+
+        >
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+
+                tools:context="material.kangere.com.tandaza.MakeNotification"
+                tools:showIn="@layout/activity_make_notification">
+
+
+                <Button
+                    android:id="@+id/bPick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Pick an image" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:padding="10dp"
+                    android:text="Enter Notification Title Below"
+                    android:textColor="@color/accent_color"
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:id="@+id/etYouthTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Notification title here" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:padding="10dp"
+                    android:text="Choose Ministry"
+                    android:textColor="@color/accent_color"
+                    android:textSize="20dp" />
+
+                <Spinner
+                    android:id="@+id/sMinistries"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:padding="10dp"
+                    android:text="Enter Notification Content Below"
+                    android:textColor="@color/accent_color"
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:id="@+id/etYouthContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:hint="Enter Notification content here" />
+
+                <Button
+                    android:id="@+id/bNoteUpload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Upload" />
+
+
+            </LinearLayout>
+        </ScrollView>
+
+        <fragment
+            android:id="@+id/Make_Note_fragment_navigation_drawer"
+            android:name="material.kangere.com.tandaza.NavigationFragment"
+
+            android:layout_width="280dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:layout="@layout/navigation_fragment"
+            tools:layout="@layout/navigation_fragment" />
+    </android.support.v4.widget.DrawerLayout>
+</RelativeLayout>

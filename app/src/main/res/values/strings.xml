@@ -48,4 +48,6 @@ Loving God, Connecting with People, Transforming Communities.
     <string name="btn_register">REGISTER</string>
     <string name="title_activity_notifications_settings">Notifications_settings</string>
     <string name="btn_logout">Log Out</string>
+    <string name="title_activity_make_notification">Create Notification</string>
+    <string name="title_activity_show__notifications">Notifications</string>
 </resources>

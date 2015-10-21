@@ -24,8 +24,8 @@ import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
  */
 public class NavigationFragment extends Fragment {
 
-    private int[] icons = {R.drawable.ic_home, R.drawable.ic_about, R.drawable.ic_ministries, R.drawable.ic_sermons, R.drawable.ic_connect, R.drawable.ic_event,
-            R.drawable.ic_event,R.drawable.ic_give, R.drawable.ic_media, R.drawable.ic_contact};
+    private int[] icons = {R.drawable.ic_home,  R.drawable.ic_sermons,R.drawable.ic_ministries,R.drawable.ic_connect,R.drawable.ic_give, R.drawable.ic_contact,
+            R.drawable.ic_about,R.drawable.ic_contact};
     private String[] navigationArray;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout drawerLayout;
@@ -82,32 +82,24 @@ public class NavigationFragment extends Fragment {
                         startActivity(new Intent(getActivity(), MainActivity.class));
                         break;
                     case 1:
-                        startActivity(new Intent(getActivity(), About.class));
+                        startActivity(new Intent(getActivity(), Show_Notifications.class));
                         break;
                     case 2:
                         startActivity(new Intent(getActivity(), Ministries.class));
                         break;
                     case 3:
-                        startActivity(new Intent(getActivity(), Sermons.class));
-                        break;
-                    case 4:
                         startActivity(new Intent(getActivity(), Connect.class));
                         break;
-                    case 5:
-                        startActivity(new Intent(getActivity(), UpcomingEvents.class));
-                        break;
-                    case 6:
-                        startActivity(new Intent(getActivity(), PastEvents.class));
-                        break;
-                    case 7:
+                    case 4:
                         startActivity(new Intent(getActivity(), Give.class));
                         break;
-                    case 8:
-                        startActivity(new Intent(getActivity(), Media.class));
-                        break;
-                    case 9:
+                    case 5:
                         startActivity(new Intent(getActivity(), Contact.class));
                         break;
+                    case 6:
+                        startActivity(new Intent(getActivity(), About.class));
+                        break;
+
                 }
             }
         });

@@ -11,15 +11,12 @@
 
     <string-array name="navigation">
         <item>Home</item>
-        <item>About</item>
+        <item>News</item>
         <item>Ministries</item>
-        <item>Sermons</item>
         <item>Connect</item>
-        <item>Events</item>
-        <item>Past Events</item>
         <item>Give</item>
-        <item>Media</item>
         <item>Contact</item>
+        <item>About</item>
 
     </string-array>
     <string-array name="About">
@@ -52,7 +49,17 @@
         <item>Wacuka Kamau-Tandaza Trust</item>
         <item>John Ndubai-Tandaza Trust</item>
     </string-array>
+    <string-array name="ministries">
+        <item>Youth Ministry</item>
+        <item>Children Ministry</item>
+        <item>Sarahs Treasure</item>
+        <item>Kingsmen</item>
+        <item>Marriage Ministry</item>
+        <item>BOFU</item>
+    </string-array>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

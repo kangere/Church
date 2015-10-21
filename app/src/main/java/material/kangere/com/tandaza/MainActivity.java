@@ -25,8 +25,7 @@ import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
 
 public class MainActivity extends ActionBarActivity {
 
-    private int[] icons = {R.drawable.ic_home, R.drawable.ic_about, R.drawable.ic_ministries, R.drawable.ic_sermons, R.drawable.ic_connect, R.drawable.ic_event,
-            R.drawable.ic_event,R.drawable.ic_give, R.drawable.ic_media, R.drawable.ic_contact};
+
     private String[] mNav;
     private DrawerLayout mDrawer;
     private ListView mList;

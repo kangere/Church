@@ -31,6 +31,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import material.kangere.com.tandaza.videoimageupload.UploadActivity;
+
 public class MakeNotification extends AppCompatActivity {
 
     // JSON Node names
@@ -40,6 +42,7 @@ public class MakeNotification extends AppCompatActivity {
     private EditText title,content;
     private Spinner ministries;
     private Button upload,pick;
+
     public String file_path;
     private String y_title,y_content,n_ministries ;
     private static final int PICK_FROM_GALLERY = 2;
@@ -58,13 +61,11 @@ public class MakeNotification extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_make_notification);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setContentView(R.layout.content_make_notification);
+
 
         //Toolbar init
-        InitToolbar tb = new InitToolbar(this);
-        tb.ClassInitisialisation(R.id.Make_Note_fragment_navigation_drawer, R.id.toolBarMakeNote, R.id.Make_Note_drawer_layout);
+        InitToolbar.ClassInitisialisation(this,R.id.Make_Note_fragment_navigation_drawer, R.id.toolBarMakeNote, R.id.Make_Note_drawer_layout);
 
 
         upload  = (Button) findViewById(R.id.bNoteUpload);
@@ -72,25 +73,17 @@ public class MakeNotification extends AppCompatActivity {
         title = (EditText) findViewById(R.id.etYouthTitle);
         content = (EditText) findViewById(R.id.etYouthContent);
         ministries = (Spinner) findViewById(R.id.sMinistries);
+        picView = (ImageView) findViewById(R.id.imgPreview);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                                                                             R.array.ministries,
                                                                             android.R.layout.simple_spinner_item);
         ministries.setAdapter(adapter);
 
-         y_title = title.getText().toString();
-         y_content = content.getText().toString();
-        n_ministries = ministries.getSelectedItem().toString();
-        file_path = "dummy path";
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        //file_path = "dummy path";
+
+
         pick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,7 +132,7 @@ public class MakeNotification extends AppCompatActivity {
                 picView.setVisibility(View.VISIBLE);
                 picView.setImageBitmap(thumbnail);
                 Toast.makeText(MakeNotification.this, picturePath, Toast.LENGTH_LONG).show();
-                //launchUploadActivity();
+                launchUploadActivity();
 
 
             } else if (requestCode == PIC_CROP) {
@@ -147,7 +140,7 @@ public class MakeNotification extends AppCompatActivity {
 //get the cropped bitmap
                 Bitmap thePic = extras.getParcelable("data");
                 picView.setVisibility(View.VISIBLE);
-               // picView = (ImageView) findViewById(R.id.imgPreview);
+                picView = (ImageView) findViewById(R.id.imgPreview);
 //display the returned cropped image
                 picView.setImageBitmap(thePic);
             } else if (requestCode == 2404) {
@@ -157,6 +150,14 @@ public class MakeNotification extends AppCompatActivity {
                 Toast.makeText(MakeNotification.this, file_path, Toast.LENGTH_LONG).show();
             }
         }
+    }
+    private void launchUploadActivity() {
+        //sends the android file path to the Upload Activity
+        Intent i = new Intent(MakeNotification.this, UploadActivity.class);
+        i.putExtra("filePath", picturePath);
+
+        startActivityForResult(i, 2404);
+
     }
     class UploadNote extends AsyncTask<String, String, String> {
 

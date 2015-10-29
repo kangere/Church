@@ -40,17 +40,9 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //toolbar init
-        toolbar = (Toolbar) findViewById(R.id.toolBarMain);
-        setSupportActionBar(toolbar);
-        toolbar.setTitleTextColor(Color.WHITE);
 
-        mNav = getResources().getStringArray(R.array.navigation);
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        //navigation fragment init
-        NavigationFragment navigationFragment = (NavigationFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        navigationFragment.setup(mDrawer,toolbar);
+        //toolbar init and nav frag
+        InitToolbar.ClassInitisialisation(this,R.id.fragment_navigation_drawer,R.id.toolBarMain,R.id.drawer_layout);
 
         txtName = (TextView) findViewById(R.id.name);
         txtEmail = (TextView) findViewById(R.id.email);

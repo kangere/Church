@@ -20,23 +20,36 @@ public class InitToolbar {
 
    /* private Toolbar toolbar;
     private DrawerLayout drawerLayout;*/
-    private AppCompatActivity a;
 
-    public InitToolbar(AppCompatActivity a){
-        this.a = a;
+
+    public InitToolbar(){
+
     }
-    public  void ClassInitisialisation(int navigation_fragment_id,int toolbarID,int drawerlayout_id){
+
+    /**
+     * @author Paul Murage
+     * @param navigation_fragment_id - id of navigation bar to initialise
+     * @param toolbarID - id of toolbar to initialise
+     * @param drawerlayout_id - id of drawerlayout  to initialise
+     */
+    public  static void ClassInitisialisation(AppCompatActivity a,int navigation_fragment_id,int toolbarID,int drawerlayout_id){
         Toolbar  toolbar = (Toolbar) a.findViewById(toolbarID);
         a.setSupportActionBar(toolbar);
-        toolbar.setTitle("Youth Ministry");
+
         toolbar.setTitleTextColor(Color.WHITE);
 
         //drawerlayout init
         DrawerLayout drawerLayout = (DrawerLayout) a.findViewById(drawerlayout_id);
 
-        //Navigation fragment init
-        NavigationFragment navfrag = (NavigationFragment) a.getSupportFragmentManager().findFragmentById(navigation_fragment_id);
-        navfrag.setup(drawerLayout,toolbar);
+        try {
+            //Navigation fragment init
+            NavigationFragment navfrag = (NavigationFragment) a.getSupportFragmentManager().findFragmentById(navigation_fragment_id);
+            navfrag.setup(drawerLayout, toolbar);
+        }catch(NullPointerException e){
+            e.printStackTrace();
+        }catch(RuntimeException e){
+            e.printStackTrace();
+        }
 
 
     }

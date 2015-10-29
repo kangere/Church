@@ -33,12 +33,7 @@
                 tools:showIn="@layout/activity_make_notification">
 
 
-                <Button
-                    android:id="@+id/bPick"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Pick an image" />
+
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -86,6 +81,27 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:hint="Enter Notification content here" />
+                <ImageView
+                    android:id="@+id/imgPreview"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:visibility="gone"
+                    android:src="@mipmap/ic_launcher"
+                    android:layout_marginTop="15dp"/>
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="100dp"
+                    android:layout_height="20dp"
+                    android:visibility="gone"
+                    android:layout_marginBottom="35dp"
+                    />
+                <Button
+                    android:id="@+id/bPick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Pick an image" />
 
                 <Button
                     android:id="@+id/bNoteUpload"
@@ -95,9 +111,9 @@
                     android:text="Upload" />
 
 
+
             </LinearLayout>
         </ScrollView>
-
         <fragment
             android:id="@+id/Make_Note_fragment_navigation_drawer"
             android:name="material.kangere.com.tandaza.NavigationFragment"

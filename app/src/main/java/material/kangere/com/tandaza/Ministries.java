@@ -2,6 +2,7 @@ package material.kangere.com.tandaza;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -21,27 +22,16 @@ import java.util.List;
 
 public class Ministries extends AppCompatActivity implements MinistryRecyclerAdapter.ClickListener {
 
-    private Toolbar toolbar;
-    private DrawerLayout drawerLayout;
+
     private RecyclerView recyclerView;
-    MinistryRecyclerAdapter adapter;
+    private MinistryRecyclerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ministries);
-        toolbar = (Toolbar) findViewById(R.id.ministriesToolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle("Ministries");
-        toolbar.setTitleTextColor(Color.WHITE);
-
-        //drawer layout init
-        drawerLayout = (DrawerLayout) findViewById(R.id.ministries_drawer_layout);
-
-
-        //navigation fragment init
-        NavigationFragment navigationFragment = (NavigationFragment) getSupportFragmentManager().findFragmentById(R.id.ministries_fragment_navigation_drawer);
-        navigationFragment.setup(drawerLayout, toolbar);
+        //Nav and toolbar initialisation
+        InitToolbar.ClassInitisialisation(this,R.id.ministries_fragment_navigation_drawer, R.id.ministriesToolbar, R.id.ministries_drawer_layout);
 
         //recyclerView initialisation
         recyclerView = (RecyclerView) findViewById(R.id.min_recycler_view);
@@ -50,9 +40,18 @@ public class Ministries extends AppCompatActivity implements MinistryRecyclerAda
         recyclerView.setLayoutManager(gridLayoutManager);
 
 
+
         //recyclerview adapter initialisation
-        adapter = new MinistryRecyclerAdapter(this,getData());
-        adapter.setClickListener(this);
+        Preload p = new Preload();
+        p.execute();
+
+        try {
+            adapter = new MinistryRecyclerAdapter(getBaseContext(),p.getData());
+            adapter.setClickListener(this);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         recyclerView.setAdapter(adapter);
 
     }
@@ -104,21 +103,31 @@ public class Ministries extends AppCompatActivity implements MinistryRecyclerAda
         return super.onOptionsItemSelected(item);
     }
 
-    public List<MinInfo> getData(){
+    class Preload extends AsyncTask<String,String,String>{
 
-        List<MinInfo> data = new ArrayList<>();
-        int[] icons = {R.drawable.ic_about,R.drawable.children_ministry,R.drawable.ic_about,R.drawable.kings_men};
-        String[] titles = {"Youth Ministry","Children Ministry","Sarah's Treasure","Kingsmen"};
-        for (int i = 0; i < 4; i++){
-            MinInfo current = new MinInfo();
-            current.iconId = icons[i];
-            current.title = titles[i];
+        @Override
+        protected String doInBackground(String... strings) {
 
-            data.add(current);
+
+
+            return null;
+        }
+        public List<MinInfo> getData(){
+
+            List<MinInfo> data = new ArrayList<>();
+            int[] icons = {R.drawable.ic_about,R.drawable.children_ministry,R.drawable.ic_about,R.drawable.kings_men};
+            String[] titles = {"Youth Ministry","Children Ministry","Sarah's Treasure","Kingsmen"};
+            for (int i = 0; i < 4; i++){
+                MinInfo current = new MinInfo();
+                current.iconId = icons[i];
+                current.title = titles[i];
+
+                data.add(current);
+
+            }
+            return data;
+
 
         }
-        return data;
-
-
     }
 }

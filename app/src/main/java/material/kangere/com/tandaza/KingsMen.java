@@ -13,8 +13,8 @@ public class KingsMen extends AppCompatActivity {
         setContentView(R.layout.activity_kings_men);
 
         //toolbar and drawer layout and navigation drawer init from the Init class
-        InitToolbar tb = new InitToolbar(this);
-        tb.ClassInitisialisation(R.id.kings_fragment_navigation_drawer, R.id.kingsToolbar, R.id.kings_drawer_layout);
+
+        InitToolbar.ClassInitisialisation(this,R.id.kings_fragment_navigation_drawer, R.id.kingsToolbar, R.id.kings_drawer_layout);
     }
 
     @Override

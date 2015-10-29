@@ -1,22 +1,17 @@
 package material.kangere.com.tandaza;
 
-import android.app.FragmentTransaction;
-import android.graphics.Color;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
+
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.astuetz.PagerSlidingTabStrip;
-import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
@@ -25,31 +20,21 @@ import it.neokree.materialtabs.MaterialTabListener;
 
 public class About extends AppCompatActivity implements MaterialTabListener {
 
-    private Toolbar toolbar;
+
     private MaterialTabHost materialTabHost;
     private ViewPager pager;
     private ViewPagerAdapter adapter;
     private String[] aboutArray;
-    private DrawerLayout drawerLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.about);
 
+
         //toolbar initialization
-        toolbar = (Toolbar) findViewById(R.id.aboutToolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle("About");
-        toolbar.setTitleTextColor(Color.WHITE);
-
-        //drawer layout init
-        drawerLayout = (DrawerLayout) findViewById(R.id.about_drawer_layout);
-
-
-        //navigation fragment init
-        NavigationFragment navigationFragment = (NavigationFragment) getSupportFragmentManager().findFragmentById(R.id.about_fragment_navigation_drawer);
-        navigationFragment.setup(drawerLayout, toolbar);
+        InitToolbar.ClassInitisialisation(this, R.id.about_fragment_navigation_drawer, R.id.aboutToolbar, R.id.about_drawer_layout);
 
         //array for titles
         aboutArray = getResources().getStringArray(R.array.About);
@@ -59,7 +44,6 @@ public class About extends AppCompatActivity implements MaterialTabListener {
         /*PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setViewPager(pager);*/
         materialTabHost = (MaterialTabHost) findViewById(R.id.aboutTabHost);
-
 
 
         //init view pager
@@ -74,7 +58,7 @@ public class About extends AppCompatActivity implements MaterialTabListener {
 
             @Override
             public void onPageSelected(int position) {
-               materialTabHost.setSelectedNavigationItem(position);
+                materialTabHost.setSelectedNavigationItem(position);
             }
 
             @Override
@@ -96,7 +80,6 @@ public class About extends AppCompatActivity implements MaterialTabListener {
 
         /*SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.aboutTabs);
         viewPagerTab.setViewPager(pager);*/
-
 
 
     }
@@ -151,7 +134,7 @@ public class About extends AppCompatActivity implements MaterialTabListener {
 
             switch (num) {
                 case 0:
-                    Log.d("About"," populates about fragment");
+                    Log.d("About", " populates about fragment");
                     // About fragment
                     AboutTandaza ab = new AboutTandaza();
                     return ab;
@@ -164,7 +147,6 @@ public class About extends AppCompatActivity implements MaterialTabListener {
             }
 
             return null;
-
 
 
         }

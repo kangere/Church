@@ -13,8 +13,7 @@ public class SarahsTreasure extends AppCompatActivity {
         setContentView(R.layout.activity_sarahs_treasure);
 
         //toolbar and drawer layout and navigation drawer init from the Init class
-        InitToolbar tb = new InitToolbar(this);
-        tb.ClassInitisialisation(R.id.sarahs_fragment_navigation_drawer, R.id.sarahsToolbar, R.id.sarah_drawer_layout);
+        InitToolbar.ClassInitisialisation(this,R.id.sarahs_fragment_navigation_drawer, R.id.sarahsToolbar, R.id.sarah_drawer_layout);
     }
 
     @Override

@@ -16,8 +16,7 @@ public class ChildrenMinistry extends AppCompatActivity {
         setContentView(R.layout.activity_children_ministry);
 
         //toolbar and drawer layout and navigation drawer init from the Init class
-        InitToolbar tb = new InitToolbar(this);
-        tb.ClassInitisialisation(R.id.children_fragment_navigation_drawer,R.id.childrenToolbar,R.id.children_drawer_layout);
+        InitToolbar.ClassInitisialisation(this,R.id.children_fragment_navigation_drawer, R.id.childrenToolbar, R.id.children_drawer_layout);
     }
 
     @Override

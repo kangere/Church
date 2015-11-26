@@ -41,6 +41,7 @@ public class Team extends Fragment {
         tm = new TeamAdapter(getActivity(),getData());
         rv.setAdapter(tm);
 
+
         return v;
     }
 
@@ -49,15 +50,15 @@ public class Team extends Fragment {
         //List<TeamInfo> data = new ArrayList<>();
 
          titles = getResources().getStringArray(R.array.team);
-        /*for (int i = 0; i < titles.length; i++){
+        for (int i = 0; i < titles.length; i++){
             TeamInfo current = new TeamInfo();
             current.setImage(icons[i]) ;
             current.setName(titles[i]) ;
 
             data.add(current);
 
-        }*/
-        new LoadinBack().execute();
+        }
+        //new LoadinBack().execute();
         return data;
 
 
@@ -66,9 +67,9 @@ public class Team extends Fragment {
 
         @Override
         protected List<TeamInfo> doInBackground(Void... params) {
-
+            TeamInfo current = new TeamInfo();
             for (int i = 0; i < titles.length; i++){
-                TeamInfo current = new TeamInfo();
+
                 current.setImage(icons[i]) ;
                 current.setName(titles[i]) ;
 
@@ -77,5 +78,17 @@ public class Team extends Fragment {
             }
             return data;
         }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        data.clear();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getData();
     }
 }

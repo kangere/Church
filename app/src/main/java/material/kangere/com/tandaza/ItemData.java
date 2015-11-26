@@ -7,8 +7,28 @@ public class ItemData {
 
     private String title;
     private String nid;
+    private String ministry;
+    private String content;
     private String image_path;
     private String time_stamp;
+
+    public String getMinistry() {
+        return ministry;
+    }
+
+    public void setMinistry(String ministry) {
+        this.ministry = ministry;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+
 
 
     public ItemData() {

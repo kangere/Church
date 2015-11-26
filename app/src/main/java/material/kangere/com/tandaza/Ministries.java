@@ -25,34 +25,36 @@ public class Ministries extends AppCompatActivity implements MinistryRecyclerAda
 
     private RecyclerView recyclerView;
     private MinistryRecyclerAdapter adapter;
+    ArrayList<MinInfo> data = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ministries);
         //Nav and toolbar initialisation
-        InitToolbar.ClassInitisialisation(this,R.id.ministries_fragment_navigation_drawer, R.id.ministriesToolbar, R.id.ministries_drawer_layout);
+        InitToolbar.ClassInitisialisation(this, R.id.ministries_fragment_navigation_drawer, R.id.ministriesToolbar, R.id.ministries_drawer_layout);
+
 
         //recyclerView initialisation
-        recyclerView = (RecyclerView) findViewById(R.id.min_recycler_view);
+       /*recyclerView = (RecyclerView) findViewById(R.id.min_recycler_view);
         recyclerView.setHasFixedSize(true);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
-        recyclerView.setLayoutManager(gridLayoutManager);
-
+        recyclerView.setLayoutManager(gridLayoutManager);*/
 
 
         //recyclerview adapter initialisation
-        Preload p = new Preload();
-        p.execute();
 
-        try {
-            adapter = new MinistryRecyclerAdapter(getBaseContext(),p.getData());
+
+       /*try {
+            adapter = new MinistryRecyclerAdapter(getBaseContext());
             adapter.setClickListener(this);
         }catch (Exception e)
         {
             e.printStackTrace();
         }
         recyclerView.setAdapter(adapter);
+        getData();*/
 
     }
 
@@ -103,31 +105,36 @@ public class Ministries extends AppCompatActivity implements MinistryRecyclerAda
         return super.onOptionsItemSelected(item);
     }
 
-    class Preload extends AsyncTask<String,String,String>{
-
-        @Override
-        protected String doInBackground(String... strings) {
 
 
+    public void getData(){
+        int[] icons = {R.drawable.ic_about,R.drawable.children_ministry,R.drawable.ic_about,R.drawable.kings_men};
+        String[] titles = {"Youth Ministry","Children Ministry","Sarah's Treasure","Kingsmen"};
 
-            return null;
-        }
-        public List<MinInfo> getData(){
 
-            List<MinInfo> data = new ArrayList<>();
-            int[] icons = {R.drawable.ic_about,R.drawable.children_ministry,R.drawable.ic_about,R.drawable.kings_men};
-            String[] titles = {"Youth Ministry","Children Ministry","Sarah's Treasure","Kingsmen"};
-            for (int i = 0; i < 4; i++){
-                MinInfo current = new MinInfo();
-                current.iconId = icons[i];
-                current.title = titles[i];
+        for (int i = 0; i < titles.length; i++){
+            MinInfo current = new MinInfo();
+            current.setIconId(icons[i]);
+            current.setTitle(titles[i]);
 
-                data.add(current);
-
-            }
-            return data;
-
+            data.add(current);
 
         }
+        adapter.setMinistries(data);
+        //return data;
+
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+       // data.clear();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //getData();
     }
 }

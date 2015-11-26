@@ -22,7 +22,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolderNotifica
 
     private ArrayList<ItemData> notificationsList = new ArrayList<>();
     private LayoutInflater layoutInflater;
-    private static final String TAG_NID = "nid";
+
     private Context mContext;
     private ClickListener clickListener;
 
@@ -46,7 +46,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolderNotifica
         return viewHolder;
     }
 
-    public void setClickListener(ClickListener clickListener){
+    public void setClickListener(ClickListener clickListener) {
         this.clickListener = clickListener;
     }
 
@@ -56,14 +56,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolderNotifica
         ItemData currentNote = notificationsList.get(position);
 
 
-
         Uri uri = Uri.parse(currentNote.getImagePath());
 
 
         Glide.with(mContext).load(uri).into(viewHolderNotifications.imgNotification);
 
         viewHolderNotifications.nid.setText(currentNote.getNid());
+        viewHolderNotifications.content.setText(currentNote.getContent());
+        viewHolderNotifications.ministry.setText(currentNote.getMinistry());
         viewHolderNotifications.title.setText(currentNote.getTitle());
+        viewHolderNotifications.imgPath.setText(currentNote.getImagePath());
         viewHolderNotifications.notificationTimeStamp.setText(currentNote.getTime_stamp());
     }
 
@@ -74,10 +76,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolderNotifica
 
     class ViewHolderNotifications extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView nid;
-        private TextView title;
-
-        private TextView notificationTimeStamp;
+        private TextView nid,title,content,ministry,notificationTimeStamp,imgPath;
         private ImageView imgNotification;
         CardView cv;
 
@@ -89,6 +88,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolderNotifica
             title = (TextView) itemView.findViewById(R.id.title);
             notificationTimeStamp = (TextView) itemView.findViewById(R.id.notificationTimeStamp);
             imgNotification = (ImageView) itemView.findViewById(R.id.img_notification);
+            imgPath = (TextView) itemView.findViewById(R.id.tvImgPathGone);
+            content = (TextView) itemView.findViewById(R.id.tvContentGone);
+            ministry = (TextView) itemView.findViewById(R.id.tvMinistryGone);
 
             itemView.setOnClickListener(this);
         }
@@ -96,20 +98,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolderNotifica
         @Override
         public void onClick(View v) {
 
-           /* String noteId = nid.getText().toString();
-            Intent i = new Intent(context, ViewNotification.class);
-            i.putExtra(TAG_NID, noteId);
-            context.startActivity(i);*/
 
-            if(clickListener != null){
-                clickListener.itemClicked(v,getAdapterPosition());
+            if (clickListener != null) {
+                clickListener.itemClicked(v, getAdapterPosition());
             }
 
         }
     }
 
     public interface ClickListener {
-         void itemClicked(View view, int position);
+        void itemClicked(View view, int position);
 
     }
 }

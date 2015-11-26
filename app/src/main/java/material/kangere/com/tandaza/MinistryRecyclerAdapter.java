@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,14 +21,18 @@ public class MinistryRecyclerAdapter extends RecyclerView.Adapter<MinistryRecycl
     //private ClickListener clickListener;
     private Context context;
     private LayoutInflater inflater;
-    List<MinInfo> data = Collections.emptyList();
+    ArrayList<MinInfo> data = new ArrayList<>();
     public ClickListener clickListener;
 
-    public MinistryRecyclerAdapter(Context context, List<MinInfo> data) {
+    public MinistryRecyclerAdapter(Context context) {
         this.context = context;
         inflater = LayoutInflater.from(context);
-        this.data = data;
 
+
+    }
+    public void setMinistries(ArrayList<MinInfo> data){
+        this.data = data;
+        notifyItemRangeChanged(0, data.size());
     }
 
     @Override
@@ -41,8 +46,8 @@ public class MinistryRecyclerAdapter extends RecyclerView.Adapter<MinistryRecycl
     public void onBindViewHolder(MinistryViewHolder ministryViewHolder, int i) {
         MinInfo current = data.get(i);
 
-        ministryViewHolder.description.setText(current.title);
-        ministryViewHolder.image.setImageResource(current.iconId);
+        ministryViewHolder.description.setText(current.getTitle());
+        ministryViewHolder.image.setImageResource(current.getIconId());
     }
 
     public void setClickListener(ClickListener clickListener){

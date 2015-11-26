@@ -16,6 +16,7 @@ import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -54,6 +55,8 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_NOTIFICATIONS = "notifications";
     private static final String TAG_NID = "id";
+    private static final String TAG_CONTENT = "contents";
+    private static final String TAG_MINISTRY = "ministry";
     private static final String TAG_TITLE = "title";
     private static final String TAG_IMAGE_PATH = "imgpath";
     private static final String TAG_TIMESTAMP = "created_at";
@@ -74,6 +77,7 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
     private LinearLayout linearLayoutNoCon;
     private TextView noConnection;
     private Button btnUploadClass,refresh;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,7 +158,20 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
         String nid = ((TextView) view.findViewById(R.id.nid)).getText()
                 .toString();
         Intent i = new Intent(Show_Notifications.this, ViewNotification.class);
-        i.putExtra(TAG_NID, nid);
+        //i.putExtra(TAG_NID, nid);
+
+        String title = ((TextView)view.findViewById(R.id.title)).getText().toString();
+        String timeStamp = ((TextView) view.findViewById(R.id.notificationTimeStamp)).getText().toString();
+        String ministry = ((TextView) view.findViewById(R.id.tvMinistryGone)).getText().toString();
+        String content = ((TextView) view.findViewById(R.id.tvContentGone)).getText().toString();
+        String img_path = ((TextView) view.findViewById(R.id.tvImgPathGone)). getText().toString();
+
+        i.putExtra(TAG_TITLE,title);
+        i.putExtra(TAG_MINISTRY,ministry);
+        i.putExtra(TAG_CONTENT,content);
+        i.putExtra(TAG_TIMESTAMP,timeStamp);
+        i.putExtra(TAG_IMAGE_PATH,img_path);
+
         startActivity(i);
 
     }
@@ -202,6 +219,8 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
                         // Storing each json item in variable
                         String nid = c.getString(TAG_NID);
                         String title = c.getString(TAG_TITLE);
+                        String content = c.getString(TAG_CONTENT);
+                        String ministry = c.getString(TAG_MINISTRY);
                         String image_path = c.getString(TAG_IMAGE_PATH);
                         String time_stamp = c.getString(TAG_TIMESTAMP);
 
@@ -222,6 +241,8 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
 
                         notificationsTitles.setNid(nid);
                         notificationsTitles.setTitle(title);
+                        notificationsTitles.setContent(content);
+                        notificationsTitles.setMinistry(ministry);
                         notificationsTitles.setImagePath(image_path);
                         notificationsTitles.setTime_stamp(timestamp);
 

@@ -1,4 +1,4 @@
-package material.kangere.com.tandaza;
+package material.kangere.com.tandaza.NavActivities;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -13,6 +13,8 @@ import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
+
+import material.kangere.com.tandaza.R;
 
 /**
  * Created by user on 10/21/2015.

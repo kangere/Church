@@ -1,4 +1,4 @@
-package material.kangere.com.tandaza;
+package material.kangere.com.tandaza.NavActivities;
 
 
 import android.support.v4.app.Fragment;
@@ -16,6 +16,9 @@ import android.view.MenuItem;
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
 import it.neokree.materialtabs.MaterialTabListener;
+import material.kangere.com.tandaza.AboutTandaza;
+import material.kangere.com.tandaza.InitToolbar;
+import material.kangere.com.tandaza.R;
 
 
 public class About extends AppCompatActivity implements MaterialTabListener {

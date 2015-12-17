@@ -30,7 +30,7 @@
                 android:orientation="vertical"
 
                 tools:context="material.kangere.com.tandaza.MakeNotification"
-                tools:showIn="@layout/activity_make_notification">
+               >
 
 
 

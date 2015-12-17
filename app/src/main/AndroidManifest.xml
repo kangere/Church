@@ -1,18 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="material.kangere.com.tandaza" >
+    package="material.kangere.com.tandaza">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDzQItVUasl2IwfrxsntcVcwpc-Y-h5l2I" />
+
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:name=".NavActivities.MainActivity"
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name=".NavActivities.About"
+            android:label="@string/title_activity_about"></activity>
+        <activity
+            android:name=".NavActivities.Ministries"
+            android:label="@string/title_activity_ministries"></activity>
+        <activity
+            android:name=".NavActivities.T_Group"
+            android:label="@string/title_activity_tgroup"></activity>
+        <activity
+            android:name=".NavActivities.UpcomingEvents"
+            android:label="@string/title_activity_upcoming_events"
+            android:parentActivityName=".NavActivities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".NavActivities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".NavActivities.Give"
+            android:label="@string/title_activity_give"></activity>
+        <activity
+            android:name=".NavActivities.Contact"
+            android:label="@string/title_activity_contact"></activity>
+        <activity
+            android:name=".NavActivities.YouthMinistry"
+            android:label="@string/title_activity_youth_ministry"></activity>
+        <activity
+            android:name=".NavActivities.ChildrenMinistry"
+            android:label="@string/title_activity_children_ministry"></activity>
+        <activity
+            android:name=".NavActivities.SarahsTreasure"
+            android:label="@string/title_activity_sarahs_treasure"></activity>
+        <activity
+            android:name=".NavActivities.KingsMen"
+            android:label="@string/title_activity_kings_men"></activity>
+        <activity
+            android:name=".Register"
+            android:label="@string/title_activity_register"></activity>
+        <activity
+            android:name=".Login"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,89 +69,38 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".About"
-            android:label="@string/title_activity_about" >
-        </activity>
-        <activity
-            android:name=".Ministries"
-            android:label="@string/title_activity_ministries" >
-        </activity>
-        <activity
-            android:name=".Sermons"
-            android:label="@string/title_activity_sermons" >
-        </activity>
-        <activity
-            android:name=".Connect"
-            android:label="@string/title_activity_connect" >
-        </activity>
-        <activity
-            android:name=".UpcomingEvents"
-            android:label="@string/title_activity_upcoming_events" >
-        </activity>
-        <activity
-            android:name=".PastEvents"
-            android:label="@string/title_activity_past_events" >
-        </activity>
-        <activity
-            android:name=".Give"
-            android:label="@string/title_activity_give" >
-        </activity>
-        <activity
-            android:name=".Contact"
-            android:label="@string/title_activity_contact" >
-        </activity>
-        <activity
-            android:name=".YouthMinistry"
-            android:label="@string/title_activity_youth_ministry" >
-        </activity>
-        <activity
-            android:name=".ChildrenMinistry"
-            android:label="@string/title_activity_children_ministry" >
-        </activity>
-        <activity
-            android:name=".SarahsTreasure"
-            android:label="@string/title_activity_sarahs_treasure" >
-        </activity>
-        <activity
-            android:name=".KingsMen"
-            android:label="@string/title_activity_kings_men" >
-        </activity>
-        <activity
-            android:name=".Register"
-            android:label="@string/title_activity_register" >
-        </activity>
-        <activity
-            android:name=".Login"
-            android:label="@string/title_activity_login" >
-        </activity>
-        <activity
             android:name=".Notifications_settings"
             android:label="@string/title_activity_notifications_settings"
-            android:theme="@style/AppTheme" >
-        </activity>
+            android:theme="@style/AppTheme"></activity>
         <activity
             android:name=".MakeNotification"
             android:label="@string/title_activity_make_notification"
-            android:theme="@style/AppTheme" >
-        </activity>
+            android:theme="@style/AppTheme"></activity>
         <activity
-            android:name=".Show_Notifications"
+            android:name=".NavActivities.Show_Notifications"
             android:label="@string/title_activity_show__notifications"
-            android:theme="@style/AppTheme" >
-        </activity>
+            android:theme="@style/AppTheme"></activity>
         <activity
             android:name=".videoimageupload.UploadActivity"
             android:label="@string/title_activity_show__notifications"
-            android:theme="@style/AppTheme" >
-        </activity>
-        <activity android:name=".ViewNotification"
+            android:theme="@style/AppTheme"></activity>
+        <activity
+            android:name=".NavActivities.ViewNotification"
             android:label="Details"
-            android:theme="@style/AppTheme"
-            android:parentActivityName=".Show_Notifications">
-
+            android:parentActivityName=".NavActivities.Show_Notifications"
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Show_Notifications"/>
+                android:value=".NavActivities.Show_Notifications" />
+        </activity>
+        <activity
+            android:name=".NavActivities.Create_Event"
+            android:label="@string/title_activity_create__event"
+            android:parentActivityName=".NavActivities.UpcomingEvents"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="material.kangere.com.tandaza.NavActivities.UpcomingEvents" />
         </activity>
     </application>
 

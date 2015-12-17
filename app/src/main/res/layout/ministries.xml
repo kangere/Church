@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context="material.kangere.com.tandaza.Ministries">
+        tools:context=".NavActivities.Ministries">
         <include
             android:id="@+id/ministriesToolbar"
             layout="@layout/app_bar" />

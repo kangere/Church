@@ -1,4 +1,4 @@
-package material.kangere.com.tandaza;
+package material.kangere.com.tandaza.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import material.kangere.com.tandaza.R;
+
 /**
  * Created by user on 7/1/2015.
  */
@@ -20,7 +22,7 @@ public class NavAdapter extends ArrayAdapter<String> {
     private int[] imageIcon;
     private String[] name;
     public NavAdapter(Activity c,int[] imageIcon,String[] name){
-          super(c,R.layout.main_nav_bar,name);
+          super(c, R.layout.main_nav_bar,name);
         this.context = c;
         this.imageIcon = imageIcon;
         this.name = name;

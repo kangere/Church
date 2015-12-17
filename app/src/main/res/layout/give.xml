@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
 
-        tools:context="material.kangere.com.tandaza.Give">
+        tools:context=".NavActivities.Give">
 
         <include
             android:id="@+id/giveToolbar"

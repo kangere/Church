@@ -1,40 +1,47 @@
-package material.kangere.com.tandaza;
+package material.kangere.com.tandaza.NavActivities;
 
 import android.graphics.Color;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import android.support.v7.widget.Toolbar;
 
-public class YouthMinistry extends AppCompatActivity {
+import material.kangere.com.tandaza.NavigationFragment;
+import material.kangere.com.tandaza.R;
 
-    private Toolbar toolbar;
+
+public class Give extends ActionBarActivity {
+
     private DrawerLayout drawerLayout;
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_youth_ministry);
+        setContentView(R.layout.give);
 
-        //toolbar initisialization
-        toolbar = (Toolbar) findViewById(R.id.youthToolbar);
+        //toolbar init
+        toolbar = (Toolbar) findViewById(R.id.giveToolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Youth Ministry");
+        toolbar.setTitle("Give");
         toolbar.setTitleTextColor(Color.WHITE);
 
-        //drawerlayout init
-        drawerLayout = (DrawerLayout) findViewById(R.id.youth_drawer_layout);
+        //drawer layout init
+        drawerLayout = (DrawerLayout) findViewById(R.id.give_drawer_layout);
 
-        //Navigation fragment init
-        NavigationFragment navfrag = (NavigationFragment) getSupportFragmentManager().findFragmentById(R.id.youth_fragment_navigation_drawer);
-        navfrag.setup(drawerLayout,toolbar);
+
+        //navigation fragment init
+        NavigationFragment navigationFragment = (NavigationFragment) getSupportFragmentManager().findFragmentById(R.id.give_fragment_navigation_drawer);
+        navigationFragment.setup(drawerLayout, toolbar);
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_youth_ministry, menu);
+        getMenuInflater().inflate(R.menu.menu_give, menu);
         return true;
     }
 

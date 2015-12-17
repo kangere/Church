@@ -1,4 +1,4 @@
-package material.kangere.com.tandaza;
+package material.kangere.com.tandaza.NavActivities;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,7 +16,6 @@ import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,25 +30,28 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import material.kangere.com.tandaza.AppConfig;
+import material.kangere.com.tandaza.CheckNetwork;
+import material.kangere.com.tandaza.InitToolbar;
+import material.kangere.com.tandaza.ItemData;
+import material.kangere.com.tandaza.JSONParser;
 import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
+import material.kangere.com.tandaza.MakeNotification;
+import material.kangere.com.tandaza.Adapters.MyAdapter;
+import material.kangere.com.tandaza.R;
+import material.kangere.com.tandaza.SessionManager;
 
 public class Show_Notifications extends AppCompatActivity implements MyAdapter.ClickListener {
 
     private static final String TAG = Show_Notifications.class.getSimpleName();
     Toolbar bar;
-    ListView noteListView;
 
     // Progress Dialog
     private ProgressDialog pDialog;
-
-    MakeNotification just;
     // Creating JSON Parser object
     JSONParser jParser = new JSONParser();
 
     ArrayList<ItemData> notificationsList = new ArrayList<>();
-
-    // url to get all products list
-    private static String url_all_notifications = "http://stuplan.co.ke/database_connect/get_all_notifications.php";
 
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
@@ -63,7 +65,6 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
 
     // products JSONArray
     JSONArray notifications = null;
-    Button addNote;
     private SessionManager session;
     private SQLiteHandler db;
     public RecyclerView recyclerView;
@@ -88,7 +89,7 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
             StrictMode.setThreadPolicy(policy);
         }
         //toolbar and nav bar initialisation
-        InitToolbar.ClassInitisialisation(this,R.id.Show_Note_fragment_navigation_drawer,R.id.tbShowNote,R.id.Show_Note_drawer_layout);
+        InitToolbar.ClassInitisialisation(this, R.id.Show_Note_fragment_navigation_drawer, R.id.tbShowNote, R.id.Show_Note_drawer_layout);
 
         btnUploadClass = (Button)findViewById(R.id.bOpenUploadClass);
         btnUploadClass.setOnClickListener(new View.OnClickListener() {

@@ -1,7 +1,6 @@
-package material.kangere.com.tandaza;
+package material.kangere.com.tandaza.NavActivities;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -10,17 +9,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
+import material.kangere.com.tandaza.InitToolbar;
 import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
+import material.kangere.com.tandaza.Login;
+import material.kangere.com.tandaza.R;
+import material.kangere.com.tandaza.SessionManager;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -42,7 +39,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         //toolbar init and nav frag
-        InitToolbar.ClassInitisialisation(this,R.id.fragment_navigation_drawer,R.id.toolBarMain,R.id.drawer_layout);
+        InitToolbar.ClassInitisialisation(this, R.id.fragment_navigation_drawer, R.id.toolBarMain, R.id.drawer_layout);
 
         txtName = (TextView) findViewById(R.id.name);
         txtEmail = (TextView) findViewById(R.id.email);
@@ -59,14 +56,16 @@ public class MainActivity extends ActionBarActivity {
         }
 
         // Fetching user details from sqlite
-        HashMap<String, String> user = db.getUserDetails();
+       /* Intent i = getIntent();
+        String emailIntent = i.getStringExtra("email");
+        HashMap<String, String> user = db.getUserDetails(emailIntent);
 
         String name = user.get("name");
         String email = user.get("email");
 
         // Displaying the user details on the screen
         txtName.setText(name);
-        txtEmail.setText(email);
+        txtEmail.setText(email);*/
 
         // Logout button click event
         btnLogout.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +101,7 @@ public class MainActivity extends ActionBarActivity {
     private void logoutUser() {
         session.setLogin(false);
 
-        db.deleteUsers();
+        //db.deleteUsers();
 
         // Launching the login activity
         Intent intent = new Intent(MainActivity.this, Login.class);

@@ -1,4 +1,4 @@
-package material.kangere.com.tandaza;
+package material.kangere.com.tandaza.Adapters;
 
 import android.content.Context;
 import android.net.Uri;
@@ -13,6 +13,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+
+import material.kangere.com.tandaza.ItemData;
+import material.kangere.com.tandaza.R;
 
 /**
  * Created by user on 10/14/2015.
@@ -74,7 +77,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolderNotifica
         return notificationsList.size();
     }
 
-    class ViewHolderNotifications extends RecyclerView.ViewHolder implements View.OnClickListener {
+     class ViewHolderNotifications extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView nid,title,content,ministry,notificationTimeStamp,imgPath;
         private ImageView imgNotification;

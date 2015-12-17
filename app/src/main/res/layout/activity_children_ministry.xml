@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
 
-        tools:context="material.kangere.com.tandaza.ChildrenMinistry">
+        tools:context=".NavActivities.ChildrenMinistry">
 
         <include
             android:id="@+id/childrenToolbar"

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Tandaza</string>
-  <string name="drawer_open">Open</string>
+    <string name="drawer_open">Open</string>
     <string name="drawer_closed">Closed</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -9,7 +9,7 @@
     <string name="title_activity_sermons">Sermons</string>
     <string name="title_activity_connect">Connect</string>
     <string name="title_activity_upcoming_events">Upcoming Events</string>
-    <string name="title_activity_past_events">PastEvents</string>
+    <string name="title_activity_tgroup">T - Groups</string>
     <string name="title_activity_give">Give</string>
     <string name="title_activity_media">Media</string>
     <string name="title_activity_contact">Contact</string>
@@ -51,4 +51,36 @@ Loving God, Connecting with People, Transforming Communities.
     <string name="title_activity_make_notification">Create Notification</string>
     <string name="title_activity_show__notifications">Notifications</string>
     <string name="title_activity_ministry_grid">Ministry Grid</string>
+    <string name="staff_login">Login as Staff</string>
+    <string name="member_login">Enter as Member</string>
+    <string name="services">K3C SERVICE TIMES</string>
+    <string name="adult_service">Adult Services:</string>
+    <string name="adult_service_time1">8:30 am - 10:00 am </string>
+    <string name="adult_service_time2">11:00 am - 12:30 pm</string>
+    <string name="children_service">Childrens Church:</string>
+    <string name="teens_service">Teens Service (TILT):</string>
+    <string name="chinese_service">Chinese Service</string>
+    <string name="kids">Kids:</string>
+    <string name="adult">Adults:</string>
+    <string name="chinese_service_kids">9:00 am - 10:00 am</string>
+    <string name="chinese_service_adult">10:15 am - 11:45 am</string>
+    <string name="contact_call">Call</string>
+    <string name="contact_email">Email</string>
+    <string name="btn_event">Create Event</string>
+    <string name="title_activity_create__event">Create Event</string>
+    <string name="Event_name">Enter Event Name</string>
+    <string name="event_date">Choose Date of Event</string>
+    <string name="event_time">Choose Event Time</string>
+    <string name="event_ministry">Choose Ministry</string>
+    <string name="venue">Enter Venue Below</string>
+    <string name="venue_hint">Enter venue here</string>
+    <string name="description">Enter Description Below</string>
+    <string name="description_hint">Enter description here</string>
+    <string name="upload_event">Upload Event</string>
+    <string name="date">Date:</string>
+    <string name="time">Time:</string>
+    <string name="label_venue">Venue:</string>
+    <string name="dummy_description">The description of the event will be here containing the event details
+            what is expected to happen and why one should be there</string>
+
 </resources>

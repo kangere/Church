@@ -1,23 +1,19 @@
-package material.kangere.com.tandaza;
+package material.kangere.com.tandaza.NavActivities;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.AsyncTask;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import material.kangere.com.tandaza.InitToolbar;
+import material.kangere.com.tandaza.MinInfo;
+import material.kangere.com.tandaza.MinistryRecyclerAdapter;
+import material.kangere.com.tandaza.R;
 
 
 public class Ministries extends AppCompatActivity implements MinistryRecyclerAdapter.ClickListener {

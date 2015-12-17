@@ -6,37 +6,41 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.HashMap;
-
+import material.kangere.com.tandaza.Adapters.NavAdapter;
 import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
+import material.kangere.com.tandaza.NavActivities.Contact;
+import material.kangere.com.tandaza.NavActivities.MainActivity;
+import material.kangere.com.tandaza.NavActivities.Ministries;
+import material.kangere.com.tandaza.NavActivities.Show_Notifications;
+import material.kangere.com.tandaza.NavActivities.T_Group;
+import material.kangere.com.tandaza.NavActivities.UpcomingEvents;
 
 /**
  * Created by user on 7/2/2015.
  */
 public class NavigationFragment extends Fragment {
 
-    private int[] icons = {R.drawable.ic_home,  R.drawable.ic_sermons,R.drawable.ic_ministries,R.drawable.ic_connect,R.drawable.ic_give, R.drawable.ic_contact,
-            R.drawable.ic_about,R.drawable.ic_contact};
+    private int[] icons = {R.drawable.ic_home, R.drawable.ic_sermons, R.drawable.ic_event, R.drawable.ic_ministries, R.drawable.ic_connect, R.drawable.ic_contact};
     private String[] navigationArray;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout drawerLayout;
     private ListView listView;
-    private TextView tvname,tvemail;
+    private TextView tvname, tvemail;
     private SQLiteHandler db;
 
-    public NavigationFragment(){
+    public NavigationFragment() {
 
 
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +52,7 @@ public class NavigationFragment extends Fragment {
 
 
         //inflate layout for this fragment
-        View layout = inflater.inflate(R.layout.navigation_fragment,container,false);
+        View layout = inflater.inflate(R.layout.navigation_fragment, container, false);
         listView = (ListView) layout.findViewById(R.id.navigation_listview);
 
         //string array for navigation drawer
@@ -58,17 +62,17 @@ public class NavigationFragment extends Fragment {
         NavAdapter navAdapter = new NavAdapter(getActivity(), icons, navigationArray);
 
         //name email init
-        tvname = (TextView)layout.findViewById(R.id.name_nav);
+        tvname = (TextView) layout.findViewById(R.id.name_nav);
         tvemail = (TextView) layout.findViewById(R.id.email_nav);
         db = new SQLiteHandler(getActivity());
-        HashMap<String, String> user = db.getUserDetails();
+       /* String emailIntent = getActivity().getIntent().getStringExtra("email");
+        HashMap<String, String> user = db.getUserDetails(emailIntent);
 
         String name = user.get("name");
         String email = user.get("email");
 
         tvname.setText(name);
-        tvemail.setText(email);
-
+        tvemail.setText(email);*/
 
 
         //attach adapter to listview
@@ -85,20 +89,18 @@ public class NavigationFragment extends Fragment {
                         startActivity(new Intent(getActivity(), Show_Notifications.class));
                         break;
                     case 2:
-                        startActivity(new Intent(getActivity(), Ministries.class));
+                        startActivity(new Intent(getActivity(), UpcomingEvents.class));
                         break;
                     case 3:
-                        startActivity(new Intent(getActivity(), Connect.class));
+                        startActivity(new Intent(getActivity(), Ministries.class));
                         break;
                     case 4:
-                        startActivity(new Intent(getActivity(), Give.class));
+                        startActivity(new Intent(getActivity(), T_Group.class));
                         break;
                     case 5:
                         startActivity(new Intent(getActivity(), Contact.class));
                         break;
-                    case 6:
-                        startActivity(new Intent(getActivity(), About.class));
-                        break;
+
 
                 }
             }
@@ -106,8 +108,8 @@ public class NavigationFragment extends Fragment {
         return layout;
     }
 
-    public void setup( DrawerLayout layout,final Toolbar toolbar){
-          drawerLayout = layout;
+    public void setup(DrawerLayout layout, final Toolbar toolbar) {
+        drawerLayout = layout;
 
         mDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_closed) {
 
@@ -141,7 +143,6 @@ public class NavigationFragment extends Fragment {
                 mDrawerToggle.syncState();
             }
         });
-
 
 
     }

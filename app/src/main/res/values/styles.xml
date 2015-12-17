@@ -6,17 +6,18 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent_color</item>
+        <item name="android:textColor">@android:color/black</item>
 
     </style>
 
     <string-array name="navigation">
         <item>Home</item>
         <item>News</item>
+        <item>Events</item>
         <item>Ministries</item>
-        <item>Connect</item>
-        <item>Give</item>
+        <item>T-Groups</item>
         <item>Contact</item>
-        <item>About</item>
+
 
     </string-array>
     <string-array name="About">
@@ -50,6 +51,7 @@
         <item>John Ndubai-Tandaza Trust</item>
     </string-array>
     <string-array name="ministries">
+        <item>General</item>
         <item>Youth Ministry</item>
         <item>Children Ministry</item>
         <item>Sarahs Treasure</item>

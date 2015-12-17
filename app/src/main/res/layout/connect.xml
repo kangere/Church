@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
 
         android:orientation="vertical"
-        tools:context="material.kangere.com.tandaza.Connect">
+        tools:context=".NavActivities.T_Group">
 
         <include
             android:id="@+id/connectToolbar"

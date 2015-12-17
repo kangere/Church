@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="material.kangere.com.tandaza.NavActivities.Create_Event">
+
+        <include
+            android:id="@+id/tbCreateEvent"
+            layout="@layout/app_bar" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:padding="8dp"
+            android:text="@string/Event_name"
+            android:textColor="@color/accent_color"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/etEventName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter event name here" />
+
+        <!--<TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:padding="8dp"
+            android:text="@string/event_date"
+            android:textColor="@color/accent_color"
+            android:textSize="20sp" /> -->
+
+        <Button
+            android:id="@+id/bDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="SetDate"
+            android:padding="8dp"
+            android:text="@string/event_date"
+            android:textColor="@color/accent_color"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/etSHowDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:editable="false"
+            android:gravity="center_horizontal"
+            android:hint="Date will appear here" />
+
+        <Button
+            android:id="@+id/bTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="SetTime"
+            android:padding="8dp"
+            android:text="@string/event_time"
+            android:textColor="@color/accent_color"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/etSHowTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:editable="false"
+            android:gravity="center_horizontal"
+            android:hint="Time will appear here" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp"
+            android:text="Choose Ministry"
+            android:textColor="@color/accent_color"
+            android:textSize="20sp" />
+
+        <Spinner
+            android:id="@+id/sEventMinistries"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:padding="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp"
+            android:text="@string/venue"
+            android:textColor="@color/accent_color"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/etEventVenue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/venue_hint" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp"
+            android:text="@string/description"
+            android:textColor="@color/accent_color"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/etEventDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/description_hint" />
+
+        <Button
+            android:id="@+id/bEventUpload"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/upload_event"
+            android:layout_margin="8dp"
+            android:background="@color/accent_color"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:onClick="UploadEvent"/>
+
+
+    </LinearLayout>
+</ScrollView>

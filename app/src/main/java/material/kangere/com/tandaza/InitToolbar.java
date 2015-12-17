@@ -53,11 +53,11 @@ public class InitToolbar {
     public static void toolBar(AppCompatActivity a, int toolBarId) {
         Toolbar toolbar = (Toolbar) a.findViewById(toolBarId);
         a.setSupportActionBar(toolbar);
-        try {
+        /*try {
             a.getActionBar().setDisplayHomeAsUpEnabled(true);
         } catch (NullPointerException e) {
             e.printStackTrace();
-        }
+        }*/
 
         toolbar.setTitleTextColor(Color.WHITE);
     }

@@ -1,4 +1,4 @@
-package material.kangere.com.tandaza;
+package material.kangere.com.tandaza.NavActivities;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +14,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import material.kangere.com.tandaza.R;
+import material.kangere.com.tandaza.TeamAdapter;
+import material.kangere.com.tandaza.TeamInfo;
 
 
 public class Team extends Fragment {
@@ -35,7 +39,7 @@ public class Team extends Fragment {
 
         rv = (RecyclerView) v.findViewById(R.id.team_recycler_view);
         rv.setHasFixedSize(true);
-        StaggeredGridLayoutManager sgLm = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager sgLm = new StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL);
         rv.setLayoutManager(sgLm);
 
         tm = new TeamAdapter(getActivity(),getData());

@@ -1,0 +1,121 @@
+package material.kangere.com.tandaza.NavActivities;
+
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.net.Uri;
+import android.provider.ContactsContract;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.telecom.Call;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.jar.Manifest;
+
+import material.kangere.com.tandaza.NavigationFragment;
+import material.kangere.com.tandaza.R;
+
+
+public class Contact extends AppCompatActivity implements OnMapReadyCallback{
+
+    private DrawerLayout drawerLayout;
+    private Toolbar toolbar;
+    private Button call,email;
+    private static String uriString = "tel:0714669642";
+    private static String subject = "Information";
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_contact);
+        //UI Initialisation
+        call =(Button) findViewById(R.id.bCall);
+        email = (Button) findViewById(R.id.bEmail);
+        final Uri uri = Uri.parse(uriString);
+
+        //toolbar init
+        toolbar = (Toolbar) findViewById(R.id.contactToolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("Contact");
+        toolbar.setTitleTextColor(Color.WHITE);
+
+        //drawer layout init
+        drawerLayout = (DrawerLayout) findViewById(R.id.contact_drawer_layout);
+
+
+        //navigation fragment init
+        NavigationFragment navigationFragment = (NavigationFragment) getSupportFragmentManager().findFragmentById(R.id.contact_fragment_navigation_drawer);
+        navigationFragment.setup(drawerLayout, toolbar);
+
+        MapFragment mapFragment = (MapFragment) getFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
+        call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                callIntent.setData(uri);
+                startActivity(callIntent);
+
+            }
+        });
+        email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent email = new Intent(Intent.ACTION_SEND);
+                email.putExtra(Intent.EXTRA_EMAIL,new String[]{"info@tandaza.org"});
+                email.putExtra(Intent.EXTRA_SUBJECT,subject);
+                email.setType("message/rfc822");
+                startActivity(Intent.createChooser(email,"Choose an email client"));
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_contact, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap map){
+        LatLng k3c = new LatLng(-1.277683,36.788978);
+        map.setMyLocationEnabled(true);
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(k3c, 17));
+        map.addMarker(new MarkerOptions()
+                .position(k3c)
+                .title("Kileleshwa Covenant Community Church")
+                .snippet("Gichugu Road, Kileleshwa – Nairobi Kenya"));
+    }
+}

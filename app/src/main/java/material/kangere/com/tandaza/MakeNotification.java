@@ -10,10 +10,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -37,6 +34,7 @@ public class MakeNotification extends AppCompatActivity {
 
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
+    private static  final  String TAG = MakeNotification.class.getSimpleName();
     private ProgressDialog pDialog;
     public String picturePath;
     private EditText title,content;
@@ -131,6 +129,7 @@ public class MakeNotification extends AppCompatActivity {
                 //Log.w("path of image from gallery......******************.........", picturePath+"");
                 picView.setVisibility(View.VISIBLE);
                 picView.setImageBitmap(thumbnail);
+                Log.d(TAG,picturePath);
                 Toast.makeText(MakeNotification.this, picturePath, Toast.LENGTH_LONG).show();
                 launchUploadActivity();
 

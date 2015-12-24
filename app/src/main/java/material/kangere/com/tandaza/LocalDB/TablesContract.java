@@ -23,11 +23,11 @@ public class TablesContract  {
     public static abstract class EventsEntry implements BaseColumns
     {
         public static final String TABLE_NAME = "events";
-        public static final String COLUMN_TITLE = "title";
-        public static final String COLUMN_DATE = "date";
-        public static final String COLUMN_TIME = "time";
-        public static final String COLUMN_VENUE = "venue";
-        public static final String COLUMN_DESCRIPTION = "description";
+        public static final String COLUMN_EVENT_CACHE = "events_cache";
+    }
+    public static  abstract class NotificationsCache implements BaseColumns{
+        public static final String TABLE_NAME = "notifications_cache";
+        public static final String COLUMN_NOTE_CACHE = "notification_cache";
     }
 
 }

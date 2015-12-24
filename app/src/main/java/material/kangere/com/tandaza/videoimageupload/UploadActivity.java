@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.RecoverySystem;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
@@ -61,7 +60,7 @@ public class UploadActivity extends Activity {
         if (filePath != null) {
 
             new UploadFileToServer().execute();
-            Toast.makeText(UploadActivity.this, "Its workingA", Toast.LENGTH_LONG).show();
+            Toast.makeText(UploadActivity.this, "Its working", Toast.LENGTH_LONG).show();
 
         } else {
             Toast.makeText(getApplicationContext(),
@@ -91,7 +90,7 @@ public class UploadActivity extends Activity {
 
         } else {
 
-            Toast.makeText(UploadActivity.this, "not workingA", Toast.LENGTH_LONG).show();
+            Toast.makeText(UploadActivity.this, "not working", Toast.LENGTH_LONG).show();
 
         }
     }

@@ -1,12 +1,9 @@
 package material.kangere.com.tandaza.NavActivities;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,7 +14,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,10 +22,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import material.kangere.com.tandaza.Adapters.MyAdapter;
 import material.kangere.com.tandaza.AppConfig;
 import material.kangere.com.tandaza.CheckNetwork;
 import material.kangere.com.tandaza.InitToolbar;
@@ -37,7 +35,6 @@ import material.kangere.com.tandaza.ItemData;
 import material.kangere.com.tandaza.JSONParser;
 import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
 import material.kangere.com.tandaza.MakeNotification;
-import material.kangere.com.tandaza.Adapters.MyAdapter;
 import material.kangere.com.tandaza.R;
 import material.kangere.com.tandaza.SessionManager;
 
@@ -251,7 +248,7 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
                         notificationsList.add(notificationsTitles);
                     }
                 } else {
-
+                    Log.d(TAG,"Error retreiving json object");
 
                 }
 

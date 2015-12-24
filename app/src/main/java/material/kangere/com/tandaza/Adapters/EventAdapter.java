@@ -40,7 +40,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolderEv
     }
     public void setEventsList(ArrayList<EventData> list){
         this.eventsList = list;
-        notifyItemRangeChanged(0,list.size());
+        notifyItemRangeChanged(0, list.size());
+    }
+    public void setClickListener(EventsClickListener eventsClickListener){
+        this.clickListener = eventsClickListener;
     }
 
     @Override
@@ -77,6 +80,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolderEv
 
     }
     public interface EventsClickListener{
-        void itemClicked(View view,int position);
+       public  void itemClicked(View view,int position);
     }
 }

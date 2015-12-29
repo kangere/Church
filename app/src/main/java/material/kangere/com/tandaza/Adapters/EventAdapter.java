@@ -35,6 +35,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolderEv
         holder.time.setText(current.getTime());
         holder.venue.setText(current.getVenue());
         holder.description.setText(current.getDescription());
+        holder.ministry.setText(current.getMinistry());
 
 
     }
@@ -60,9 +61,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolderEv
 
     class ViewHolderEvents extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private TextView title,date,venue,time,description;
+        private TextView title,date,ministry,venue,time,description;
         public ViewHolderEvents(View view){
             super(view);
+            ministry = (TextView)view.findViewById(R.id.tvEventMinistry);
             title = (TextView) view.findViewById(R.id.tvEventTitle);
             date = (TextView) view.findViewById(R.id.tvEventDate);
             venue = (TextView) view.findViewById(R.id.tvEventVenue);
@@ -82,4 +84,5 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolderEv
     public interface EventsClickListener{
        public  void itemClicked(View view,int position);
     }
+
 }

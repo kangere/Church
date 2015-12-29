@@ -63,5 +63,37 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <string-array name="youth_headers">
 
+        <item>Daraja</item>
+        <item>TILT (Teenz Influencing Life Today)</item>
+        <item>HD (High Definition)</item>
+        <item>IGNITION</item>
+        <item>Culture Café</item>
+
+    </string-array>
+    <string-array name="youth_text">
+
+        <item>This is a year-long R.O.P.E.S (Rights of Passage Experiences) program for those in the final year of primary school.
+The curriculum based sessions prepare the participants for transition in to teenage with the help and support of their parents and guardians.
+The sessions run on Sunday from 11.00am-12.30pm</item>
+        <item>We are about mobilizing and building a community and movement of high-school teenagers who love God passionately and live for Him in way that influences others to follow.
+We Grow deeper in our FAITH and connect with meaningful FRIENDS over lots of FUN and FOOD.
+Our Service runs from 11.00am- 12.30pm</item>
+        <item>This is our Ex-cans program that challenges participants to continually define who they are, their relationship with God, their careers and future.</item>
+        <item>Is our College Students Xperience that challenges young people to rev-up their lives in Christ, light up their world, spark their gifts, and equip them to be witnesses in every sphere of society.</item>
+        <item>These are our Teens and Young Adults T-Groups.
+Our On-Campus T-Group meets on Wednesday 6.00pm-7.30pm.
+Our Off- Campus T-Groups meet during the holiday and weekends to cater for boarders.</item>
+    </string-array>
+
+    <string-array name="ministry_header">
+
+        <item>Youth Ministry</item>
+        <item>Children Ministry</item>
+        <item>Sarahs Treasure</item>
+        <item>Kingsmen</item>
+        <item>Marriage Ministry</item>
+        <item>BOFU</item>
+    </string-array>
 </resources>

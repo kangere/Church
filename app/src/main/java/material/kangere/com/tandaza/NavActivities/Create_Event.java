@@ -3,16 +3,12 @@ package material.kangere.com.tandaza.NavActivities;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,12 +18,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.apache.http.NameValuePair;
@@ -35,15 +28,14 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import material.kangere.com.tandaza.AppConfig;
-import material.kangere.com.tandaza.InitToolbar;
 import material.kangere.com.tandaza.JSONParser;
 import material.kangere.com.tandaza.R;
+import material.kangere.com.tandaza.StaticMethods;
 
 public class Create_Event extends AppCompatActivity {
 
@@ -65,7 +57,7 @@ public class Create_Event extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_create__event);
 
-        InitToolbar.toolBar(this,R.id.tbCreateEvent);
+        StaticMethods.toolBar(this, R.id.tbCreateEvent);
 
         try{
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -188,7 +180,13 @@ public class Create_Event extends AppCompatActivity {
                     //finish activity
                     finish();
                 }else{
-                    Log.d("Error","Json request failed");
+                    Log.e("Error","Json request failed");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(Create_Event.this,"Something Seems to be wrong, Try again later",Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
 
             }catch(JSONException e){

@@ -1,12 +1,12 @@
 package material.kangere.com.tandaza.NavActivities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import material.kangere.com.tandaza.InitToolbar;
 import material.kangere.com.tandaza.R;
+import material.kangere.com.tandaza.StaticMethods;
 
 public class SarahsTreasure extends AppCompatActivity {
 
@@ -16,7 +16,7 @@ public class SarahsTreasure extends AppCompatActivity {
         setContentView(R.layout.activity_sarahs_treasure);
 
         //toolbar and drawer layout and navigation drawer init from the Init class
-        InitToolbar.ClassInitisialisation(this, R.id.sarahs_fragment_navigation_drawer, R.id.sarahsToolbar, R.id.sarah_drawer_layout);
+        StaticMethods.ClassInitisialisation(this, R.id.sarahs_fragment_navigation_drawer, R.id.sarahsToolbar, R.id.sarah_drawer_layout);
     }
 
     @Override

@@ -15,6 +15,7 @@ public class AppConfig {
    // public static String URL_REGISTER = "http://192.168.0.105/android_login_api/register.php";
     public static String URL_REGISTER = "http://192.168.0.105/tandaza_api/register.php";
     public static String URL_UPLOAD = "http://192.168.0.105/tandaza_api/upload_note.php";
-    public static String FILE_UPLOAD_URL = "http://192.168.0.105/tandaza_api/file_upload.php";
-    public static String EVENT_UPLOAD_URL = "http://192.168.0.105/tandaza_api/upload_event.php";
+    public static String FILE_UPLOAD_URL = "http://192.168.0.105/tandaza/file_upload.php";
+    public static String EVENT_UPLOAD_URL = "http://192.168.0.105/tandaza/upload_note.php";
+    public static String URL_GET_EVENTS = "http://192.168.0.105/tandaza_api/get_events.php";
 }

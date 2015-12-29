@@ -63,7 +63,7 @@ public class MakeNotification extends AppCompatActivity {
 
 
         //Toolbar init
-        InitToolbar.ClassInitisialisation(this,R.id.Make_Note_fragment_navigation_drawer, R.id.toolBarMakeNote, R.id.Make_Note_drawer_layout);
+        StaticMethods.ClassInitisialisation(this, R.id.Make_Note_fragment_navigation_drawer, R.id.toolBarMakeNote, R.id.Make_Note_drawer_layout);
 
 
         upload  = (Button) findViewById(R.id.bNoteUpload);

@@ -5,7 +5,15 @@ package material.kangere.com.tandaza;
  */
 public class EventData {
 
-    private String title,date,time,venue,description;
+    private String title,date,time,ministry,venue,description;
+
+    public String getMinistry() {
+        return ministry;
+    }
+
+    public void setMinistry(String ministry) {
+        this.ministry = ministry;
+    }
 
     public String getTitle() {
         return title;

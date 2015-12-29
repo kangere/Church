@@ -1,40 +1,40 @@
 package material.kangere.com.tandaza.Adapters;
 
-import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import material.kangere.com.tandaza.R;
 
 /**
  * Created by user on 11/5/2015.
  */
-public class MinAdapter extends BaseAdapter {
-    Context mContext;
-    int[] icons = {R.drawable.ic_about,R.drawable.children_ministry,R.drawable.ic_about,R.drawable.kings_men};
-    public MinAdapter(Context c){
-        mContext = c;
-    }
-    @Override
-    public int getCount() {
-        return icons.length;
-    }
+public class MinAdapter extends ArrayAdapter {
+    private String[] titles;
+    private int[] images;
+    private AppCompatActivity a;
 
-    @Override
-    public Object getItem(int i) {
-        return null;
+
+    public MinAdapter(AppCompatActivity a,String[] titles,int[] images){
+        super(a,R.layout.ministry_cardview,titles);
+        this.a = a;
+        this.titles = titles;
+        this.images = images;
     }
 
     @Override
-    public long getItemId(int i) {
-        return 0;
+    public View getView(int position, View convertView, ViewGroup parent) {
+        LayoutInflater inflater = a.getLayoutInflater();
+        View view = inflater.inflate(R.layout.ministry_cardview, null, true);
+        ImageView image = (ImageView) view.findViewById(R.id.ivMin);
+        TextView text = (TextView) view.findViewById(R.id.tvMin);
+
+        image.setImageResource(images[position]);
+        text.setText(titles[position]);
+        return view;
     }
-
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        return null;
-    }
-
-
 }

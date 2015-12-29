@@ -179,11 +179,35 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         }
 
     }
+    public void addEventCache() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        //values.put(KEY_CACHE_ID, cache_id); // Name
+        values.putNull(EventsEntry.COLUMN_EVENT_CACHE); // StudentId
+        //values.put(KEY_NOTIFICATION_CACHE, notification_cache); //Email
+
+        long id = db.insert(EventsEntry.TABLE_NAME, null, values);
+        db.close(); // Closing database connection
+
+        Log.d(TAG, "New Events cache inserted into sqlite: " + id);
+    }
+    public void addNotificationCache() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        //values.put(KEY_CACHE_ID, cache_id); // Name
+        values.putNull(NotificationsCache.COLUMN_NOTE_CACHE); // StudentId
+        //values.put(KEY_NOTIFICATION_CACHE, notification_cache); //Email
+
+        long id = db.insert(NotificationsCache.TABLE_NAME, null, values);
+        db.close(); // Closing database connection
+
+        Log.d(TAG, "New Notifications cache inserted into sqlite: " + id);
+    }
     public void updateNotificationCache(String note_cache)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues args = new ContentValues();
-        args.put(NotificationsCache.COLUMN_NOTE_CACHE , note_cache);
+        args.put(NotificationsCache.COLUMN_NOTE_CACHE, note_cache);
 
         db.update(NotificationsCache.TABLE_NAME, args, NotificationsCache._ID + "= '" + 1 + "'", null);
         //db.close();
@@ -200,5 +224,46 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         //db.close();
 
 
+    }
+    public HashMap<String, String> getEventCacheDetails() {
+        HashMap<String, String> eventCache = new HashMap<String, String>();
+        String selectQuery = "SELECT  * FROM " + EventsEntry.TABLE_NAME;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // Move to first row
+        cursor.moveToFirst();
+        if (cursor.getCount() > 0) {
+            //cache.put("cache_id", cursor.getString(1));
+            eventCache.put("event_cache", cursor.getString(1));
+
+        }
+        cursor.close();
+        db.close();
+        // return user
+        Log.d(TAG, "Fetching event from Sqlite: " + eventCache.toString());
+
+        return eventCache;
+    }
+
+    public HashMap<String, String> getNotificationCache() {
+        HashMap<String, String> noteCache = new HashMap<String, String>();
+        String selectQuery = "SELECT  * FROM " + NotificationsCache.TABLE_NAME;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // Move to first row
+        cursor.moveToFirst();
+        if (cursor.getCount() > 0) {
+            //cache.put("cache_id", cursor.getString(1));
+            noteCache.put("notification_cache", cursor.getString(1));
+
+        }
+        cursor.close();
+        db.close();
+        // return user
+        Log.d(TAG, "Fetching notification from Sqlite: " + noteCache.toString());
+
+        return noteCache;
     }
 }

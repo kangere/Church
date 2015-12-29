@@ -1,37 +1,41 @@
 package material.kangere.com.tandaza.NavActivities;
 
-import android.graphics.Color;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.support.v7.widget.Toolbar;
+import android.widget.ListView;
 
-import material.kangere.com.tandaza.NavigationFragment;
+import material.kangere.com.tandaza.Adapters.YouthAdapter;
 import material.kangere.com.tandaza.R;
+import material.kangere.com.tandaza.StaticMethods;
 
 public class YouthMinistry extends AppCompatActivity {
 
-    private Toolbar toolbar;
-    private DrawerLayout drawerLayout;
+
+    private ListView listView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_youth_ministry);
 
         //toolbar initisialization
-        toolbar = (Toolbar) findViewById(R.id.youthToolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle("Youth Ministry");
-        toolbar.setTitleTextColor(Color.WHITE);
+        StaticMethods.toolBar(this,R.id.youthToolbar);
 
-        //drawerlayout init
-        drawerLayout = (DrawerLayout) findViewById(R.id.youth_drawer_layout);
+        try{
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+        }catch(NullPointerException e){
+            e.printStackTrace();
+        }
 
-        //Navigation fragment init
-        NavigationFragment navfrag = (NavigationFragment) getSupportFragmentManager().findFragmentById(R.id.youth_fragment_navigation_drawer);
-        navfrag.setup(drawerLayout,toolbar);
+        String[] titles = getResources().getStringArray(R.array.youth_headers);
+        String[] body = getResources().getStringArray(R.array.youth_text);
+        listView = (ListView) findViewById(R.id.lvYouth);
+        YouthAdapter youthAdapter = new YouthAdapter(this,titles,body);
+        listView.setAdapter(youthAdapter);
     }
 
     @Override
@@ -51,6 +55,9 @@ public class YouthMinistry extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        if(id == android.R.id.home){
+            NavUtils.navigateUpFromSameTask(this);
         }
 
         return super.onOptionsItemSelected(item);

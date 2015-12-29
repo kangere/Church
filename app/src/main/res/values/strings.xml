@@ -82,5 +82,8 @@ Loving God, Connecting with People, Transforming Communities.
     <string name="label_venue">Venue:</string>
     <string name="dummy_description">The description of the event will be here containing the event details
             what is expected to happen and why one should be there</string>
+    <string name="label_minstry">Ministry:</string>
+    <string name="youth">Youth Ministry</string>
+
 
 </resources>

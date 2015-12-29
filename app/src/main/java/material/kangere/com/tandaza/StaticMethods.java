@@ -7,13 +7,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 
-public class InitToolbar {
+public class StaticMethods {
 
    /* private Toolbar toolbar;
     private DrawerLayout drawerLayout;*/
 
 
-    public InitToolbar() {
+    public StaticMethods() {
 
     }
 
@@ -61,4 +61,5 @@ public class InitToolbar {
 
         toolbar.setTitleTextColor(Color.WHITE);
     }
+
 }

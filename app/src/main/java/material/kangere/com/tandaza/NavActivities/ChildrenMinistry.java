@@ -1,14 +1,12 @@
 package material.kangere.com.tandaza.NavActivities;
 
-import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toolbar;
 
-import material.kangere.com.tandaza.InitToolbar;
 import material.kangere.com.tandaza.R;
+import material.kangere.com.tandaza.StaticMethods;
 
 public class ChildrenMinistry extends AppCompatActivity {
 
@@ -19,7 +17,7 @@ public class ChildrenMinistry extends AppCompatActivity {
         setContentView(R.layout.activity_children_ministry);
 
         //toolbar and drawer layout and navigation drawer init from the Init class
-        InitToolbar.ClassInitisialisation(this, R.id.children_fragment_navigation_drawer, R.id.childrenToolbar, R.id.children_drawer_layout);
+        StaticMethods.ClassInitisialisation(this, R.id.children_fragment_navigation_drawer, R.id.childrenToolbar, R.id.children_drawer_layout);
     }
 
     @Override

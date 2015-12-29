@@ -1,9 +1,11 @@
 package material.kangere.com.tandaza.NavActivities;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -13,11 +15,13 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import material.kangere.com.tandaza.InitToolbar;
 import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
+import material.kangere.com.tandaza.LocalDB.TablesContract.EventsEntry;
+import material.kangere.com.tandaza.LocalDB.TablesContract.NotificationsCache;
 import material.kangere.com.tandaza.Login;
 import material.kangere.com.tandaza.R;
 import material.kangere.com.tandaza.SessionManager;
+import material.kangere.com.tandaza.StaticMethods;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -29,7 +33,7 @@ public class MainActivity extends ActionBarActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     Toolbar toolbar;
     private Button btnLogout;
-    private TextView txtName,txtEmail;
+    private TextView txtName, txtEmail;
     private SQLiteHandler db;
     private SessionManager session;
 
@@ -39,7 +43,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         //toolbar init and nav frag
-        InitToolbar.ClassInitisialisation(this, R.id.fragment_navigation_drawer, R.id.toolBarMain, R.id.drawer_layout);
+        StaticMethods.ClassInitisialisation(this, R.id.fragment_navigation_drawer, R.id.toolBarMain, R.id.drawer_layout);
 
         txtName = (TextView) findViewById(R.id.name);
         txtEmail = (TextView) findViewById(R.id.email);
@@ -47,6 +51,19 @@ public class MainActivity extends ActionBarActivity {
 
         // SqLite database handler
         db = new SQLiteHandler(getApplicationContext());
+        SQLiteDatabase database = db.getWritableDatabase();
+        String query = "SELECT * FROM " + NotificationsCache.TABLE_NAME;
+        String eventQuery = "SELECT * FROM " + EventsEntry.TABLE_NAME;
+        Cursor c = database.rawQuery(query, null);
+        c.moveToFirst();
+        if (c.getCount() == 0) {
+            db.addNotificationCache();
+        }
+        Cursor cursor = database.rawQuery(eventQuery,null);
+        cursor.moveToFirst();
+        if(cursor.getCount() == 0)
+                db.addEventCache();
+
 
         // session manager
         session = new SessionManager(getApplicationContext());
@@ -98,6 +115,7 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
     private void logoutUser() {
         session.setLogin(false);
 

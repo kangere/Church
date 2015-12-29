@@ -1,24 +1,22 @@
 package material.kangere.com.tandaza.NavActivities;
 
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
 import it.neokree.materialtabs.MaterialTabListener;
 import material.kangere.com.tandaza.AboutTandaza;
-import material.kangere.com.tandaza.InitToolbar;
 import material.kangere.com.tandaza.R;
+import material.kangere.com.tandaza.StaticMethods;
 
 
 public class About extends AppCompatActivity implements MaterialTabListener {
@@ -37,7 +35,7 @@ public class About extends AppCompatActivity implements MaterialTabListener {
 
 
         //toolbar initialization
-        InitToolbar.ClassInitisialisation(this, R.id.about_fragment_navigation_drawer, R.id.aboutToolbar, R.id.about_drawer_layout);
+        StaticMethods.ClassInitisialisation(this, R.id.about_fragment_navigation_drawer, R.id.aboutToolbar, R.id.about_drawer_layout);
 
         //array for titles
         aboutArray = getResources().getStringArray(R.array.About);

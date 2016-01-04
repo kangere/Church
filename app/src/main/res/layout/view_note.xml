@@ -76,6 +76,8 @@
                 cardview:contentPadding="8dp">
 
                 <TextView
+                    android:linksClickable="true"
+                    android:textIsSelectable="true"
                     android:id="@+id/tvDetailNoteContent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

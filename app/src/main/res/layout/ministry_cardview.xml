@@ -1,32 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="10dp"
-    card_view:elevation="2dp"
-    card_view:cardCornerRadius="4dp">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        card_view:cardCornerRadius="4dp"
+        card_view:elevation="2dp">
 
-        <ImageView
-            android:id="@+id/ivMin"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:src="@drawable/ic_about"
-            android:scaleType="fitXY"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvMin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="Hello world"
-            android:textSize="20sp" />
+            <TextView
+                android:id="@+id/tvMinTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center_horizontal"
+                android:text="Some Dummy Header"
+                android:textSize="20sp" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tvMinText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:maxLines="15"
+                android:ellipsize="end"
+                android:text="Hello world"
+                android:textSize="15sp" />
 
-</android.support.v7.widget.CardView>
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+</FrameLayout>

@@ -1,8 +1,10 @@
 package material.kangere.com.tandaza.NavActivities;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -13,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -74,10 +77,9 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
     private MyAdapter adapter;
     private long NOW = new Date().getTime();
     private Date parsedDate;
-    private Date currentDate;
+
     private LinearLayout linearLayoutCon;
-    private LinearLayout linearLayoutNoCon;
-    private TextView noConnection;
+
     private Button btnUploadClass, refresh;
 
     @Override
@@ -110,6 +112,14 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 
+        loadData();
+
+
+    }
+
+
+
+    private void loadData() {
         //check to see if internet connection is available
         if (CheckNetwork.isInternetAvailable(Show_Notifications.this)) //returns true if internet available
         {
@@ -136,15 +146,26 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
             });
             snack.setActionTextColor(getResources().getColor(R.color.accent_color));
             View view = snack.getView();
-            TextView tv =(TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+            TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
             tv.setTextColor(Color.WHITE);
             snack.show();
 
 
+        }
+    }
+
+    public static ProgressDialog createProgrssDialog(Context mContext){
+        ProgressDialog dialog = new ProgressDialog(mContext);
+        try {
+            dialog.show();
+        } catch (WindowManager.BadTokenException e) {
 
         }
-
-
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setContentView(R.layout.progressdialog);
+        // dialog.setMessage(Message);
+        return dialog;
     }
 
     @Override
@@ -253,13 +274,12 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(Show_Notifications.this);
-            //pDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            pDialog.setMessage("Loading notifications. Please wait...");
-            pDialog.setIndeterminate(true);
-            pDialog.setCancelable(false);
-
-            pDialog.show();
+            if (pDialog == null) {
+                pDialog = createProgrssDialog(Show_Notifications.this);
+                pDialog.show();
+            } else {
+                pDialog.show();
+            }
         }
 
 

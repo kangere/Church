@@ -122,7 +122,8 @@
             android:id="@+id/etEventDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/description_hint" />
+            android:hint="@string/description_hint"
+            android:minHeight="100dp"/>
 
         <Button
             android:id="@+id/bEventUpload"

@@ -3,8 +3,10 @@ package material.kangere.com.tandaza.NavActivities;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 
 import material.kangere.com.tandaza.Adapters.YouthAdapter;
@@ -31,9 +33,17 @@ public class YouthMinistry extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        //data for listview
         String[] titles = getResources().getStringArray(R.array.youth_headers);
         String[] body = getResources().getStringArray(R.array.youth_text);
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        View view = inflater.inflate(R.layout.youth_header,null);
+
+
         listView = (ListView) findViewById(R.id.lvYouth);
+        listView.addHeaderView(view);
+
         YouthAdapter youthAdapter = new YouthAdapter(this,titles,body);
         listView.setAdapter(youthAdapter);
     }

@@ -4,15 +4,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
-import android.provider.ContactsContract;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.telecom.Call;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,25 +21,24 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.jar.Manifest;
-
 import material.kangere.com.tandaza.NavigationFragment;
 import material.kangere.com.tandaza.R;
 
 
-public class Contact extends AppCompatActivity implements OnMapReadyCallback{
+public class Contact extends AppCompatActivity implements OnMapReadyCallback {
 
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
-    private Button call,email;
+    private Button call, email;
     private static String uriString = "tel:0714669642";
     private static String subject = "Information";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
         //UI Initialisation
-        call =(Button) findViewById(R.id.bCall);
+        call = (Button) findViewById(R.id.bCall);
         email = (Button) findViewById(R.id.bEmail);
         final Uri uri = Uri.parse(uriString);
 
@@ -77,11 +72,11 @@ public class Contact extends AppCompatActivity implements OnMapReadyCallback{
         email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent email = new Intent(Intent.ACTION_SEND);
-                email.putExtra(Intent.EXTRA_EMAIL,new String[]{"info@tandaza.org"});
-                email.putExtra(Intent.EXTRA_SUBJECT,subject);
-                email.setType("message/rfc822");
-                startActivity(Intent.createChooser(email,"Choose an email client"));
+                Intent email = new Intent(Intent.ACTION_SENDTO,Uri.fromParts("mailto","info@tandaza.org",null));
+                //email.putExtra(Intent.EXTRA_EMAIL, new String[]{"info@tandaza.org"});
+                email.putExtra(Intent.EXTRA_SUBJECT, subject);
+                //email.setType(HTTP.PLAIN_TEXT_TYPE);
+                startActivity(Intent.createChooser(email, "Send Email"));
             }
         });
     }
@@ -109,9 +104,20 @@ public class Contact extends AppCompatActivity implements OnMapReadyCallback{
     }
 
     @Override
-    public void onMapReady(GoogleMap map){
-        LatLng k3c = new LatLng(-1.277683,36.788978);
-        map.setMyLocationEnabled(true);
+    public void onMapReady(GoogleMap map) {
+        LatLng k3c = new LatLng(-1.277683, 36.788978);
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            map.setMyLocationEnabled(true);
+            return;
+        }
+
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(k3c, 17));
         map.addMarker(new MarkerOptions()
                 .position(k3c)

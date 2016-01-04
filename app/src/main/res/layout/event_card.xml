@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+
             <TextView
                 android:id="@+id/tvEventTitle"
                 android:layout_width="wrap_content"
@@ -25,30 +26,35 @@
                 android:layout_centerHorizontal="true"
                 android:text="Event Name Here"
                 android:textSize="20sp" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:id="@+id/ivEventImage"
+                android:layout_below="@+id/tvEventTitle"
+                android:src="@drawable/youth"
+                android:scaleType="fitXY"/>
 
             <TextView
+
                 android:id="@+id/tvLabelDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvEventTitle"
+                android:layout_below="@+id/ivEventImage"
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/date"
-                android:textSize="15sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/tvEventDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvEventTitle"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_toEndOf="@+id/tvLabelDate"
-                android:layout_toRightOf="@+id/tvLabelDate"
                 android:text="2015-11-12"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:layout_alignBottom="@+id/tvLabelDate"
+                android:layout_toRightOf="@+id/tvLabelVenue"
+                android:layout_toEndOf="@+id/tvLabelVenue" />
 
             <TextView
                 android:id="@+id/tvLabelTime"
@@ -59,20 +65,17 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/time"
-                android:textSize="15sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/tvEventTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvLabelDate"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_toEndOf="@+id/tvLabelTime"
-                android:layout_toRightOf="@+id/tvLabelTime"
                 android:text="12:30"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:layout_alignBottom="@+id/tvLabelTime"
+                android:layout_toRightOf="@+id/tvLabelVenue"
+                android:layout_toEndOf="@+id/tvLabelVenue" />
 
             <TextView
                 android:id="@+id/tvLabelMinistry"
@@ -83,20 +86,18 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/label_minstry"
-                android:textSize="15sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/tvEventMinistry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvLabelTime"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_toEndOf="@+id/tvLabelMinistry"
-                android:layout_toRightOf="@+id/tvLabelMinistry"
                 android:text="Ministry here"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:paddingLeft="8dp"
+                android:paddingStart="8dp"
+                android:layout_above="@+id/tvLabelVenue"
+                android:layout_toRightOf="@+id/tvLabelMinistry" />
 
             <TextView
                 android:id="@+id/tvLabelVenue"
@@ -107,26 +108,33 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/label_venue"
-                android:textSize="15sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/tvEventVenue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvLabelMinistry"
+                android:text="Venue here"
+                android:textSize="15sp"
+                android:layout_alignBottom="@+id/tvLabelVenue"
+                android:layout_toRightOf="@+id/tvLabelMinistry"
+                android:layout_toEndOf="@+id/tvLabelMinistry" />
+            <TextView
+                android:id="@+id/tvLabelDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvEventVenue"
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_toEndOf="@+id/tvLabelVenue"
-                android:layout_toRightOf="@+id/tvLabelVenue"
-                android:text="Venue here"
-                android:textSize="15sp" />
+                android:text="@string/desc"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/tvEventDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvLabelVenue"
+                android:layout_below="@+id/tvLabelDesc"
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"

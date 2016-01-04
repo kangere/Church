@@ -80,7 +80,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
-                    android:hint="Enter Notification content here" />
+                    android:hint="Enter Notification content here"
+                    android:minHeight="200dp"/>
                 <ImageView
                     android:id="@+id/imgPreview"
                     android:layout_width="100dp"

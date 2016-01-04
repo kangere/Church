@@ -28,6 +28,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import material.kangere.com.tandaza.NavActivities.Show_Notifications;
 import material.kangere.com.tandaza.videoimageupload.UploadActivity;
 
 public class MakeNotification extends AppCompatActivity {
@@ -75,7 +76,7 @@ public class MakeNotification extends AppCompatActivity {
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                                                                             R.array.ministries,
-                                                                            android.R.layout.simple_spinner_item);
+                                                                            R.layout.myspinner);
         ministries.setAdapter(adapter);
 
 
@@ -166,11 +167,12 @@ public class MakeNotification extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(MakeNotification.this);
-            pDialog.setMessage("Posting Notification..");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(true);
-            pDialog.show();
+            if (pDialog == null) {
+                pDialog = Show_Notifications.createProgrssDialog(MakeNotification.this);
+                pDialog.show();
+            } else {
+                pDialog.show();
+            }
         }
 
 

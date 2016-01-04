@@ -1,271 +1,288 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
-    <include
-        android:id="@+id/toolBarMain"
-        layout="@layout/app_bar" />
 
-    <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
-        android:id="@+id/drawer_layout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/toolBarMain"
-
-        >
+        android:layout_height="match_parent">
 
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:fadeScrollbars="true"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="WELCOME"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:textColor="@color/lbl_name"
-                    android:textSize="24dp"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/email"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="13dp"
-                    android:visibility="gone" />
-
-                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    card_view:cardCornerRadius="2dp"
-                    card_view:cardElevation="4dp">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <ImageView
-                            android:id="@+id/ivMain"
-                            android:layout_width="match_parent"
-                            android:layout_height="200dp"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/main" />
-
-                        <TextView
-                            android:id="@+id/tvK3Ctimes"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/ivMain"
-                            android:background="@null"
-                            android:gravity="center_horizontal"
-                            android:paddingTop="4dp"
-                            android:text="@string/services"
-
-
-                            android:textSize="20dp" />
-
-                        <TextView
-                            android:id="@+id/tvAdult"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/tvK3Ctimes"
-                            android:text="@string/adult_service" />
-
-                        <TextView
-                            android:id="@+id/tvAdultServicetime1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/tvK3Ctimes"
-                            android:layout_toRightOf="@+id/tvAdult"
-                            android:paddingLeft="8dp"
-                            android:text="@string/adult_service_time1" />
-
-                        <TextView
-                            android:id="@+id/tvAdultServicetime2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/tvAdultServicetime1"
-                            android:layout_toRightOf="@+id/tvAdult"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="8dp"
-                            android:text="@string/adult_service_time2" />
-
-                        <TextView
-                            android:id="@+id/tvChildren"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/tvAdultServicetime2"
-                            android:text="@string/children_service" />
-
-                        <TextView
-                            android:id="@+id/tvChildrenServicetime1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/tvAdultServicetime2"
-                            android:layout_toRightOf="@+id/tvChildren"
-                            android:paddingLeft="8dp"
-                            android:text="@string/adult_service_time1" />
-
-                        <TextView
-                            android:id="@+id/tvChildrenServicetime2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/tvChildrenServicetime1"
-                            android:layout_toRightOf="@+id/tvChildren"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="8dp"
-                            android:text="@string/adult_service_time2" />
-
-                        <TextView
-                            android:id="@+id/tvTeens"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/tvChildrenServicetime2"
-                            android:text="@string/teens_service" />
-
-                        <TextView
-                            android:id="@+id/tvTeensServiceTime"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/tvChildrenServicetime2"
-                            android:layout_toRightOf="@+id/tvTeens"
-                            android:paddingBottom="10dp"
-                            android:paddingLeft="8dp"
-                            android:text="@string/adult_service_time2" />
-
-                        <TextView
-                            android:id="@+id/tvChinese"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/tvTeensServiceTime"
-                            android:gravity="center_horizontal"
-                            android:text="@string/chinese_service"
-                            android:textSize="15dp" />
-
-                        <TextView
-                            android:id="@+id/tvKidsChinese"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/tvChinese"
-                            android:text="@string/kids" />
-
-                        <TextView
-                            android:id="@+id/tvKidsChineseTime"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/tvChinese"
-                            android:layout_toRightOf="@+id/tvKidsChinese"
-                            android:paddingBottom="10dp"
-                            android:paddingLeft="8dp"
-                            android:text="@string/chinese_service_kids" />
-
-                        <TextView
-                            android:id="@+id/tvAdultChinese"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/tvKidsChinese"
-                            android:text="@string/adult" />
-
-                        <TextView
-                            android:id="@+id/tvAdultChineseTime"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/tvKidsChinese"
-                            android:layout_toRightOf="@+id/tvAdultChinese"
-                            android:paddingBottom="10dp"
-                            android:paddingLeft="8dp"
-                            android:text="@string/chinese_service_adult" />
-                    </RelativeLayout>
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    card_view:cardCornerRadius="2dp"
-                    card_view:cardElevation="4dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
-                            android:text="@string/visionHeader"
-                            android:textSize="20sp" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/vision" />
-                    </LinearLayout>
-
-
-                </android.support.v7.widget.CardView>
-
-
-                <Button
-                    android:id="@+id/btnLogout"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="40dip"
-                    android:background="@color/btn_logut_bg"
-                    android:text="@string/btn_logout"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="15dp" />
-            </LinearLayout>
-        </ScrollView>
-
-
-        <fragment
-            android:id="@+id/fragment_navigation_drawer"
-            android:name="material.kangere.com.tandaza.NavigationFragment"
-
-            android:layout_width="280dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            app:layout="@layout/navigation_fragment"
-            tools:layout="@layout/navigation_fragment" />
-
-        <!--<ImageView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/tandaza_logo"/>
-        <ListView
-            android:id="@+id/left_drawer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:fadeScrollbars="true"
+            android:gravity="center"
+            android:orientation="vertical">
 
-            android:choiceMode="singleChoice"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="0dp" />-->
+            <include
+                android:id="@+id/toolBarMain"
+                layout="@layout/app_bar" />
+
+            <!-- <TextView
+
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="WELCOME"
+                 android:textSize="20dp" />
+
+             <TextView
+                 android:id="@+id/name"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:padding="10dp"
+                 android:textColor="@color/lbl_name"
+                 android:textSize="24dp"
+                 android:visibility="gone" />
+
+             <TextView
+                 android:id="@+id/email"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:textSize="13dp"
+                 android:visibility="gone" />-->
+
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:padding="8dp"
+                card_view:cardCornerRadius="2dp"
+                card_view:cardElevation="4dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/ivMain"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/main" />
+
+                    <TextView
+                        android:id="@+id/tvK3Ctimes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ivMain"
+                        android:background="@null"
+                        android:gravity="center_horizontal"
+                        android:paddingTop="4dp"
+                        android:text="@string/services"
 
 
-    </android.support.v4.widget.DrawerLayout>
-</RelativeLayout>
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:id="@+id/tvAdult"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvK3Ctimes"
+                        android:paddingLeft="8dp"
+                        android:paddingStart="8dp"
+                        android:text="@string/adult_service" />
+
+                    <TextView
+                        android:id="@+id/tvAdultServicetime1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvK3Ctimes"
+                        android:layout_toRightOf="@+id/tvAdult"
+                        android:paddingLeft="8dp"
+                        android:text="@string/adult_service_time1" />
+
+                    <TextView
+                        android:id="@+id/tvAdultServicetime2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvAdultServicetime1"
+                        android:layout_toRightOf="@+id/tvAdult"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="8dp"
+                        android:text="@string/adult_service_time2" />
+
+                    <TextView
+                        android:id="@+id/tvChildren"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvAdultServicetime2"
+                        android:paddingLeft="8dp"
+                        android:paddingStart="8dp"
+                        android:text="@string/children_service" />
+
+                    <TextView
+                        android:id="@+id/tvChildrenServicetime1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvAdultServicetime2"
+                        android:layout_toRightOf="@+id/tvChildren"
+                        android:paddingLeft="8dp"
+                        android:text="@string/adult_service_time1" />
+
+                    <TextView
+                        android:id="@+id/tvChildrenServicetime2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvChildrenServicetime1"
+                        android:layout_toRightOf="@+id/tvChildren"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="8dp"
+                        android:text="@string/adult_service_time2" />
+
+                    <TextView
+                        android:id="@+id/tvTeens"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvChildrenServicetime2"
+                        android:paddingLeft="8dp"
+                        android:paddingStart="8dp"
+                        android:text="@string/teens_service" />
+
+                    <TextView
+                        android:id="@+id/tvTeensServiceTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvChildrenServicetime2"
+                        android:layout_toRightOf="@+id/tvTeens"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="8dp"
+                        android:text="@string/adult_service_time2" />
+
+                    <TextView
+                        android:id="@+id/tvChinese"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvTeensServiceTime"
+                        android:gravity="center_horizontal"
+                        android:text="@string/chinese_service"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:id="@+id/tvKidsChinese"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvChinese"
+                        android:paddingLeft="8dp"
+                        android:paddingStart="8dp"
+                        android:text="@string/kids" />
+
+                    <TextView
+                        android:id="@+id/tvKidsChineseTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvChinese"
+                        android:layout_toRightOf="@+id/tvKidsChinese"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="8dp"
+                        android:text="@string/chinese_service_kids" />
+
+                    <TextView
+                        android:id="@+id/tvAdultChinese"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvKidsChinese"
+                        android:paddingLeft="8dp"
+                        android:paddingStart="8dp"
+                        android:text="@string/adult" />
+
+                    <TextView
+                        android:id="@+id/tvAdultChineseTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvKidsChinese"
+                        android:layout_toRightOf="@+id/tvAdultChinese"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="8dp"
+                        android:text="@string/chinese_service_adult" />
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="8dp"
+
+                card_view:cardCornerRadius="2dp"
+                card_view:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/visionHeader"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:text="@string/vision" />
+                </LinearLayout>
+
+
+            </android.support.v7.widget.CardView>
+
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@android:color/transparent"
+                android:layout_gravity="center"
+                android:scaleType="fitXY"
+                android:src="@drawable/fb_icon"
+                android:onClick="OpenFbPage"
+                android:layout_margin="10dp"/>
+
+
+            <Button
+                android:id="@+id/btnLogout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dip"
+                android:background="@color/btn_logut_bg"
+                android:text="@string/btn_logout"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="15dp"
+                android:visibility="gone" />
+        </LinearLayout>
+    </ScrollView>
+
+
+    <fragment
+        android:id="@+id/fragment_navigation_drawer"
+        android:name="material.kangere.com.tandaza.NavigationFragment"
+
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:layout="@layout/navigation_fragment"
+        tools:layout="@layout/navigation_fragment" />
+
+    <!--<ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/tandaza_logo"/>
+    <ListView
+        android:id="@+id/left_drawer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp" />-->
+
+
+</android.support.v4.widget.DrawerLayout>

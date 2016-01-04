@@ -1,8 +1,11 @@
 package material.kangere.com.tandaza.NavActivities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -36,6 +39,10 @@ public class MainActivity extends ActionBarActivity {
     private TextView txtName, txtEmail;
     private SQLiteHandler db;
     private SessionManager session;
+    public static  String facebookID = "129991457013820";
+    public static String FACEBOOK_URL = "https://www.facebook.com/K3C.Tandaza";
+    boolean isIntentSafe;
+    Intent facebookAppIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +52,9 @@ public class MainActivity extends ActionBarActivity {
         //toolbar init and nav frag
         StaticMethods.ClassInitisialisation(this, R.id.fragment_navigation_drawer, R.id.toolBarMain, R.id.drawer_layout);
 
-        txtName = (TextView) findViewById(R.id.name);
+       /* txtName = (TextView) findViewById(R.id.name);
         txtEmail = (TextView) findViewById(R.id.email);
-        btnLogout = (Button) findViewById(R.id.btnLogout);
+        btnLogout = (Button) findViewById(R.id.btnLogout);*/
 
         // SqLite database handler
         db = new SQLiteHandler(getApplicationContext());
@@ -85,13 +92,19 @@ public class MainActivity extends ActionBarActivity {
         txtEmail.setText(email);*/
 
         // Logout button click event
-        btnLogout.setOnClickListener(new View.OnClickListener() {
+       /* btnLogout.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 logoutUser();
             }
-        });
+        });*/
+        /*final String url = "fb://page/" + facebookID;
+        facebookAppIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        PackageManager packageManager = getPackageManager();
+        List activities = packageManager.queryIntentActivities(facebookAppIntent,
+                PackageManager.MATCH_DEFAULT_ONLY);
+         isIntentSafe = activities.size() > 0;*/
     }
 
     @Override
@@ -125,5 +138,24 @@ public class MainActivity extends ActionBarActivity {
         Intent intent = new Intent(MainActivity.this, Login.class);
         startActivity(intent);
         finish();
+    }
+    public void OpenFbPage(View view){
+        Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
+        String facebookUrl = getFacebookPageURL(this);
+        facebookIntent.setData(Uri.parse(facebookUrl));
+        startActivity(facebookIntent);
+    }
+    public String getFacebookPageURL(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        try {
+            int versionCode = packageManager.getPackageInfo("com.facebook.katana", 0).versionCode;
+            if (versionCode >= 3002850) { //newer versions of fb app
+                return "fb://facewebmodal/f?href=" + FACEBOOK_URL;
+            } else { //older versions of fb app
+                return "fb://page/" + facebookID;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            return FACEBOOK_URL; //normal web url
+        }
     }
 }

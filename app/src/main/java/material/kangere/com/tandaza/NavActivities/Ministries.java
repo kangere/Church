@@ -3,32 +3,34 @@ package material.kangere.com.tandaza.NavActivities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import material.kangere.com.tandaza.Adapters.MinAdapter;
-import material.kangere.com.tandaza.MinInfo;
+import material.kangere.com.tandaza.MinData;
 import material.kangere.com.tandaza.MinistryRecyclerAdapter;
 import material.kangere.com.tandaza.R;
 import material.kangere.com.tandaza.StaticMethods;
 
 
-public class Ministries extends AppCompatActivity  {
+public class Ministries extends AppCompatActivity implements MinistryRecyclerAdapter.ClickListener {
 
 
     private ListView listView;
     private RecyclerView recyclerView;
     private MinistryRecyclerAdapter adapter;
-    ArrayList<MinInfo> data = new ArrayList<>();
+    List<MinData> data = new ArrayList<>();
+    private String[] titles;
+    private String[] info;
 
-    private int[] images = {R.mipmap.youth, R.mipmap.ark, R.mipmap.sarahs, R.mipmap.kings_men, R.mipmap.ndoa
-            , R.mipmap.bofu};
+    //private int[] images = {R.mipmap.youth, R.mipmap.ark, R.mipmap.sarahs, R.mipmap.kings_men, R.mipmap.ndoa
+    //, R.mipmap.bofu};
 
 
     @Override
@@ -37,58 +39,41 @@ public class Ministries extends AppCompatActivity  {
         setContentView(R.layout.ministries);
         //Nav and toolbar initialisation
         StaticMethods.ClassInitisialisation(this, R.id.ministries_fragment_navigation_drawer, R.id.ministriesToolbar, R.id.ministries_drawer_layout);
-
-
-        String[] titles = getResources().getStringArray(R.array.ministry_header);
+        titles = getResources().getStringArray(R.array.ministry_header);
+        info = getResources().getStringArray(R.array.minitry_text);
         //List view initialisation
-        listView = (ListView) findViewById(R.id.lvMin);
-        MinAdapter adapter = new MinAdapter(this,titles,images);
-        listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch(position){
-                    case 0:
-                        startActivity(new Intent(Ministries.this,YouthMinistry.class));
-                        break;
-                    case 1:
 
-                        break;
-                    case 2:
-
-                        break;
-                    case 3:
-
-                        break;
-                    case 4:
-
-                        break;
-                }
-            }
-        });
         //recyclerView initialisation
-       /*recyclerView = (RecyclerView) findViewById(R.id.min_recycler_view);
+        recyclerView = (RecyclerView) findViewById(R.id.min_recycler_view);
         recyclerView.setHasFixedSize(true);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
-        recyclerView.setLayoutManager(gridLayoutManager);*/
-
-
-        //recyclerview adapter initialisation
-
-
-       /*try {
-            adapter = new MinistryRecyclerAdapter(getBaseContext());
-            adapter.setClickListener(this);
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        MinistryRecyclerAdapter adapter = new MinistryRecyclerAdapter(this, getData());
+        adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
-        getData();*/
+        //GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
+
 
     }
 
+    @Override
+    public void itemClicked(View v, int position) {
+
+        switch (position) {
+            case 0:
+
+                startClass(YouthMinistry.class);
+                break;
+            case 1:
+
+                startClass(ChildrenMinistry.class);
+                break;
+
+
+        }
+    }
 
     //method to start class from selected card, takes in the class name as parameter
     public void startClass(Class classes) {
@@ -118,21 +103,19 @@ public class Ministries extends AppCompatActivity  {
     }
 
 
-    public void getData() {
-        int[] icons = {R.drawable.ic_about, R.drawable.children_ministry, R.drawable.ic_about, R.drawable.kings_men};
-        String[] titles = {"Youth Ministry", "Children Ministry", "Sarah's Treasure", "Kingsmen"};
+    public List<MinData> getData() {
 
 
         for (int i = 0; i < titles.length; i++) {
-            MinInfo current = new MinInfo();
-            current.setIconId(icons[i]);
+            MinData current = new MinData();
+            current.setInfo(info[i]);
             current.setTitle(titles[i]);
 
             data.add(current);
 
         }
-        adapter.setMinistries(data);
-        //return data;
+
+        return data;
 
 
     }

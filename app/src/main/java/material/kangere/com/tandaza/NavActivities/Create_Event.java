@@ -77,7 +77,7 @@ public class Create_Event extends AppCompatActivity {
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                                                                             R.array.ministries,
-                                                                            android.R.layout.simple_spinner_item);
+                                                                            R.layout.myspinner);
         sministries.setAdapter(adapter);
 
         requestQueue = Volley.newRequestQueue(this);
@@ -148,11 +148,12 @@ public class Create_Event extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = new ProgressDialog(Create_Event.this);
-            progressDialog.setMessage("Uploading");
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(true);
-            progressDialog.show();
+           if(progressDialog == null){
+               progressDialog = Show_Notifications.createProgrssDialog(Create_Event.this);
+               progressDialog.show();
+           }else {
+               progressDialog.show();
+           }
         }
 
         @Override
@@ -171,7 +172,7 @@ public class Create_Event extends AppCompatActivity {
             JSONObject jsonObject = jsonParser.makeHttpRequest(AppConfig.EVENT_UPLOAD_URL,"POST",params);
 
             //check logcat
-            Log.d("Create Respons",jsonObject.toString());
+            Log.d("Create Response",jsonObject.toString());
 
             try{
                 int success = jsonObject.getInt(TAG_SUCCESS);

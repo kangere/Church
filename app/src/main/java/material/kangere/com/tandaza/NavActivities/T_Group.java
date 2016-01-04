@@ -1,12 +1,15 @@
 package material.kangere.com.tandaza.NavActivities;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Toast;
 
 import material.kangere.com.tandaza.NavigationFragment;
 import material.kangere.com.tandaza.R;
@@ -16,10 +19,11 @@ public class T_Group extends ActionBarActivity {
 
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
+    private static final int FILE_SELECT_CODE = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.connect);
+        setContentView(R.layout.t_group);
 
         //Toolbar init
         toolbar = (Toolbar) findViewById(R.id.connectToolbar);
@@ -56,5 +60,26 @@ public class T_Group extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    public void ShowFileChooser(View view){
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("text/plain");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+
+        try {
+            startActivityForResult(
+                    Intent.createChooser(intent, "Select txt file"),
+                    FILE_SELECT_CODE);
+        } catch (android.content.ActivityNotFoundException ex) {
+            // Potentially direct the user to the Market with a Dialog
+            Toast.makeText(this, "Please install a File Manager.",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

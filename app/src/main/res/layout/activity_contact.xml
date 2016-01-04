@@ -8,51 +8,170 @@
 
     >
 
-    <LinearLayout
 
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".NavActivities.Contact">
+        android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/contactToolbar"
-            layout="@layout/app_bar" />
-
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.MapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="250dp" />
-
-        <Button
-            android:id="@+id/bCall"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="50dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="40dip"
-            android:background="@color/btn_login"
-            android:text="@string/contact_call" />
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/bEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="50dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="25dip"
+            <include
+                android:id="@+id/contactToolbar"
+                layout="@layout/app_bar" />
 
-            android:background="@color/btn_login"
-            android:text="@string/contact_email" />
+            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.MapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="250dp" />
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/bCall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="40dip"
+                android:background="@color/btn_login"
+                android:text="@string/contact_call" />
+
+            <Button
+                android:id="@+id/bEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="25dip"
+                android:background="@color/btn_login"
+                android:text="@string/contact_email" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:text="GIVE"
+                android:textSize="20dp" />
+
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:padding="10dp"
+                card_view:cardCornerRadius="2dp"
+                card_view:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/account"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:paddingLeft="8dp"
+                        android:paddingStart="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/account_k3c" />
+
+                    <TextView
+                        android:paddingLeft="8dp"
+                        android:paddingStart="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/chase" />
+
+                    <TextView
+                        android:paddingLeft="8dp"
+                        android:paddingStart="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ac" />
+
+                    <TextView
+                        android:paddingLeft="8dp"
+                        android:paddingStart="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/kenya" />
+                </LinearLayout>
+
+
+            </android.support.v7.widget.CardView>
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                card_view:cardCornerRadius="2dp"
+                card_view:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/paybill"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:paddingLeft="8dp"
+                        android:paddingStart="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mpesa" />
+
+                    <TextView
+                        android:paddingLeft="8dp"
+                        android:paddingStart="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mpesa_ac" />
+
+                    <TextView
+                        android:paddingLeft="8dp"
+                        android:paddingStart="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/airtel" />
+
+                    <TextView
+                        android:paddingLeft="8dp"
+                        android:paddingStart="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/airtel_ac" />
+                </LinearLayout>
+
+
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
+
 
     <fragment
         android:id="@+id/contact_fragment_navigation_drawer"

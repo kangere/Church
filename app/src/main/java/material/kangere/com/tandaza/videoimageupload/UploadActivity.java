@@ -37,7 +37,7 @@ public class UploadActivity extends Activity {
     // LogCat tag
     private static final String TAG = MakeNotification.class.getSimpleName();
 
-    private static String url_add_notification = "http://stuplan.co.ke/database_connect/add_notification.php";
+
     private String filePath = null;
     JSONParser jsonParser = new JSONParser();
     public String file_path;

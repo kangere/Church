@@ -1,6 +1,7 @@
 package material.kangere.com.tandaza.NavActivities;
 
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,9 +16,13 @@ public class ChildrenMinistry extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_children_ministry);
-
-        //toolbar and drawer layout and navigation drawer init from the Init class
-        StaticMethods.ClassInitisialisation(this, R.id.children_fragment_navigation_drawer, R.id.childrenToolbar, R.id.children_drawer_layout);
+        StaticMethods.toolBar(this, R.id.childrenToolbar);
+        try{
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+        }catch(NullPointerException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -37,6 +42,9 @@ public class ChildrenMinistry extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        if(id == android.R.id.home){
+            NavUtils.navigateUpFromSameTask(this);
         }
 
         return super.onOptionsItemSelected(item);

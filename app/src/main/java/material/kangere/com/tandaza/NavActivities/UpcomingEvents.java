@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,7 +15,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +34,7 @@ import material.kangere.com.tandaza.EventData;
 import material.kangere.com.tandaza.JSONParser;
 import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
 import material.kangere.com.tandaza.R;
+import material.kangere.com.tandaza.StaticMethods;
 
 
 public class UpcomingEvents extends AppCompatActivity implements EventAdapter.EventsClickListener {
@@ -70,15 +69,8 @@ public class UpcomingEvents extends AppCompatActivity implements EventAdapter.Ev
         super.onCreate(savedInstanceState);
         setContentView(R.layout.upcoming_events);
 
-        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.clEvents);
-        toolbar = (Toolbar) findViewById(R.id.upcoming_eventsToolbar);
-        setSupportActionBar(toolbar);
-        try {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeButtonEnabled(true);
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
+
+        StaticMethods.ClassInitisialisation(this, R.id.events_fragment, R.id.upcoming_eventsToolbar, R.id.dlEvenets);
         db = new SQLiteHandler(getApplicationContext());
         recyclerView = (RecyclerView) findViewById(R.id.rvEvents);
         adapter = new EventAdapter(getBaseContext());
@@ -95,7 +87,7 @@ public class UpcomingEvents extends AppCompatActivity implements EventAdapter.Ev
 
         } else {
             LoadDB();
-            Snackbar snack = Snackbar.make(coordinatorLayout, "No Internet Connection", Snackbar.LENGTH_LONG);
+            Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "No Internet Connection", Snackbar.LENGTH_LONG);
 
             snack.setAction("RETRY", new View.OnClickListener() {
                 @Override
@@ -108,10 +100,9 @@ public class UpcomingEvents extends AppCompatActivity implements EventAdapter.Ev
             });
             snack.setActionTextColor(getResources().getColor(R.color.accent_color));
             View view = snack.getView();
-            TextView tv =(TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+            TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
             tv.setTextColor(Color.WHITE);
             snack.show();
-
 
 
         }
@@ -119,7 +110,7 @@ public class UpcomingEvents extends AppCompatActivity implements EventAdapter.Ev
 
     }
 
-    private  void LoadDB() {
+    private void LoadDB() {
         try {
             HashMap<String, String> note_cache = db.getEventCacheDetails();
 
@@ -197,10 +188,6 @@ public class UpcomingEvents extends AppCompatActivity implements EventAdapter.Ev
         }
 
 
-        if (id == android.R.id.home) {
-            NavUtils.navigateUpFromSameTask(this);
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -214,13 +201,12 @@ public class UpcomingEvents extends AppCompatActivity implements EventAdapter.Ev
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = new ProgressDialog(UpcomingEvents.this);
-            progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            //pDialog.setMessage("Loading notifications. Please wait...");
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-
-            progressDialog.show();
+            if (progressDialog == null) {
+                progressDialog = Show_Notifications.createProgrssDialog(UpcomingEvents.this);
+                progressDialog.show();
+            } else {
+                progressDialog.show();
+            }
         }
 
         @Override

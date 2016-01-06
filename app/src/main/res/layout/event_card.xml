@@ -19,6 +19,7 @@
 
 
             <TextView
+                android:textIsSelectable="true"
                 android:id="@+id/tvEventTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -47,6 +48,7 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:textIsSelectable="true"
                 android:id="@+id/tvEventDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -68,6 +70,7 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:textIsSelectable="true"
                 android:id="@+id/tvEventTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -89,6 +92,7 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:textIsSelectable="true"
                 android:id="@+id/tvEventMinistry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -111,6 +115,7 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:textIsSelectable="true"
                 android:id="@+id/tvEventVenue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -131,6 +136,7 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:textIsSelectable="true"
                 android:id="@+id/tvEventDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

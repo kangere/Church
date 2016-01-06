@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.content.FileBody;
@@ -24,15 +23,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
 
 import material.kangere.com.tandaza.AppConfig;
 import material.kangere.com.tandaza.JSONParser;
 import material.kangere.com.tandaza.MakeNotification;
 
-/**
- * Created by user on 10/21/2015.
- */
+
 public class UploadActivity extends Activity {
     // LogCat tag
     private static final String TAG = MakeNotification.class.getSimpleName();
@@ -41,6 +37,7 @@ public class UploadActivity extends Activity {
     private String filePath = null;
     JSONParser jsonParser = new JSONParser();
     public String file_path;
+    public String path;
     long totalSize = 0;
 
     @Override
@@ -52,6 +49,7 @@ public class UploadActivity extends Activity {
 
         // image or video path that is captured in previous activity
         filePath = i.getStringExtra("filePath");
+        path = i.getStringExtra("Path");
 
 
         // boolean flag to identify the media type, image or video
@@ -63,6 +61,13 @@ public class UploadActivity extends Activity {
             Toast.makeText(UploadActivity.this, "Its working", Toast.LENGTH_LONG).show();
 
         } else {
+            Toast.makeText(getApplicationContext(),
+                    "Sorry, file path is missing!", Toast.LENGTH_LONG).show();
+        }
+
+        if(path != null){
+            Toast.makeText(UploadActivity.this,"Path file found",Toast.LENGTH_LONG).show();
+        }else {
             Toast.makeText(getApplicationContext(),
                     "Sorry, file path is missing!", Toast.LENGTH_LONG).show();
         }
@@ -115,7 +120,7 @@ public class UploadActivity extends Activity {
 
         @SuppressWarnings("deprecation")
         private String uploadFile() {
-            String responseString = null;
+            String responseString ;
 
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(AppConfig.FILE_UPLOAD_URL);
@@ -160,9 +165,7 @@ public class UploadActivity extends Activity {
                 }
 
 
-            } catch (ClientProtocolException e) {
-                responseString = e.toString();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 responseString = e.toString();
             }
 

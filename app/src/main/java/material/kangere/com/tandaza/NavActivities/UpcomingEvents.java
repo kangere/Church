@@ -12,8 +12,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -165,31 +163,11 @@ public class UpcomingEvents extends AppCompatActivity implements EventAdapter.Ev
 
     @Override
     public void itemClicked(View view, int position) {
-        Toast.makeText(this, "Item " + position + " clicked", Toast.LENGTH_LONG).show();
+       // Toast.makeText(this, "Item " + position + " clicked", Toast.LENGTH_LONG).show();
+        Log.d(TAG,"item " + position + " clicked");
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_upcoming_events, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-
-        return super.onOptionsItemSelected(item);
-    }
 
     public void CreateEvent(View view) {
         startActivity(new Intent(this, Create_Event.class));
@@ -213,7 +191,7 @@ public class UpcomingEvents extends AppCompatActivity implements EventAdapter.Ev
         protected Void doInBackground(Void... args) {
 
             // Building Parameters
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            List<NameValuePair> params = new ArrayList<>();
             // getting JSON string from URL
             JSONObject json = jParser.makeHttpRequest(AppConfig.URL_GET_EVENTS, "GET", params);
 

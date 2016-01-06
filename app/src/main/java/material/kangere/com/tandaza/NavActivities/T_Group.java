@@ -1,25 +1,30 @@
 package material.kangere.com.tandaza.NavActivities;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import material.kangere.com.tandaza.NavigationFragment;
 import material.kangere.com.tandaza.R;
+import material.kangere.com.tandaza.videoimageupload.UploadActivity;
 
 
-public class T_Group extends ActionBarActivity {
+public class T_Group extends AppCompatActivity {
 
+    private static final String TAG = T_Group.class.getSimpleName();
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private static final int FILE_SELECT_CODE = 0;
+    private String Path;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,27 +45,9 @@ public class T_Group extends ActionBarActivity {
         navigationFragment.setup(drawerLayout, toolbar);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_connect, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
-        return super.onOptionsItemSelected(item);
-    }
     public void ShowFileChooser(View view){
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("text/plain");
@@ -80,6 +67,27 @@ public class T_Group extends ActionBarActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            Uri selectedFile = data.getData();
+            String[] filePath = {MediaStore.Files.FileColumns.DATA};
+            Cursor c = getContentResolver().query(selectedFile, filePath, null, null, null);
+            c.moveToFirst();
+            int columnIndex = c.getColumnIndex(filePath[0]);
+            Path = c.getString(columnIndex);
+            c.close();
+
+            Log.d(TAG, Path);
+            Toast.makeText(T_Group.this, Path, Toast.LENGTH_LONG).show();
+
+
+        }
+    }
+    private void launchUploadActivity() {
+        //sends the android file path to the Upload Activity
+        Intent i = new Intent(T_Group.this, UploadActivity.class);
+        i.putExtra("Path", Path);
+
+        startActivity(i);
+
     }
 }

@@ -19,8 +19,7 @@
             android:id="@+id/bCreateEvent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="10dp"
+            android:layout_margin="10dp"
             android:onClick="CreateEvent"
             android:background="@color/accent_color"
             android:text="@string/btn_event" />

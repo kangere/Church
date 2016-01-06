@@ -3,22 +3,16 @@ package material.kangere.com.tandaza.NavActivities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.support.v7.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 
 import material.kangere.com.tandaza.R;
 
-/**
- * Created by user on 10/21/2015.
- */
+
 public class ViewNotification extends AppCompatActivity {
 
     private TextView title,content,ministry,timeStamp;
@@ -67,19 +61,5 @@ public class ViewNotification extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
 
-        int id = item.getItemId();
-        if(id == android.R.id.home){
-            NavUtils.navigateUpFromSameTask(this);
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        return super.onCreateOptionsMenu(menu);
-    }
 }

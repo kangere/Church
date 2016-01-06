@@ -9,8 +9,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -32,6 +30,7 @@ public class Contact extends AppCompatActivity implements OnMapReadyCallback {
     private Button call, email;
     private static String uriString = "tel:0714669642";
     private static String subject = "Information";
+    private static String Devsubject = "Contact";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +71,7 @@ public class Contact extends AppCompatActivity implements OnMapReadyCallback {
         email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent email = new Intent(Intent.ACTION_SENDTO,Uri.fromParts("mailto","info@tandaza.org",null));
+                Intent email = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "info@tandaza.org", null));
                 //email.putExtra(Intent.EXTRA_EMAIL, new String[]{"info@tandaza.org"});
                 email.putExtra(Intent.EXTRA_SUBJECT, subject);
                 //email.setType(HTTP.PLAIN_TEXT_TYPE);
@@ -81,27 +80,7 @@ public class Contact extends AppCompatActivity implements OnMapReadyCallback {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_contact, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onMapReady(GoogleMap map) {
@@ -123,5 +102,11 @@ public class Contact extends AppCompatActivity implements OnMapReadyCallback {
                 .position(k3c)
                 .title("Kileleshwa Covenant Community Church")
                 .snippet("Gichugu Road, Kileleshwa – Nairobi Kenya"));
+    }
+
+    public void EmailDeveloper(View view) {
+        Intent email = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "kangere721@gmail.com", null));
+        email.putExtra(Intent.EXTRA_SUBJECT, Devsubject);
+        startActivity(Intent.createChooser(email, "Send Email"));
     }
 }

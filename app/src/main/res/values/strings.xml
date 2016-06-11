@@ -106,5 +106,7 @@ This is the reason “THE ARK” for the children’s ministry at Kileleshwa Cov
     <string name="airtel_ac">Reference: K3C</string>
     <string name="desc">Description</string>
     <string name="contact_dev">Contact Developer</string>
+    <string name="noInternet">No Internet Connection. Connect to Internet at least once</string>
+    <string name="t_groupHeader"></string>
 
 </resources>

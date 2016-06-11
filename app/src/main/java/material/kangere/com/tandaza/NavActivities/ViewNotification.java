@@ -1,6 +1,7 @@
 package material.kangere.com.tandaza.NavActivities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -37,6 +38,7 @@ public class ViewNotification extends AppCompatActivity {
         }catch (NullPointerException e){
             e.printStackTrace();
         }
+        toolbar.setTitleTextColor(Color.WHITE);
 
 
         Intent i = getIntent();

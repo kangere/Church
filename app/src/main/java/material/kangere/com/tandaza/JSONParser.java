@@ -1,25 +1,25 @@
 package material.kangere.com.tandaza;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.util.List;
+import android.util.Log;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
 
 /**
  * Created by user on 10/16/2015.
@@ -42,10 +42,15 @@ public class JSONParser {
         // Making HTTP request
         try {
 
+            URL my_url = new URL(url);
+            HttpURLConnection conn = (HttpURLConnection) my_url.openConnection();
+            conn.setReadTimeout(10000);
+            conn.setConnectTimeout(15000);              //maximum time to wait while connecting
+            conn.setRequestMethod(method);
             // check for request method
             if(method == "POST"){
                 // request method is POST
-                // defaultHttpClient
+                // defaultHttpClient deprecated
                 DefaultHttpClient httpClient = new DefaultHttpClient();
                 HttpPost httpPost = new HttpPost(url);
                 httpPost.setEntity(new UrlEncodedFormEntity(params));
@@ -54,21 +59,42 @@ public class JSONParser {
                 HttpEntity httpEntity = httpResponse.getEntity();
                 is = httpEntity.getContent();
 
+                //httpurlconnection code
+                /*conn.setDoOutput(true);
+
+                conn.connect();*/
+                //conn.setRequestProperty();
+                DataOutputStream outputStream = new DataOutputStream(conn.getOutputStream());
+                outputStream.writeBytes(params.toString());
+
             }else if(method == "GET"){
-                // request method is GET
-                DefaultHttpClient httpClient = new DefaultHttpClient();
+
+                // old deprecated code
+                /*DefaultHttpClient httpClient = new DefaultHttpClient();
                 String paramString = URLEncodedUtils.format(params, "utf-8");
                 url += "?" + paramString;
                 HttpGet httpGet = new HttpGet(url);
 
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 HttpEntity httpEntity = httpResponse.getEntity();
-                is = httpEntity.getContent();
+                is = httpEntity.getContent();*/
+
+                //testing url connection code
+                conn.setDoInput(true);
+
+                //start query
+                conn.connect();
+                int response = conn.getResponseCode();      //get response code from connection
+                Log.d("JSON GET RESPONSE","The response is: " + response);
+                is = conn.getInputStream();
+
+
             }
 
+            //close connection
+            conn.disconnect();
+
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (ClientProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
@@ -78,7 +104,7 @@ public class JSONParser {
             BufferedReader reader = new BufferedReader(new InputStreamReader(
                     is, "iso-8859-1"), 8);
             StringBuilder sb = new StringBuilder();
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null) {
                 sb.append(line + "\n");
             }

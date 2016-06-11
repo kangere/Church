@@ -93,6 +93,40 @@
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
             android:padding="8dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp"
+            android:text="Choose Poster "
+            android:textColor="@color/accent_color"
+            android:textSize="20sp" />
+        <ImageView
+            android:id="@+id/ivPoster"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:visibility="gone"
+            android:src="@mipmap/ic_launcher"
+            android:layout_marginTop="15dp"/>
+        <ProgressBar
+            android:id="@+id/pbPoster"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:visibility="gone"
+            android:layout_marginBottom="35dp"
+            />
+        <Button
+            android:id="@+id/bEventPoster"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pick an image"
+            android:layout_margin="8dp"
+            android:background="@color/accent_color"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:onClick="GetPoster"
+            />
 
         <TextView
             android:layout_width="wrap_content"

@@ -49,7 +49,7 @@ public class UploadActivity extends Activity {
 
         // image or video path that is captured in previous activity
         filePath = i.getStringExtra("filePath");
-        path = i.getStringExtra("Path");
+       // path = i.getStringExtra("Path");
 
 
         // boolean flag to identify the media type, image or video
@@ -65,12 +65,12 @@ public class UploadActivity extends Activity {
                     "Sorry, file path is missing!", Toast.LENGTH_LONG).show();
         }
 
-        if(path != null){
+        /*if(path != null){
             Toast.makeText(UploadActivity.this,"Path file found",Toast.LENGTH_LONG).show();
         }else {
             Toast.makeText(getApplicationContext(),
                     "Sorry, file path is missing!", Toast.LENGTH_LONG).show();
-        }
+        }*/
 
 
     }
@@ -189,7 +189,7 @@ public class UploadActivity extends Activity {
 
             Log.e(TAG, "file_path " + file_path);
 
-            showAlert(file_path);
+           // showAlert(file_path);
 
             //send back the server file path to AddNotification Activity using setResult method
             Intent intent= new Intent();

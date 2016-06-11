@@ -2,15 +2,15 @@ package material.kangere.com.tandaza.NavActivities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -31,6 +31,7 @@ import material.kangere.com.tandaza.CheckNetwork;
 import material.kangere.com.tandaza.EventData;
 import material.kangere.com.tandaza.JSONParser;
 import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
+import material.kangere.com.tandaza.LocalDB.TablesContract;
 import material.kangere.com.tandaza.R;
 import material.kangere.com.tandaza.StaticMethods;
 
@@ -39,9 +40,8 @@ public class UpcomingEvents extends AppCompatActivity implements EventAdapter.Ev
 
     ProgressDialog progressDialog;
     private SQLiteHandler db;
-    private Toolbar toolbar;
     private RecyclerView recyclerView;
-    private CoordinatorLayout coordinatorLayout;
+    private TextView noCon;
     private JSONParser jParser = new JSONParser();
     private JSONArray json_events_cache;
     private static final String TAG = UpcomingEvents.class.getSimpleName();
@@ -56,6 +56,7 @@ public class UpcomingEvents extends AppCompatActivity implements EventAdapter.Ev
     private static final String TAG_DATE = "event_date";
     private static final String TAG_TIME = "event_time";
     private static final String TAG_MINISTRY = "ministry";
+    private static final String TAG_POSTER = "posterpath";
     private static final String TAG_VENUE = "venue";
     private static final String TAG_DESCRIPTION = "description";
 
@@ -68,6 +69,7 @@ public class UpcomingEvents extends AppCompatActivity implements EventAdapter.Ev
         setContentView(R.layout.upcoming_events);
 
 
+        noCon =(TextView) findViewById(R.id.tvEventsNoNetwork);
         StaticMethods.ClassInitisialisation(this, R.id.events_fragment, R.id.upcoming_eventsToolbar, R.id.dlEvenets);
         db = new SQLiteHandler(getApplicationContext());
         recyclerView = (RecyclerView) findViewById(R.id.rvEvents);
@@ -82,6 +84,8 @@ public class UpcomingEvents extends AppCompatActivity implements EventAdapter.Ev
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }
+            recyclerView.setVisibility(View.VISIBLE);
+            noCon.setVisibility(View.GONE);
 
         } else {
             LoadDB();
@@ -108,65 +112,87 @@ public class UpcomingEvents extends AppCompatActivity implements EventAdapter.Ev
 
     }
 
+    /*
+     *@definition - Function loads the local cache from databse
+                    if their is no internet connection.
+     */
     private void LoadDB() {
-        try {
-            HashMap<String, String> note_cache = db.getEventCacheDetails();
+        SQLiteDatabase database = db.getReadableDatabase();
+
+        String eventQuery = "SELECT * FROM " + TablesContract.EventsEntry.TABLE_NAME;
+        Cursor cursor = database.rawQuery(eventQuery, null);
+        cursor.moveToFirst();
+        //check if cache is empty
+        if (cursor.isNull(cursor.getColumnIndex(TablesContract.EventsEntry.COLUMN_EVENT_CACHE))) {
+            //if cache is empty
+            //prompt user to connect to internet atleast once
+            recyclerView.setVisibility(View.GONE);
+            noCon.setVisibility(View.VISIBLE);
+
+        } else {
+            //if cache is not null
+            //load data from cache
+            try {
+                HashMap<String, String> note_cache = db.getEventCacheDetails();
 
 
-            String eventcache = note_cache.get("event_cache");
+                String eventcache = note_cache.get("event_cache");
 
-            JSONObject json = new JSONObject(eventcache);
-            json_events_cache = json.optJSONArray("events");
+                JSONObject json = new JSONObject(eventcache);
+                json_events_cache = json.optJSONArray("events");
 
-            Log.d("All Events: ", json.toString());
-
-
-            for (int i = 0; i < json_events_cache.length(); i++) {
-                JSONObject c = json_events_cache.optJSONObject(i);
-
-                // Storing each json item in variable
-                String title = c.getString(TAG_NAME);
-                String date = c.getString(TAG_DATE);
-                String time = c.getString(TAG_TIME);
-                String venue = c.getString(TAG_VENUE);
-                String ministry = c.getString(TAG_MINISTRY);
-                String description = c.getString(TAG_DESCRIPTION);
+                Log.d("All Events: ", json.toString());
 
 
-                //storing each variable
-                EventData eventTitles = new EventData();
+                for (int i = 0; i < json_events_cache.length(); i++) {
+                    JSONObject c = json_events_cache.optJSONObject(i);
+
+                    // Storing each json item in variable
+                    String title = c.getString(TAG_NAME);
+                    String date = c.getString(TAG_DATE);
+                    String time = c.getString(TAG_TIME);
+                    String posterpath = c.getString(TAG_POSTER);
+                    String venue = c.getString(TAG_VENUE);
+                    String ministry = c.getString(TAG_MINISTRY);
+                    String description = c.getString(TAG_DESCRIPTION);
 
 
-                eventTitles.setTitle(title);
-                eventTitles.setDate(date);
-                eventTitles.setTime(time);
-                eventTitles.setMinistry(ministry);
-                eventTitles.setVenue(venue);
-                eventTitles.setDescription(description);
+                    //storing each variable
+                    EventData eventTitles = new EventData();
 
 
-                Log.d("One Event: ", title);
+                    eventTitles.setTitle(title);
+                    eventTitles.setDate(date);
+                    eventTitles.setTime(time);
+                    eventTitles.setMinistry(ministry);
+                    eventTitles.setVenue(venue);
+                    eventTitles.setPosterpath(posterpath);
+                    eventTitles.setDescription(description);
 
-                //getSupportActionBar().setIcon(new BitmapDrawable(getResources(), letterTile));
+
+                    Log.d("One Event: ", title);
+
+                    //getSupportActionBar().setIcon(new BitmapDrawable(getResources(), letterTile));
 
 
-                eventsList.add(eventTitles);
+                    eventsList.add(eventTitles);
 
-                adapter.setEventsList(eventsList);
+                    adapter.setEventsList(eventsList);
 
+                }
+
+            } catch (JSONException e) {
+                Log.d(TAG, e.toString());
             }
-
-        } catch (JSONException e) {
-            Log.d(TAG, e.toString());
         }
+        cursor.close();
     }
 
     @Override
     public void itemClicked(View view, int position) {
-       // Toast.makeText(this, "Item " + position + " clicked", Toast.LENGTH_LONG).show();
-        Log.d(TAG,"item " + position + " clicked");
+        // Toast.makeText(this, "Item " + position + " clicked", Toast.LENGTH_LONG).show();
+        Log.d(TAG, "item " + position + " clicked");
     }
-
 
 
     public void CreateEvent(View view) {
@@ -214,6 +240,7 @@ public class UpcomingEvents extends AppCompatActivity implements EventAdapter.Ev
                             String name = c.getString(TAG_NAME);
                             String date = c.getString(TAG_DATE);
                             String time = c.getString(TAG_TIME);
+                            String poster = c.getString(TAG_POSTER);
                             String ministry = c.getString(TAG_MINISTRY);
                             String venue = c.getString(TAG_VENUE);
                             String description = c.getString(TAG_DESCRIPTION);
@@ -234,6 +261,7 @@ public class UpcomingEvents extends AppCompatActivity implements EventAdapter.Ev
                             EventData eventsTitles = new EventData();
 
                             eventsTitles.setTitle(name);
+                            eventsTitles.setPosterpath(poster);
                             eventsTitles.setDate(date);
                             eventsTitles.setTime(time);
                             eventsTitles.setMinistry(ministry);

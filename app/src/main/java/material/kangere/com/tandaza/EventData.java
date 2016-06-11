@@ -4,8 +4,12 @@ package material.kangere.com.tandaza;
  * Created by user on 12/17/2015.
  */
 public class EventData {
+    public EventData(){
 
-    private String title,date,time,ministry,venue,description;
+    }
+
+
+    private String title,date,time,ministry,venue,description,posterpath;
 
     public String getMinistry() {
         return ministry;
@@ -53,6 +57,13 @@ public class EventData {
 
     public void setVenue(String venue) {
         this.venue = venue;
+    }
+    public String getPosterpath() {
+        return posterpath;
+    }
+
+    public void setPosterpath(String posterpath) {
+        this.posterpath = posterpath;
     }
 }
 

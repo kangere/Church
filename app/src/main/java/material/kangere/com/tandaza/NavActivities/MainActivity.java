@@ -3,8 +3,6 @@ package material.kangere.com.tandaza.NavActivities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -17,8 +15,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
-import material.kangere.com.tandaza.LocalDB.TablesContract.EventsEntry;
-import material.kangere.com.tandaza.LocalDB.TablesContract.NotificationsCache;
 import material.kangere.com.tandaza.Login;
 import material.kangere.com.tandaza.R;
 import material.kangere.com.tandaza.SessionManager;
@@ -56,26 +52,31 @@ public class MainActivity extends AppCompatActivity {
 
         // SqLite database handler
         db = new SQLiteHandler(getApplicationContext());
-        SQLiteDatabase database = db.getWritableDatabase();
+        /*SQLiteDatabase database = db.getWritableDatabase();
         String query = "SELECT * FROM " + NotificationsCache.TABLE_NAME;
-        String eventQuery = "SELECT * FROM " + EventsEntry.TABLE_NAME;
-        Cursor c = database.rawQuery(query, null);
+        String eventQuery = "SELECT * FROM " + EventsEntry.TABLE_NAME;*/
+
+        db.addEventCache();
+        db.addNotificationCache();
+        /*Cursor c = database.rawQuery(query, null);
         c.moveToFirst();
         if (c.getCount() == 0) {
             db.addNotificationCache();
         }
-        Cursor cursor = database.rawQuery(eventQuery,null);
-        cursor.moveToFirst();
-        if(cursor.getCount() == 0)
-                db.addEventCache();
+        //c.close();
 
+        c = database.rawQuery(eventQuery,null);
+        c.moveToFirst();
+        if(c.getCount() == 0)
+                db.addEventCache();*/
 
+        //cursor.close();
         // session manager
-        session = new SessionManager(getApplicationContext());
+        //session = new SessionManager(getApplicationContext());
 
-        if (!session.isLoggedIn()) {
-            logoutUser();
-        }
+       // if (!session.isLoggedIn()) {
+       //     logoutUser();
+       // }
 
         // Fetching user details from sqlite
        /* Intent i = getIntent();

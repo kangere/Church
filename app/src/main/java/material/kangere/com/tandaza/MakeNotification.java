@@ -3,6 +3,7 @@ package material.kangere.com.tandaza;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -41,6 +42,7 @@ public class MakeNotification extends AppCompatActivity {
     private EditText title,content;
     private Spinner ministries;
     private Button upload,pick;
+    private static final int MY_PERMISSION_REQUEST_READ_STORAGE = 3;
 
     public String file_path;
     private String y_title,y_content,n_ministries ;
@@ -87,10 +89,19 @@ public class MakeNotification extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // capture picture
+                /*int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE);
+
+                if(permissionCheck != PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(MakeNotification.this,new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},MY_PERMISSION_REQUEST_READ_STORAGE);
+                }*/
                 try {
+
+
+
                     Intent intent = new Intent(
                             Intent.ACTION_PICK,
-                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    //intent.addCategory(Intent.CATEGORY_OPENABLE);
                     intent.setType("image/*");
                     startActivityForResult(
                             Intent.createChooser(intent, "Select File"),
@@ -99,6 +110,7 @@ public class MakeNotification extends AppCompatActivity {
                     Toast.makeText(MakeNotification.this, "Phone does not support camera", Toast.LENGTH_LONG).show();
 
                 }
+
             }
         });
 
@@ -244,4 +256,26 @@ public class MakeNotification extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch(requestCode){
+
+            case MY_PERMISSION_REQUEST_READ_STORAGE: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // storage-related task you need to do.
+
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+
+                return;
+            }
+        }
+    }
 }

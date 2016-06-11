@@ -53,17 +53,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="No internet Connection" />
+                android:text="@string/noInternet" />
 
 
-            <Button
+            <!--<Button
                 android:id="@+id/bRefreshNotifications"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/primary_dark"
                 android:text="Refresh"
 
-                />
+                /> -->
 
 
         </LinearLayout>

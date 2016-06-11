@@ -1,11 +1,16 @@
 package material.kangere.com.tandaza.Adapters;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -17,6 +22,7 @@ import material.kangere.com.tandaza.R;
  */
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolderEvents> {
 
+    private final String TAG = EventAdapter.class.getSimpleName();
     private Context context;
     private ArrayList<EventData> eventsList = new ArrayList<>();
     private LayoutInflater inflater;
@@ -26,19 +32,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolderEv
         this.context = context;
         inflater = LayoutInflater.from(context);
     }
-    @Override
-    public void onBindViewHolder(ViewHolderEvents holder, int position) {
-        EventData current = eventsList.get(position);
 
-        holder.title.setText(current.getTitle());
-        holder.date.setText(current.getDate());
-        holder.time.setText(current.getTime());
-        holder.venue.setText(current.getVenue());
-        holder.description.setText(current.getDescription());
-        holder.ministry.setText(current.getMinistry());
-
-
-    }
     public void setEventsList(ArrayList<EventData> list){
         this.eventsList = list;
         notifyItemRangeChanged(0, list.size());
@@ -58,10 +52,35 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolderEv
         //ViewHolderEvents viewHolderEvents = new ViewHolderEvents(view);
         return new ViewHolderEvents(view);
     }
+    @Override
+    public void onBindViewHolder(ViewHolderEvents holder, int position) {
+        EventData current = eventsList.get(position);
+        Log.d(TAG,current.getPosterpath());
+        Uri uri = Uri.parse(current.getPosterpath());
+
+        //load image to imageview with glide library
+        try {
+            Glide.with(context).load(uri).into(holder.poster);
+        }catch (Exception e){
+            Log.e(TAG," " + e);
+        }
+
+        //set text to appropriate textview for the event card
+        holder.title.setText(current.getTitle());
+        holder.date.setText(current.getDate());
+        holder.time.setText(current.getTime());
+        holder.venue.setText(current.getVenue());
+        holder.description.setText(current.getDescription());
+        holder.ministry.setText(current.getMinistry());
+
+
+
+    }
 
     class ViewHolderEvents extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private TextView title,date,ministry,venue,time,description;
+        private ImageView poster;
         public ViewHolderEvents(View view){
             super(view);
             ministry = (TextView)view.findViewById(R.id.tvEventMinistry);
@@ -70,7 +89,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolderEv
             venue = (TextView) view.findViewById(R.id.tvEventVenue);
             time = (TextView) view.findViewById(R.id.tvEventTime);
             description = (TextView) view.findViewById(R.id.tvEventDescription);
-
+            poster = (ImageView) view.findViewById(R.id.ivEventImage);
             view.setOnClickListener(this);
         }
         @Override

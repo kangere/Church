@@ -3,6 +3,8 @@ package material.kangere.com.tandaza.NavActivities;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -38,6 +40,7 @@ import material.kangere.com.tandaza.CheckNetwork;
 import material.kangere.com.tandaza.ItemData;
 import material.kangere.com.tandaza.JSONParser;
 import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
+import material.kangere.com.tandaza.LocalDB.TablesContract;
 import material.kangere.com.tandaza.MakeNotification;
 import material.kangere.com.tandaza.R;
 import material.kangere.com.tandaza.SessionManager;
@@ -71,7 +74,9 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
     private JSONArray json_notification_cache;
     private SessionManager session;
     private SQLiteHandler db;
-    public RecyclerView recyclerView;
+    private RecyclerView recyclerView;
+    private TextView noCon;
+    private LinearLayout noConnection,connection;
 
 
     private MyAdapter adapter;
@@ -91,6 +96,10 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
+        //Connection/No Connection User Interfaces
+        noCon = (TextView) findViewById(R.id.tvShowNoteNoConnection);
+        connection = (LinearLayout) findViewById(R.id.lLConnection);
+        noConnection = (LinearLayout) findViewById(R.id.lLNoConnection);
         //toolbar and navigation bar initialisation
         StaticMethods.ClassInitisialisation(this, R.id.Show_Note_fragment_navigation_drawer, R.id.tbShowNote, R.id.Show_Note_drawer_layout);
 
@@ -118,13 +127,13 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
     }
 
 
-
     private void loadData() {
         //check to see if internet connection is available
         if (CheckNetwork.isInternetAvailable(Show_Notifications.this)) //returns true if internet available
         {
-            linearLayoutCon = (LinearLayout) findViewById(R.id.lLConnection);
-            linearLayoutCon.setVisibility(View.VISIBLE);
+
+            connection.setVisibility(View.VISIBLE);
+            noConnection.setVisibility(View.GONE);
             try {
                 new LoadAllNotifications().execute();
             } catch (RuntimeException e) {
@@ -154,7 +163,7 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
         }
     }
 
-    public static ProgressDialog createProgrssDialog(Context mContext){
+    public static ProgressDialog createProgrssDialog(Context mContext) {
         ProgressDialog dialog = new ProgressDialog(mContext);
         try {
             dialog.show();
@@ -164,7 +173,7 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
         dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setContentView(R.layout.progressdialog);
-        // dialog.setMessage(Message);
+
         return dialog;
     }
 
@@ -185,60 +194,72 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
 
     private void LoadCache() {
 
-        try {
-            HashMap<String, String> note_cache = db.getNotificationCache();
+        String query = "SELECT * FROM " + TablesContract.NotificationsCache.TABLE_NAME;
+
+        SQLiteDatabase database = db.getReadableDatabase();
+        Cursor cursor = database.rawQuery(query, null);
+        cursor.moveToFirst();
+        if (cursor.isNull(cursor.getColumnIndex(TablesContract.NotificationsCache.COLUMN_NOTE_CACHE))) {
+            connection.setVisibility(View.GONE);
+            noConnection.setVisibility(View.VISIBLE);
 
 
-            String notecache = note_cache.get("notification_cache");
-
-            JSONObject json = new JSONObject(notecache);
-            json_notification_cache = json.optJSONArray("notifications");
-
-            Log.d("All Notifications: ", json.toString());
+        } else {
+            try {
+                HashMap<String, String> note_cache = db.getNotificationCache();
 
 
-            for (int i = 0; i < json_notification_cache.length(); i++) {
-                JSONObject c = json_notification_cache.optJSONObject(i);
+                String notecache = note_cache.get("notification_cache");
 
-                // Storing each json item in variable
-                String nid = c.getString(TAG_NID);
-                String title = c.getString(TAG_TITLE);
-                String content = c.getString(TAG_CONTENT);
-                String ministry = c.getString(TAG_MINISTRY);
-                String image_path = c.getString(TAG_IMAGE_PATH);
-                String time_stamp = c.getString(TAG_TIMESTAMP);
+                JSONObject json = new JSONObject(notecache);
+                json_notification_cache = json.optJSONArray("notifications");
+
+                Log.d("All Notifications: ", json.toString());
 
 
-                try {
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    parsedDate = dateFormat.parse(time_stamp);
-                } catch (Exception e) {//this generic but you can control another types of exception
-                    e.printStackTrace();
+                for (int i = 0; i < json_notification_cache.length(); i++) {
+                    JSONObject c = json_notification_cache.optJSONObject(i);
+
+                    // Storing each json item in variable
+                    String nid = c.getString(TAG_NID);
+                    String title = c.getString(TAG_TITLE);
+                    String content = c.getString(TAG_CONTENT);
+                    String ministry = c.getString(TAG_MINISTRY);
+                    String image_path = c.getString(TAG_IMAGE_PATH);
+                    String time_stamp = c.getString(TAG_TIMESTAMP);
+
+
+                    try {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        parsedDate = dateFormat.parse(time_stamp);
+                    } catch (Exception e) {//this generic but you can control another types of exception
+                        e.printStackTrace();
+                    }
+                    DateUtils.getRelativeTimeSpanString(parsedDate.getTime(), NOW, DateUtils.MINUTE_IN_MILLIS);
+
+                    String timestamp = String.valueOf(DateUtils.getRelativeTimeSpanString(parsedDate.getTime(), NOW, DateUtils.MINUTE_IN_MILLIS));
+
+                    //storing each variable
+                    ItemData notificationsTitles = new ItemData();
+
+                    notificationsTitles.setNid(nid);
+                    notificationsTitles.setTitle(title);
+                    notificationsTitles.setContent(content);
+                    notificationsTitles.setMinistry(ministry);
+                    notificationsTitles.setImagePath(image_path);
+                    notificationsTitles.setTime_stamp(timestamp);
+
+
+                    Log.d("One Notification: ", title);
+                    notificationsList.add(notificationsTitles);
+
+                    adapter.setNotificationsList(notificationsList);
+
                 }
-                DateUtils.getRelativeTimeSpanString(parsedDate.getTime(), NOW, DateUtils.MINUTE_IN_MILLIS);
 
-                String timestamp = String.valueOf(DateUtils.getRelativeTimeSpanString(parsedDate.getTime(), NOW, DateUtils.MINUTE_IN_MILLIS));
-
-                //storing each variable
-                ItemData notificationsTitles = new ItemData();
-
-                notificationsTitles.setNid(nid);
-                notificationsTitles.setTitle(title);
-                notificationsTitles.setContent(content);
-                notificationsTitles.setMinistry(ministry);
-                notificationsTitles.setImagePath(image_path);
-                notificationsTitles.setTime_stamp(timestamp);
-
-
-                Log.d("One Notification: ", title);
-                notificationsList.add(notificationsTitles);
-
-                adapter.setNotificationsList(notificationsList);
-
+            } catch (JSONException e) {
+                Log.d(TAG, e.toString());
             }
-
-        } catch (JSONException e) {
-            Log.d(TAG, e.toString());
         }
     }
 
@@ -266,6 +287,7 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
 
     }
 
+    //backgound thread
     class LoadAllNotifications extends AsyncTask<String, String, String> {
 
         /**
@@ -288,7 +310,7 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
          */
         protected String doInBackground(String... args) {
             // Building Parameters
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            List<NameValuePair> params = new ArrayList<>();
             // getting JSON string from URL
             JSONObject json = jParser.makeHttpRequest(AppConfig.URL_GET_ALL_NOTIFICATIONS, "GET", params);
 

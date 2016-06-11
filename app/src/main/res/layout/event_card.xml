@@ -29,7 +29,7 @@
                 android:textSize="20sp" />
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="200dp"
                 android:id="@+id/ivEventImage"
                 android:layout_below="@+id/tvEventTitle"
                 android:src="@drawable/youth"

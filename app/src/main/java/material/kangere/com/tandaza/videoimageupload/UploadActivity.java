@@ -9,6 +9,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
@@ -27,6 +31,7 @@ import java.io.File;
 import material.kangere.com.tandaza.AppConfig;
 import material.kangere.com.tandaza.JSONParser;
 import material.kangere.com.tandaza.MakeNotification;
+import material.kangere.com.tandaza.R;
 
 
 public class UploadActivity extends Activity {
@@ -34,7 +39,11 @@ public class UploadActivity extends Activity {
     private static final String TAG = MakeNotification.class.getSimpleName();
 
 
-    private String filePath = null;
+
+   private String filePath = null;
+    private ProgressBar progressBar;
+    private TextView txtPercentage;
+    private ImageView imgPreview;
     JSONParser jsonParser = new JSONParser();
     public String file_path;
     public String path;
@@ -43,8 +52,11 @@ public class UploadActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.upload_activity);
 
-
+        progressBar = (ProgressBar) findViewById(R.id.pbUploadImage);
+        txtPercentage = (TextView) findViewById(R.id.txtPercentage);
+        imgPreview = (ImageView) findViewById(R.id.imgPreview);
         Intent i = getIntent();
 
         // image or video path that is captured in previous activity
@@ -53,10 +65,11 @@ public class UploadActivity extends Activity {
 
 
         // boolean flag to identify the media type, image or video
-
+        boolean isImage = i.getBooleanExtra("isImage", true);
 
         if (filePath != null) {
 
+            previewMedia(isImage);
             new UploadFileToServer().execute();
             Toast.makeText(UploadActivity.this, "Its working", Toast.LENGTH_LONG).show();
 
@@ -83,6 +96,7 @@ public class UploadActivity extends Activity {
         if (isImage) {
 
             //vidPreview.setVisibility(View.GONE);
+            imgPreview.setVisibility(View.VISIBLE);
             // bimatp factory
             BitmapFactory.Options options = new BitmapFactory.Options();
 
@@ -92,13 +106,15 @@ public class UploadActivity extends Activity {
 
             final Bitmap bitmap = BitmapFactory.decodeFile(filePath, options);
 
-
+            imgPreview.setImageBitmap(bitmap);
         } else {
 
             Toast.makeText(UploadActivity.this, "not working", Toast.LENGTH_LONG).show();
 
         }
     }
+
+
 
 
     /**
@@ -108,10 +124,21 @@ public class UploadActivity extends Activity {
         @Override
         protected void onPreExecute() {
             // setting progress bar to zero
-
+            progressBar.setProgress(0);
             super.onPreExecute();
         }
 
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            // Making progress bar visible
+            progressBar.setVisibility(View.VISIBLE);
+
+            // updating progress bar value
+            progressBar.setProgress(values[0]);
+
+            // updating percentage value
+            txtPercentage.setText(String.valueOf(values[0]) + "%");
+        }
 
         @Override
         protected String doInBackground(Void... params) {
@@ -187,15 +214,15 @@ public class UploadActivity extends Activity {
                 e.printStackTrace();
             }
 
-            Log.e(TAG, "file_path " + file_path);
+            Log.d(TAG, "file_path " + file_path);
 
-           // showAlert(file_path);
+           showAlert(file_path);
 
             //send back the server file path to AddNotification Activity using setResult method
             Intent intent= new Intent();
             intent.putExtra("file_path", file_path);
             setResult(RESULT_OK, intent);
-            finish();
+
         }
 
 
@@ -212,6 +239,7 @@ public class UploadActivity extends Activity {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // do nothing
+                        finish();
                     }
                 });
         AlertDialog alert = builder.create();

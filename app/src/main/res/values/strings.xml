@@ -1,32 +1,18 @@
 <resources>
     <string name="app_name">Tandaza</string>
+    <string name="home">Home</string>
+    <string name="news">News</string>
+
     <string name="drawer_open">Open</string>
     <string name="drawer_closed">Closed</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_about">About</string>
     <string name="title_activity_ministries">Ministries</string>
-    <string name="title_activity_sermons">Sermons</string>
-    <string name="title_activity_connect">Connect</string>
-    <string name="title_activity_upcoming_events">Upcoming Events</string>
-    <string name="title_activity_tgroup">T - Groups</string>
-    <string name="title_activity_give">Give</string>
-    <string name="title_activity_media">Media</string>
-    <string name="title_activity_contact">Contact</string>
     <string name="title_activity_youth_ministry">Youth Ministry</string>
     <string name="title_activity_children_ministry">Children Ministry</string>
     <string name="title_activity_sarahs_treasure">Sarah\'s Treasure</string>
     <string name="title_activity_kings_men">Kingsmen</string>
     <string name="dev">Application in Development </string>
-   <string name="aboutText">Our Beliefs\n
-    We believe \n
-    1.In the unity of the Father, the Son and the Holy Spirit in the Godhead \n
-    2.The incarnation, sinless life, atoning death, bodily resurrection, ascension to the right hand of the Father and the personal return in glory of Jesus Christ\n
-    3.The agency of the Holy Spirit in the conversion of sinners, the sanctification of believers, and the ministry of the Church\n
-     4.The universal sinfulness and guilt of man, and that salvation is only by the Grace of God through repentance from sin and faith in Jesus Christ.\n
-    5.The Bible as an inspired inerrant word of God, authoritative inall matters of faith and practice for the believers\n
-    6.The priesthood of the believers</string>
-    <string name="vision">
+   <string name="vision">
 
 A community of transformed persons connected through small groups and courageous witnesses of Christ in every sphere of society\n
 
@@ -35,27 +21,13 @@ Loving God, Connecting with People, Transforming Communities.
     <string name="visionHeader">
         Vision And Mission
     </string>
-    <string name="title_activity_register">Register</string>
-    <string name="title_activity_login">Login</string>
-    <string name="btn_link_to_register">Not a member? Sign up now.</string>
-    <string name="btn_link_to_login">Already registred! Login Me.</string>
-    <string name="hint_email">Email</string>
-    <string name="hint_password">Password</string>
-    <string name="hint_confirmpassword">Confirm Password</string>
-    <string name="hint_name">First Name</string>
-    <string name="hint_lname">Last Name</string>
-    <string name="btn_login">LOGIN</string>
-    <string name="btn_register">REGISTER</string>
     <string name="title_activity_notifications_settings">Notifications_settings</string>
     <string name="btn_logout">Log Out</string>
     <string name="title_activity_make_notification">Create Notification</string>
     <string name="title_activity_show__notifications">Notifications</string>
-    <string name="title_activity_ministry_grid">Ministry Grid</string>
-    <string name="staff_login">Login as Staff</string>
-    <string name="member_login">Enter as Member</string>
     <string name="services">K3C SERVICE TIMES</string>
     <string name="adult_service">Adult Services:</string>
-    <string name="adult_service_time1">8:30 am - 10:00 am </string>
+    <string name="adult_service_time1">9:00 am - 10:30 am </string>
     <string name="adult_service_time2">11:00 am - 12:30 pm</string>
     <string name="children_service">Childrens Church:</string>
     <string name="teens_service">Teens Service (TILT):</string>
@@ -67,11 +39,9 @@ Loving God, Connecting with People, Transforming Communities.
     <string name="contact_call">Call</string>
     <string name="contact_email">Email</string>
     <string name="btn_event">Create Event</string>
-    <string name="title_activity_create__event">Create Event</string>
     <string name="Event_name">Enter Event Name</string>
     <string name="event_date">Choose Date of Event</string>
     <string name="event_time">Choose Event Time</string>
-    <string name="event_ministry">Choose Ministry</string>
     <string name="venue">Enter Venue Below</string>
     <string name="venue_hint">Enter venue here</string>
     <string name="description">Enter Description Below</string>
@@ -83,7 +53,6 @@ Loving God, Connecting with People, Transforming Communities.
     <string name="dummy_description">The description of the event will be here containing the event details
             what is expected to happen and why one should be there</string>
     <string name="label_minstry">Ministry:</string>
-    <string name="youth">Youth Ministry</string>
     <string name="children_genesis6">In Genesis 6 -9 we read the great biblical account of the flood; how God saved Noah, his family and all the animals in THE ARK.
 “The Lord saw how great the wickedness of the human race had become on the earth, and that every inclination of the thoughts of the human heart was only evil all the time. TheLord regretted that he had made human beings on the earth, and his heart was deeply troubled. So the Lord said, “I will wipe from the face of the earth the human race I have created—and with them the animals, the birds and the creatures that move along the ground—for I regret that I have made them.”  But Noah found favor in the eyes of the Lord.”
 This inspired us to be committed in bringing up a godly generation that would be found righteous in the midst of this wicked world.
@@ -96,17 +65,20 @@ This is the reason “THE ARK” for the children’s ministry at Kileleshwa Cov
     <string name="children_joshua">Joshua 2:10 “After that whole generation had been gathered to their fathers, another generation grew up, who knew neither the LORD nor what he had done for Israel.” We must aggressively tell our children about God to avoid a time like mentioned above, where an entire generation did not know God nor his deeds.</string>
     <string name="account">Church Account Details</string>
     <string name="account_k3c">Kileleshwa Covenant Community Church</string>
-    <string name="chase">Chase Bank : Village Market Branch</string>
-    <string name="ac">A/c No: 0032008036002 </string>
+    <string name="chase">Standard Chatered Bank : Chiromo Branch</string>
+    <string name="ac">A/c No: 0102845716200</string>
     <string name="kenya">Kenya</string>
     <string name="paybill">Paybill Numbers</string>
-    <string name="mpesa">Mpesa Paybill No: 510800</string>
+    <string name="mpesa">Mpesa Paybill No: 488700 </string>
     <string name="mpesa_ac">Account: K3C</string>
     <string name="airtel">Airtel Paybill No: Ipay</string>
     <string name="airtel_ac">Reference: K3C</string>
     <string name="desc">Description</string>
     <string name="contact_dev">Contact Developer</string>
     <string name="noInternet">No Internet Connection. Connect to Internet at least once</string>
-    <string name="t_groupHeader"></string>
+    <string name="find_a_group">Find a Group</string>
+    <string name="sign_up_to_serve">Sign Up To Serve</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
 
 </resources>

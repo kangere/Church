@@ -1,37 +1,47 @@
 package material.kangere.com.tandaza.NavActivities;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Toast;
 
-import material.kangere.com.tandaza.NavigationFragment;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import material.kangere.com.tandaza.R;
 import material.kangere.com.tandaza.videoimageupload.UploadActivity;
 
 
-public class T_Group extends AppCompatActivity {
+public class T_Group extends Fragment {
 
     private static final String TAG = T_Group.class.getSimpleName();
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
+    private WebView webView;
     private static final int FILE_SELECT_CODE = 0;
     private String Path;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.t_group);
+    private StorageReference mStorageRef;
 
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //setContentView(R.layout.t_group);
+
+        mStorageRef = FirebaseStorage.getInstance().getReference();
         //Toolbar init
-        toolbar = (Toolbar) findViewById(R.id.connectToolbar);
+        /*toolbar = (Toolbar) findViewById(R.id.connectToolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("T-Group");
         toolbar.setTitleTextColor(Color.WHITE);
@@ -42,13 +52,34 @@ public class T_Group extends AppCompatActivity {
 
         //navigation fragment init
         NavigationFragment navigationFragment = (NavigationFragment) getSupportFragmentManager().findFragmentById(R.id.connect_fragment_navigation_drawer);
-        navigationFragment.setup(drawerLayout, toolbar);
+        navigationFragment.setup(drawerLayout, toolbar);*/
+    }
+
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.t_group,container,false);
+
+        webView = (WebView) view.findViewById(R.id.wvTgroup);
+
+        webView.loadUrl("http://tandaza.org/connect/");
+       // Button uploadContent = (Button)  view.findViewById(R.id.bTgroupUpload);
+
+        /*uploadContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShowFileChooser();
+            }
+        });*/
+
+
+        return view;
     }
 
 
 
-
-    public void ShowFileChooser(View view){
+    public void ShowFileChooser(){
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("text/plain");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -60,34 +91,40 @@ public class T_Group extends AppCompatActivity {
                     FILE_SELECT_CODE);
         } catch (android.content.ActivityNotFoundException ex) {
             // Potentially direct the user to the Market with a Dialog
-            Toast.makeText(this, "Please install a File Manager.",
+            Toast.makeText(getActivity(), "Please install a File Manager.",
                     Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_OK){
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == getActivity().RESULT_OK){
             Uri selectedFile = data.getData();
             String[] filePath = {MediaStore.Files.FileColumns.DATA};
-            Cursor c = getContentResolver().query(selectedFile, filePath, null, null, null);
+            Cursor c = getActivity().getContentResolver().query(selectedFile, filePath, null, null, null);
             c.moveToFirst();
             int columnIndex = c.getColumnIndex(filePath[0]);
             Path = c.getString(columnIndex);
             c.close();
 
             Log.d(TAG, Path);
-            Toast.makeText(T_Group.this, Path, Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), Path, Toast.LENGTH_LONG).show();
 
 
         }
     }
     private void launchUploadActivity() {
         //sends the android file path to the Upload Activity
-        Intent i = new Intent(T_Group.this, UploadActivity.class);
+        Intent i = new Intent(getActivity(), UploadActivity.class);
         i.putExtra("Path", Path);
 
         startActivity(i);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setTitle("T-Groups");
     }
 }

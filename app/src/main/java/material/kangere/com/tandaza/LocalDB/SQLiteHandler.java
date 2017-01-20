@@ -179,29 +179,108 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         }
 
     }
+    /**
+    * Method adds table and inserts a null value if it doesn't exist, if it table already
+    * exists it does nothing
+    *
+    * @author - Paul Kang'ere
+    * @param tablename  String: the tablename to be added
+    * @param column  String: the column name to add null value
+     */
+    public void addTable(String tablename,String column){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String countQuery = "SELECT  * FROM " + tablename;
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int cnt = cursor.getCount();
+
+        Log.d( tablename + " DB Rows","" + cnt);
+
+        //check if table exists
+        Cursor c = db.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = '"+tablename+"'", null);
+        int count = c.getCount();
+
+        //if table doesn't exist add a null value to create it
+        if(cnt <= 0)
+        {
+            ContentValues values = new ContentValues();
+            //values.put(KEY_CACHE_ID, cache_id); // Name
+            values.putNull(column); // StudentId
+            //values.put(KEY_NOTIFICATION_CACHE, notification_cache); //Email
+
+            long id = db.insert(tablename, null, values);
+
+
+            Log.d(TAG, "New " + tablename + " inserted into sqlite: " + id);
+        }else {
+            Log.d(TAG,tablename + " table already exists");
+        }
+        c.close();
+        cursor.close();
+        db.close(); // Closing database connection
+    }
     public void addEventCache() {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        //values.put(KEY_CACHE_ID, cache_id); // Name
-        values.putNull(EventsEntry.COLUMN_EVENT_CACHE); // StudentId
-        //values.put(KEY_NOTIFICATION_CACHE, notification_cache); //Email
 
-        long id = db.insert(EventsEntry.TABLE_NAME, null, values);
-        db.close(); // Closing database connection
+        String countQuery = "SELECT  * FROM " + EventsEntry.TABLE_NAME;
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int cnt = cursor.getCount();
+        cursor.close();
+        Log.d("Event DB Rows","" + cnt);
 
-        Log.d(TAG, "New Events cache inserted into sqlite: " + id);
+        //check if table exists
+        Cursor c = db.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = '"+EventsEntry.TABLE_NAME+"'", null);
+        int count = c.getCount();
+
+        //if table doesn't exist add a null value to create it
+        if(count >= 1)
+        {
+            ContentValues values = new ContentValues();
+            //values.put(KEY_CACHE_ID, cache_id); // Name
+            values.putNull(EventsEntry.COLUMN_EVENT_CACHE); // StudentId
+            //values.put(KEY_NOTIFICATION_CACHE, notification_cache); //Email
+
+            long id = db.insert(EventsEntry.TABLE_NAME, null, values);
+            db.close(); // Closing database connection
+
+            Log.d(TAG, "New Events cache inserted into sqlite: " + id);
+        }else {
+            Log.d(TAG,"Events table already exists");
+        }
+        c.close();
+
+
     }
     public void addNotificationCache() {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        //values.put(KEY_CACHE_ID, cache_id); // Name
-        values.putNull(NotificationsCache.COLUMN_NOTE_CACHE); // StudentId
-        //values.put(KEY_NOTIFICATION_CACHE, notification_cache); //Email
 
-        long id = db.insert(NotificationsCache.TABLE_NAME, null, values);
-        db.close(); // Closing database connection
+        String countQuery = "SELECT  * FROM " + NotificationsCache.TABLE_NAME;
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int cnt = cursor.getCount();
+        cursor.close();
+        Log.d("Notification DB Rows","" + cnt);
 
-        Log.d(TAG, "New Notifications cache inserted into sqlite: " + id);
+        //check if table exists
+        Cursor c = db.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = '"+NotificationsCache.TABLE_NAME+"'", null);
+        int count = c.getCount();
+
+        //if table doesn't exist add a null value to create it
+        if(count <= 0){
+            ContentValues values = new ContentValues();
+            //values.put(KEY_CACHE_ID, cache_id); // Name
+            values.putNull(NotificationsCache.COLUMN_NOTE_CACHE); // StudentId
+            //values.put(KEY_NOTIFICATION_CACHE, notification_cache); //Email
+
+            long id = db.insert(NotificationsCache.TABLE_NAME, null, values);
+            db.close(); // Closing database connection
+
+            Log.d(TAG, "New Notifications cache inserted into sqlite: " + id);
+        }//if table exists do nothing
+        else{
+            Log.d(TAG,"NOtification table already exists");
+        }
+        c.close();
+
     }
     public void updateNotificationCache(String note_cache)
     {

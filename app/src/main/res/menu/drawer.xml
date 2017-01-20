@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+
+        <item
+            android:checked="true"
+            android:icon="@drawable/ic_home"
+            android:title="@string/home"/>
+
+        <item
+            android:icon="@drawable/ic_sermons"
+            android:title="@string/news"/>
+        <item
+            android:icon="@drawable/ic_event"
+            android:title="Events"
+            />
+        <item
+            android:icon="@drawable/ic_ministries"
+            android:title="Ministries"
+            />
+        <!--<item
+            android:icon="@drawable/ic_connect"
+            android:title="T-Groups"
+            /> -->
+
+        <item
+            android:icon="@drawable/ic_contact"
+            android:title="Contact"
+            />
+    </group>
+
+</menu>

@@ -1,18 +1,21 @@
 package material.kangere.com.tandaza.NavActivities;
 
+import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,10 +36,9 @@ import material.kangere.com.tandaza.JSONParser;
 import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
 import material.kangere.com.tandaza.LocalDB.TablesContract;
 import material.kangere.com.tandaza.R;
-import material.kangere.com.tandaza.StaticMethods;
 
 
-public class UpcomingEvents extends AppCompatActivity implements EventAdapter.EventsClickListener {
+public class UpcomingEvents extends Fragment implements EventAdapter.EventsClickListener {
 
     ProgressDialog progressDialog;
     private SQLiteHandler db;
@@ -50,6 +52,7 @@ public class UpcomingEvents extends AppCompatActivity implements EventAdapter.Ev
     private EventAdapter adapter;
 
     // JSON Node names
+    private static final String TAG_ID = "";
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_EVENTS = "events";
     private static final String TAG_NAME = "event_name";
@@ -62,22 +65,31 @@ public class UpcomingEvents extends AppCompatActivity implements EventAdapter.Ev
 
     // products JSONArray
     private JSONArray events = null;
+    private Button upload;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.upcoming_events);
 
 
-        noCon =(TextView) findViewById(R.id.tvEventsNoNetwork);
-        StaticMethods.ClassInitisialisation(this, R.id.events_fragment, R.id.upcoming_eventsToolbar, R.id.dlEvenets);
-        db = new SQLiteHandler(getApplicationContext());
-        recyclerView = (RecyclerView) findViewById(R.id.rvEvents);
-        adapter = new EventAdapter(getBaseContext());
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View layout = inflater.inflate(R.layout.upcoming_events,container,false);
+
+        eventsList.clear();
+
+        noCon =(TextView) layout.findViewById(R.id.tvEventNoNetwork);
+
+        db = new SQLiteHandler(getActivity());
+        recyclerView = (RecyclerView) layout.findViewById(R.id.rvEvents);
+        adapter = new EventAdapter(getActivity());
         adapter.setClickListener(this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
-        if (CheckNetwork.isInternetAvailable(UpcomingEvents.this)) {
+        if (CheckNetwork.isInternetAvailable(getActivity())) {
 
             try {
                 new EventsLoader().execute();
@@ -89,15 +101,15 @@ public class UpcomingEvents extends AppCompatActivity implements EventAdapter.Ev
 
         } else {
             LoadDB();
-            Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "No Internet Connection", Snackbar.LENGTH_LONG);
+            Snackbar snack = Snackbar.make(layout.findViewById(android.R.id.content), "No Internet Connection", Snackbar.LENGTH_LONG);
 
             snack.setAction("RETRY", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    finish();
+                    /*finish();
                     overridePendingTransition(0, 0);
                     startActivity(getIntent());
-                    overridePendingTransition(0, 0);
+                    overridePendingTransition(0, 0);*/
                 }
             });
             snack.setActionTextColor(getResources().getColor(R.color.accent_color));
@@ -108,14 +120,24 @@ public class UpcomingEvents extends AppCompatActivity implements EventAdapter.Ev
 
 
         }
-
-
+        upload = (Button) layout.findViewById(R.id.bCreateEvent);
+        upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Create_Event create_event = new Create_Event();
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.flContent, create_event)
+                        .addToBackStack(create_event.getClass().getSimpleName())
+                        .commit();
+            }
+        });
+        return layout;
     }
 
     /*
-     *@definition - Function loads the local cache from databse
-                    if their is no internet connection.
-     */
+         *@definition - Function loads the local cache from databse
+                        if their is no internet connection.
+         */
     private void LoadDB() {
         SQLiteDatabase database = db.getReadableDatabase();
 
@@ -177,7 +199,12 @@ public class UpcomingEvents extends AppCompatActivity implements EventAdapter.Ev
 
                     eventsList.add(eventTitles);
 
-                    adapter.setEventsList(eventsList);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.setEventsList(eventsList);
+                        }
+                    });
 
                 }
 
@@ -195,10 +222,6 @@ public class UpcomingEvents extends AppCompatActivity implements EventAdapter.Ev
     }
 
 
-    public void CreateEvent(View view) {
-        startActivity(new Intent(this, Create_Event.class));
-    }
-
     private class EventsLoader extends AsyncTask<Void, Void, Void> {
 
 
@@ -206,7 +229,7 @@ public class UpcomingEvents extends AppCompatActivity implements EventAdapter.Ev
         protected void onPreExecute() {
             super.onPreExecute();
             if (progressDialog == null) {
-                progressDialog = Show_Notifications.createProgrssDialog(UpcomingEvents.this);
+                progressDialog = Show_Notifications.createProgrssDialog(getActivity());
                 progressDialog.show();
             } else {
                 progressDialog.show();
@@ -286,15 +309,16 @@ public class UpcomingEvents extends AppCompatActivity implements EventAdapter.Ev
 
             } else {
                 LoadDB();
-                runOnUiThread(new Runnable() {
+               getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(UpcomingEvents.this, "No Internet Connection", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_LONG).show();
                     }
                 });
 
             }
 
+            json = null;
             return null;
         }
 
@@ -302,12 +326,19 @@ public class UpcomingEvents extends AppCompatActivity implements EventAdapter.Ev
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             progressDialog.dismiss();
-            runOnUiThread(new Runnable() {
+            getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     adapter.setEventsList(eventsList);
                 }
             });
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getActivity().setTitle("Events");
     }
 }

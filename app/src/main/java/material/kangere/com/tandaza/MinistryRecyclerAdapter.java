@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Collections;
@@ -43,12 +44,13 @@ public class MinistryRecyclerAdapter extends RecyclerView.Adapter<MinistryRecycl
     @Override
     public void onBindViewHolder(MinistryViewHolder ministryViewHolder, int i) {
         MinData current = data.get(i);
-        Log.d(TAG,"onBindViewHolder called");
-        if(i == 0){
-            ministryViewHolder.description.setMaxLines(5);
-        }
+        Log.d(TAG,"onBindViewHolder called, item called is " + data.get(i).toString());
+//        if(i == 0){
+//            ministryViewHolder.description.setMaxLines(5);
+//        }
         ministryViewHolder.description.setText(current.getInfo());
         ministryViewHolder.header.setText(current.getTitle());
+        ministryViewHolder.image.setImageResource(current.getImage());
     }
 
     public void setClickListener(ClickListener clickListener){
@@ -60,7 +62,7 @@ public class MinistryRecyclerAdapter extends RecyclerView.Adapter<MinistryRecycl
     }
 
     public interface ClickListener{
-        public void itemClicked(View v, int position);
+         void itemClicked(View v, int position);
 
     }
 
@@ -69,11 +71,13 @@ public class MinistryRecyclerAdapter extends RecyclerView.Adapter<MinistryRecycl
      class MinistryViewHolder extends RecyclerView.ViewHolder implements  View.OnClickListener{
 
         TextView header,description;
+         ImageView image;
 
         public MinistryViewHolder (View v){
             super(v);
             description = (TextView) v.findViewById(R.id.tvMinText);
             header = (TextView) v.findViewById(R.id.tvMinTitle);
+            image = (ImageView) v.findViewById(R.id.ivMinistries);
             v.setOnClickListener(this);
 
 

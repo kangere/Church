@@ -1,5 +1,8 @@
 package material.kangere.com.tandaza;
 
+import android.app.ActionBar;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -11,9 +14,11 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,10 +34,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import material.kangere.com.tandaza.NavActivities.Create_Event;
 import material.kangere.com.tandaza.NavActivities.Show_Notifications;
 import material.kangere.com.tandaza.videoimageupload.UploadActivity;
 
-public class MakeNotification extends AppCompatActivity {
+import static android.app.Activity.RESULT_OK;
+
+public class MakeNotification extends Fragment {
 
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
@@ -60,25 +68,33 @@ public class MakeNotification extends AppCompatActivity {
     JSONParser jsonParser = new JSONParser();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_make_notification);
 
+        ActionBar actionBar = getActivity().getActionBar();
+        try {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+        } catch (NullPointerException e) {
+            Log.d(TAG, " " + e);
+        }
+    }
 
-        //Toolbar init
-        StaticMethods.ClassInitisialisation(this, R.id.Make_Note_fragment_navigation_drawer, R.id.toolBarMakeNote, R.id.Make_Note_drawer_layout);
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.content_make_notification,container,false);
 
+        upload  = (Button) view.findViewById(R.id.bNoteUpload);
+        pick = (Button) view.findViewById(R.id.bPick);
+        title = (EditText) view.findViewById(R.id.etYouthTitle);
+        content = (EditText) view.findViewById(R.id.etYouthContent);
+        ministries = (Spinner) view.findViewById(R.id.sMinistries);
+        picView = (ImageView) view.findViewById(R.id.imgPreview);
 
-        upload  = (Button) findViewById(R.id.bNoteUpload);
-        pick = (Button) findViewById(R.id.bPick);
-        title = (EditText) findViewById(R.id.etYouthTitle);
-        content = (EditText) findViewById(R.id.etYouthContent);
-        ministries = (Spinner) findViewById(R.id.sMinistries);
-        picView = (ImageView) findViewById(R.id.imgPreview);
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                                                                            R.array.ministries,
-                                                                            R.layout.myspinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.ministries,
+                R.layout.myspinner);
         ministries.setAdapter(adapter);
 
 
@@ -94,6 +110,7 @@ public class MakeNotification extends AppCompatActivity {
                 if(permissionCheck != PackageManager.PERMISSION_GRANTED){
                     ActivityCompat.requestPermissions(MakeNotification.this,new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},MY_PERMISSION_REQUEST_READ_STORAGE);
                 }*/
+                Create_Event.verifyStoragePermissions(getActivity());
                 try {
 
 
@@ -107,7 +124,7 @@ public class MakeNotification extends AppCompatActivity {
                             Intent.createChooser(intent, "Select File"),
                             PICK_FROM_GALLERY);
                 } catch (ActivityNotFoundException anfe) {
-                    Toast.makeText(MakeNotification.this, "Phone does not support camera", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Phone does not support camera", Toast.LENGTH_LONG).show();
 
                 }
 
@@ -120,12 +137,15 @@ public class MakeNotification extends AppCompatActivity {
                 new UploadNote().execute();
             }
         });
+
+        return view;
     }
+
     /**
      * Receiving activity result method will be called after closing the camera
      */
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
 
             if (requestCode == PICK_FROM_GALLERY) {
@@ -133,7 +153,7 @@ public class MakeNotification extends AppCompatActivity {
 
                 Uri selectedImage = data.getData();
                 String[] filePath = {MediaStore.Images.Media.DATA};
-                Cursor c = getContentResolver().query(selectedImage, filePath, null, null, null);
+                Cursor c = getActivity().getContentResolver().query(selectedImage, filePath, null, null, null);
                 c.moveToFirst();
                 int columnIndex = c.getColumnIndex(filePath[0]);
                 picturePath = c.getString(columnIndex);
@@ -143,7 +163,7 @@ public class MakeNotification extends AppCompatActivity {
                 picView.setVisibility(View.VISIBLE);
                 picView.setImageBitmap(thumbnail);
                 Log.d(TAG,picturePath);
-                Toast.makeText(MakeNotification.this, picturePath, Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), picturePath, Toast.LENGTH_LONG).show();
                 launchUploadActivity();
 
 
@@ -152,20 +172,20 @@ public class MakeNotification extends AppCompatActivity {
 //get the cropped bitmap
                 Bitmap thePic = extras.getParcelable("data");
                 picView.setVisibility(View.VISIBLE);
-                picView = (ImageView) findViewById(R.id.imgPreview);
+                picView = (ImageView) getActivity().findViewById(R.id.imgPreview);
 //display the returned cropped image
                 picView.setImageBitmap(thePic);
             } else if (requestCode == 2404) {
 
                 //Retrives the image server file path from Upload Activity using the request code.
                 file_path = data.getStringExtra("file_path");
-                Toast.makeText(MakeNotification.this, file_path, Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), file_path, Toast.LENGTH_LONG).show();
             }
         }
     }
     private void launchUploadActivity() {
         //sends the android file path to the Upload Activity
-        Intent i = new Intent(MakeNotification.this, UploadActivity.class);
+        Intent i = new Intent(getActivity(), UploadActivity.class);
         i.putExtra("filePath", picturePath);
 
         startActivityForResult(i, 2404);
@@ -180,7 +200,7 @@ public class MakeNotification extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             if (pDialog == null) {
-                pDialog = Show_Notifications.createProgrssDialog(MakeNotification.this);
+                pDialog = Show_Notifications.createProgrssDialog(getActivity());
                 pDialog.show();
             } else {
                 pDialog.show();
@@ -222,12 +242,28 @@ public class MakeNotification extends AppCompatActivity {
 
                 if (success == 1) {
 
-                    //onBackPressed();
-                    finish();
+                    //finish activity
+                    // finish();
+                    //go to previous fragment
+                    Show_Notifications showNotifications = new Show_Notifications();
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                    // Replace whatever is in the fragment_container view with this fragment,
+                    // and add the transaction to the back stack
+                    transaction.replace(R.id.flContent, showNotifications);
+                    transaction.addToBackStack(null);
+
+                    // Commit the transaction
+                    transaction.commit();
 
                 } else {
-                    // failed to create product
-                    //Toast.makeText(getApplicationContext(), "trial", Toast.LENGTH_LONG).show();
+                    Log.e("Error", "Json request failed");
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getActivity(), "Something Seems to be wrong, Try again later", Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

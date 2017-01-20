@@ -1,98 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:cardview="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
-    <include
-        android:id="@+id/tbviewNote"
-        layout="@layout/app_bar" />
-
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <Button
+            android:id="@+id/bDeleteNote"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@color/accent_color"
+            android:text="Delete Article" />
 
-            <TextView
-                android:layout_margin="8dp"
-                android:id="@+id/tvDetailNoteTitle"
+        <TextView
+            android:id="@+id/tvDetailNoteTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:gravity="center_horizontal"
+            android:text="Some Dummy Text"
+            android:textSize="25sp" />
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_gravity="center"
+            android:layout_margin="2dp"
+            cardview:cardCornerRadius="5dp"
+            cardview:cardElevation="2dp"
+            cardview:contentPadding="8dp">
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="Some Dummy Text"
-                android:textSize="25sp" />
+                android:layout_height="match_parent">
 
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:layout_gravity="center"
-                android:layout_margin="2dp"
-                cardview:cardCornerRadius="5dp"
-                cardview:cardElevation="2dp"
-                cardview:contentPadding="8dp">
-
-                <RelativeLayout
+                <ImageView
+                    android:id="@+id/ivDetailNoteImage"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
 
-                    <ImageView
-                        android:id="@+id/ivDetailNoteImage"
-                        android:layout_width="match_parent"
-
-                        android:layout_height="200dp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/bible" />
-
-                    <TextView
-                        android:id="@+id/tvDetailTimeStamp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/ivDetailNoteImage"
-                        android:text="some dummy text" />
-
-                    <TextView
-                        android:id="@+id/tvDetailMinistry"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/tvDetailTimeStamp"
-                        android:text="some dummy text" />
-
-                </RelativeLayout>
-
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                cardview:cardCornerRadius="5dp"
-                cardview:cardElevation="2dp"
-                cardview:contentPadding="8dp">
+                    android:layout_height="200dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/bible" />
 
                 <TextView
-                    android:linksClickable="true"
-                    android:textIsSelectable="true"
-                    android:id="@+id/tvDetailNoteContent"
+                    android:id="@+id/tvDetailTimeStamp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:text="We are so glad you have made it here. It takes bravery to pack your bags and say goodbye to your family. Your families love you just the way you are, but we know they want to see you grow and see new things while you are gone. We invite you to be a part of our community. We are so excited to have you be a part of our city and our lives.
+                    android:layout_below="@+id/ivDetailNoteImage"
+                    android:text="some dummy text" />
+
+                <TextView
+                    android:id="@+id/tvDetailMinistry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvDetailTimeStamp"
+                    android:text="some dummy text" />
+
+            </RelativeLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            cardview:cardCornerRadius="5dp"
+            cardview:cardElevation="2dp"
+            cardview:contentPadding="8dp">
+
+            <TextView
+                android:id="@+id/tvDetailNoteContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:linksClickable="true"
+                android:padding="8dp"
+                android:text="We are so glad you have made it here. It takes bravery to pack your bags and say goodbye to your family. Your families love you just the way you are, but we know they want to see you grow and see new things while you are gone. We invite you to be a part of our community. We are so excited to have you be a part of our city and our lives.
 
 Get updates about Trips, services, and events over email HERE.
 
-For airport pick ups and temp housing information, go HERE." />
+For airport pick ups and temp housing information, go HERE."
+                android:textIsSelectable="true" />
 
-            </android.support.v7.widget.CardView>
-
-
-        </LinearLayout>
-    </ScrollView>
+        </android.support.v7.widget.CardView>
 
 
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>
+
+

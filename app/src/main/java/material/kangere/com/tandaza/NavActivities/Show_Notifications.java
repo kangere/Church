@@ -1,5 +1,7 @@
 package material.kangere.com.tandaza.NavActivities;
 
+
+import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -11,12 +13,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -44,9 +47,9 @@ import material.kangere.com.tandaza.LocalDB.TablesContract;
 import material.kangere.com.tandaza.MakeNotification;
 import material.kangere.com.tandaza.R;
 import material.kangere.com.tandaza.SessionManager;
-import material.kangere.com.tandaza.StaticMethods;
 
-public class Show_Notifications extends AppCompatActivity implements MyAdapter.ClickListener {
+
+public class Show_Notifications extends Fragment implements MyAdapter.ClickListener {
 
     private static final String TAG = Show_Notifications.class.getSimpleName();
 
@@ -76,81 +79,123 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
     private SQLiteHandler db;
     private RecyclerView recyclerView;
     private TextView noCon;
-    private LinearLayout noConnection,connection;
+    private LinearLayout noConnection, connection;
 
 
     private MyAdapter adapter;
     private long NOW = new Date().getTime();
     private Date parsedDate;
-
-    private LinearLayout linearLayoutCon;
-
+    private final String NOTE_ID = "note_array";
     private Button btnUploadClass, refresh;
 
+    //onNotificationSelectedListener notificationSelectedListener;
+    public Show_Notifications() {
+
+    }
+
+    /* public interface onNotificationSelectedListener{
+          void NotificationSelected(int position,String[] content);
+     }*/
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_show__notifications);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        View layout = inflater.inflate(R.layout.content_show__notifications, container, false);
+
+        notificationsList.clear();
 
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
         //Connection/No Connection User Interfaces
-        noCon = (TextView) findViewById(R.id.tvShowNoteNoConnection);
-        connection = (LinearLayout) findViewById(R.id.lLConnection);
-        noConnection = (LinearLayout) findViewById(R.id.lLNoConnection);
+        noCon = (TextView) layout.findViewById(R.id.tvShowNoteNoConnection);
+        connection = (LinearLayout) layout.findViewById(R.id.lLConnection);
+        //noConnection = (LinearLayout) layout.findViewById(R.id.lLNoConnection);
         //toolbar and navigation bar initialisation
-        StaticMethods.ClassInitisialisation(this, R.id.Show_Note_fragment_navigation_drawer, R.id.tbShowNote, R.id.Show_Note_drawer_layout);
+        //StaticMethods.ClassInitisialisation(getActivity(), R.id.Show_Note_fragment_navigation_drawer, R.id.tbShowNote, R.id.Show_Note_drawer_layout);
 
         //Upload button initialisation
-        btnUploadClass = (Button) findViewById(R.id.bOpenUploadClass);
+        btnUploadClass = (Button) layout.findViewById(R.id.bOpenUploadClass);
         btnUploadClass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(Show_Notifications.this, MakeNotification.class));
+                //startActivity(new Intent(Show_Notifications.this, MakeNotification.class));
+                MakeNotification makeNotification = new MakeNotification();
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.flContent, makeNotification)
+                        .addToBackStack(makeNotification.getClass().getSimpleName())
+                        .commit();
             }
         });
         //db initialisation
-        db = new SQLiteHandler(getApplicationContext());
+        db = new SQLiteHandler(getActivity());
 
         //recycler view initialisation
-        recyclerView = (RecyclerView) findViewById(R.id.rvShowNote);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        adapter = new MyAdapter(getBaseContext());
+        recyclerView = (RecyclerView) layout.findViewById(R.id.rvShowNote);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new MyAdapter(getActivity());
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 
         loadData();
 
 
+        return layout;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setTitle("News");
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            //notificationSelectedListener = (onNotificationSelectedListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+
+    }
 
     private void loadData() {
         //check to see if internet connection is available
-        if (CheckNetwork.isInternetAvailable(Show_Notifications.this)) //returns true if internet available
+        if (CheckNetwork.isInternetAvailable(getActivity())) //returns true if internet available
         {
 
-            connection.setVisibility(View.VISIBLE);
-            noConnection.setVisibility(View.GONE);
+
             try {
                 new LoadAllNotifications().execute();
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }
+            connection.setVisibility(View.VISIBLE);
+            noCon.setVisibility(View.GONE);
 
         } else {//if not load data from cache in local database
             LoadCache();
-            Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "No Internet Connection", Snackbar.LENGTH_LONG);
+            Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), "No Internet Connection", Snackbar.LENGTH_LONG);
 
             snack.setAction("RETRY", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    finish();
+                    /*finish();
                     overridePendingTransition(0, 0);
                     startActivity(getIntent());
-                    overridePendingTransition(0, 0);
+                    overridePendingTransition(0, 0);*/
                 }
             });
             snack.setActionTextColor(getResources().getColor(R.color.accent_color));
@@ -185,13 +230,17 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
             // if result code 100 is received
             // means user edited/deleted product
             // reload this screen again
-            Intent intent = getIntent();
-            finish();
+            Intent intent = getActivity().getIntent();
+            getActivity().finish();
             startActivity(intent);
         }
 
     }
 
+
+    /*
+    Function to load stored cache from the local database if device is not connected to the internet
+     */
     private void LoadCache() {
 
         String query = "SELECT * FROM " + TablesContract.NotificationsCache.TABLE_NAME;
@@ -199,9 +248,10 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
         SQLiteDatabase database = db.getReadableDatabase();
         Cursor cursor = database.rawQuery(query, null);
         cursor.moveToFirst();
+
         if (cursor.isNull(cursor.getColumnIndex(TablesContract.NotificationsCache.COLUMN_NOTE_CACHE))) {
             connection.setVisibility(View.GONE);
-            noConnection.setVisibility(View.VISIBLE);
+            noCon.setVisibility(View.VISIBLE);
 
 
         } else {
@@ -249,11 +299,14 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
                     notificationsTitles.setImagePath(image_path);
                     notificationsTitles.setTime_stamp(timestamp);
 
-
-                    Log.d("One Notification: ", title);
                     notificationsList.add(notificationsTitles);
 
-                    adapter.setNotificationsList(notificationsList);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.setNotificationsList(notificationsList);
+                        }
+                    });
 
                 }
 
@@ -261,29 +314,54 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
                 Log.d(TAG, e.toString());
             }
         }
+        cursor.close();
     }
 
+    /**
+     * Opens the viewNotification fragment when a user clicks the notification.
+     *
+     * @param view     - the view holding the UI elements in the individual notification
+     * @param position - position of the notification clicked
+     */
     @Override
     public void itemClicked(View view, int position) {
 
-        String nid = ((TextView) view.findViewById(R.id.nid)).getText()
-                .toString();
-        Intent i = new Intent(Show_Notifications.this, ViewNotification.class);
-        //i.putExtra(TAG_NID, nid);
-
+        //retrieve notification details once clicked
+        String id = ((TextView) view.findViewById(R.id.nid)).getText().toString();
         String title = ((TextView) view.findViewById(R.id.title)).getText().toString();
         String timeStamp = ((TextView) view.findViewById(R.id.notificationTimeStamp)).getText().toString();
         String ministry = ((TextView) view.findViewById(R.id.tvMinistryGone)).getText().toString();
         String content = ((TextView) view.findViewById(R.id.tvContentGone)).getText().toString();
         String img_path = ((TextView) view.findViewById(R.id.tvImgPathGone)).getText().toString();
 
-        i.putExtra(TAG_TITLE, title);
-        i.putExtra(TAG_MINISTRY, ministry);
-        i.putExtra(TAG_CONTENT, content);
-        i.putExtra(TAG_TIMESTAMP, timeStamp);
-        i.putExtra(TAG_IMAGE_PATH, img_path);
+        //single notification content in an array
+        String[] notification = {title, timeStamp, ministry, content, img_path,id};
 
-        startActivity(i);
+        //create detail note fragment
+        ViewNotification viewNotification = new ViewNotification();
+        //create bundle variable
+        Bundle args = new Bundle();
+
+        //store single notification in bundle and set viewNotification arguments to bundle
+        args.putStringArray(NOTE_ID, notification);
+        viewNotification.setArguments(args);
+
+        //begin fragment transaction
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back stack so the user can navigate back
+        // Commit the transaction
+        getFragmentManager().beginTransaction()
+                .replace(R.id.flContent, viewNotification)
+                .addToBackStack(null)
+                .commit();
+
+        //setTitle("Story");
+
+        try {
+            getActivity().getActionBar().setHomeButtonEnabled(true);
+        } catch (NullPointerException e) {
+            Log.d("Show_Notification", " " + e);
+        }
 
     }
 
@@ -297,7 +375,7 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
         protected void onPreExecute() {
             super.onPreExecute();
             if (pDialog == null) {
-                pDialog = createProgrssDialog(Show_Notifications.this);
+                pDialog = createProgrssDialog(getActivity());
                 pDialog.show();
             } else {
                 pDialog.show();
@@ -367,6 +445,7 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
                             json.put("notification_cache", new JSONArray(notificationsList));
                             String arrayList = json.toString();
 
+                            Log.d("arrayList",arrayList);
                             db.updateNotificationCache(arrayList);
                         }
                     } else {
@@ -379,13 +458,15 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
                 }
             } else {
                 LoadCache();
-                runOnUiThread(new Runnable() {
+                getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(Show_Notifications.this, "No Internet Connection", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_LONG).show();
                     }
                 });
             }
+            json = null;
+
 
             return null;
         }
@@ -398,26 +479,13 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
             // dismiss the dialog after getting all products
             pDialog.dismiss();
             // updating UI from Background Thread
-            runOnUiThread(new Runnable() {
+            getActivity().runOnUiThread(new Runnable() {
                 public void run() {
 
                     /**
                      * Updating parsed JSON data into ListView
                      * */
-
-
                     adapter.setNotificationsList(notificationsList);
-
-
-
-                     /*adapter = new SimpleAdapter(
-                            NotificationsActivity.this, notificationsList,
-                            R.layout.list_cell, new String[]{TAG_NID,
-                            TAG_TITLE},
-                            new int[]{R.id.nid, R.id.title});
-                    // updating listview
-                    noteListView.setAdapter(adapter);
-                    */
 
 
                 }
@@ -429,4 +497,8 @@ public class Show_Notifications extends AppCompatActivity implements MyAdapter.C
 
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
 }

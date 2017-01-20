@@ -56,14 +56,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolderEv
     public void onBindViewHolder(ViewHolderEvents holder, int position) {
         EventData current = eventsList.get(position);
         Log.d(TAG,current.getPosterpath());
+
         Uri uri = Uri.parse(current.getPosterpath());
 
         //load image to imageview with glide library
-        try {
-            Glide.with(context).load(uri).into(holder.poster);
-        }catch (Exception e){
-            Log.e(TAG," " + e);
-        }
+        Glide.with(context).load(uri).into(holder.poster);
+
 
         //set text to appropriate textview for the event card
         holder.title.setText(current.getTitle());
@@ -84,7 +82,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolderEv
         public ViewHolderEvents(View view){
             super(view);
             ministry = (TextView)view.findViewById(R.id.tvEventMinistry);
-            title = (TextView) view.findViewById(R.id.tvEventTitle);
+            title = (TextView) view.findViewById(R.id.tvEventsTitle);
             date = (TextView) view.findViewById(R.id.tvEventDate);
             venue = (TextView) view.findViewById(R.id.tvEventVenue);
             time = (TextView) view.findViewById(R.id.tvEventTime);
@@ -101,7 +99,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolderEv
 
     }
     public interface EventsClickListener{
-       public  void itemClicked(View view,int position);
+        void itemClicked(View view,int position);
     }
 
 }

@@ -1,8 +1,8 @@
 package material.kangere.com.tandaza.videoimageupload;
 
 
-import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
 
 import java.io.FilterOutputStream;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.nio.charset.Charset;
  * Created by user on 10/21/2015.
  */
 @SuppressWarnings("deprecation")
-public class AndroidMultiPartEntity extends MultipartEntity {
+class AndroidMultiPartEntity extends MultipartEntity {
     private final ProgressListener listener;
 
     public AndroidMultiPartEntity(final ProgressListener listener) {
@@ -40,7 +40,7 @@ public class AndroidMultiPartEntity extends MultipartEntity {
         super.writeTo(new CountingOutputStream(outstream, this.listener));
     }
 
-    public static interface ProgressListener {
+    public  interface ProgressListener {
         void transferred(long num);
     }
 

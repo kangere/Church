@@ -1,116 +1,78 @@
 package material.kangere.com.tandaza.NavActivities;
 
+
+import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.multidex.MultiDex;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.view.MenuItem;
 
 import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
-import material.kangere.com.tandaza.Login;
+import material.kangere.com.tandaza.LocalDB.TablesContract;
 import material.kangere.com.tandaza.R;
 import material.kangere.com.tandaza.SessionManager;
-import material.kangere.com.tandaza.StaticMethods;
 
 
 public class MainActivity extends AppCompatActivity {
 
 
-    private String[] mNav;
     private DrawerLayout mDrawer;
-    private ListView mList;
-    private ActionBarDrawerToggle mDrawerToggle;
-    Toolbar toolbar;
-    private Button btnLogout;
-    private TextView txtName, txtEmail;
+    private NavigationView navigationView;
+
     private SQLiteHandler db;
     private SessionManager session;
-    public static  String facebookID = "129991457013820";
-    public static String FACEBOOK_URL = "https://www.facebook.com/K3C.Tandaza";
-    boolean isIntentSafe;
-    Intent facebookAppIntent;
+
+    Toolbar toolbar;
+    // boolean isIntentSafe;
+    //Intent facebookAppIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setTitle("Home");
 
-        //toolbar init and nav frag
-        StaticMethods.ClassInitisialisation(this, R.id.fragment_navigation_drawer, R.id.toolBarMain, R.id.drawer_layout);
 
-       /* txtName = (TextView) findViewById(R.id.name);
-        txtEmail = (TextView) findViewById(R.id.email);
-        btnLogout = (Button) findViewById(R.id.btnLogout);*/
+        if (savedInstanceState == null) {
+            getFragmentManager().beginTransaction().replace(R.id.flContent, new MainContent()).commit();
+
+        }
+
+        setupNavView();
+
+        //toolbar initialisation
+        toolbar = (Toolbar) findViewById(R.id.toolBarMain);
+        setSupportActionBar(toolbar);
+        final ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null) {
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        toolbar.setTitleTextColor(ContextCompat.getColor(getBaseContext(), R.color.white));
 
         // SqLite database handler
         db = new SQLiteHandler(getApplicationContext());
-        /*SQLiteDatabase database = db.getWritableDatabase();
-        String query = "SELECT * FROM " + NotificationsCache.TABLE_NAME;
-        String eventQuery = "SELECT * FROM " + EventsEntry.TABLE_NAME;*/
 
-        db.addEventCache();
-        db.addNotificationCache();
-        /*Cursor c = database.rawQuery(query, null);
-        c.moveToFirst();
-        if (c.getCount() == 0) {
-            db.addNotificationCache();
-        }
-        //c.close();
+        //create cache tables in local database
+        db.addTable(TablesContract.EventsEntry.TABLE_NAME, TablesContract.EventsEntry.COLUMN_EVENT_CACHE);
+        db.addTable(TablesContract.NotificationsCache.TABLE_NAME, TablesContract.NotificationsCache.COLUMN_NOTE_CACHE);
 
-        c = database.rawQuery(eventQuery,null);
-        c.moveToFirst();
-        if(c.getCount() == 0)
-                db.addEventCache();*/
 
-        //cursor.close();
-        // session manager
-        //session = new SessionManager(getApplicationContext());
-
-       // if (!session.isLoggedIn()) {
-       //     logoutUser();
-       // }
-
-        // Fetching user details from sqlite
-       /* Intent i = getIntent();
-        String emailIntent = i.getStringExtra("email");
-        HashMap<String, String> user = db.getUserDetails(emailIntent);
-
-        String name = user.get("name");
-        String email = user.get("email");
-
-        // Displaying the user details on the screen
-        txtName.setText(name);
-        txtEmail.setText(email);*/
-
-        // Logout button click event
-       /* btnLogout.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                logoutUser();
-            }
-        });*/
-        /*final String url = "fb://page/" + facebookID;
-        facebookAppIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        PackageManager packageManager = getPackageManager();
-        List activities = packageManager.queryIntentActivities(facebookAppIntent,
-                PackageManager.MATCH_DEFAULT_ONLY);
-         isIntentSafe = activities.size() > 0;*/
     }
 
-   /* @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(newBase);
+        MultiDex.install(this);
     }
 
     @Override
@@ -124,37 +86,91 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-
-        return super.onOptionsItemSelected(item);
-    }*/
-
-    private void logoutUser() {
-        session.setLogin(false);
-
-        //db.deleteUsers();
-
-        // Launching the login activity
-        Intent intent = new Intent(MainActivity.this, Login.class);
-        startActivity(intent);
-        finish();
-    }
-    public void OpenFbPage(View view){
-        Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
-        String facebookUrl = getFacebookPageURL(this);
-        facebookIntent.setData(Uri.parse(facebookUrl));
-        startActivity(facebookIntent);
-    }
-    public String getFacebookPageURL(Context context) {
-        PackageManager packageManager = context.getPackageManager();
-        try {
-            int versionCode = packageManager.getPackageInfo("com.facebook.katana", 0).versionCode;
-            if (versionCode >= 3002850) { //newer versions of fb app
-                return "fb://facewebmodal/f?href=" + FACEBOOK_URL;
-            } else { //older versions of fb app
-                return "fb://page/" + facebookID;
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            return FACEBOOK_URL; //normal web url
+        if (id == android.R.id.home) {
+            mDrawer.openDrawer(GravityCompat.START);
         }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setupNavView() {
+
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+
+                switch (menuItem.getTitle().toString()) {
+                    case "Home":
+                        // Create new fragment
+                        MainContent main = new MainContent();
+                        openFragment(main, menuItem);
+                        break;
+
+                    case "News":
+                        // Create new fragment
+                        Show_Notifications show_notifications = new Show_Notifications();
+                        //call openFragment method
+                        openFragment(show_notifications, menuItem);
+                        break;
+
+                    case "Events":
+                        //Create new fragment
+                        UpcomingEvents upcomingEvents = new UpcomingEvents();
+                        //call openFragment method
+                        openFragment(upcomingEvents, menuItem);
+                        break;
+
+                    case "Contact":
+                        //create new contact fragment
+                        Contact contact = new Contact();
+                        //call openFragment method to perform fragment transaction
+                        openFragment(contact, menuItem);
+
+                        break;
+
+                    case "Ministries":
+                        Ministries ministries = new Ministries();
+                        //call openfrag method
+                        openFragment(ministries, menuItem);
+                        //startActivity(new Intent(MainActivity.this,Ministries.class));
+                        break;
+
+                    case "T-Groups":
+                        T_Group t_group = new T_Group();
+                        //call openfrag method
+                        openFragment(t_group, menuItem);
+
+                        break;
+
+                }
+                menuItem.setChecked(true);
+                mDrawer.closeDrawers();
+                return true;
+            }
+        });
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setTitle("Home");
+    }
+
+    private void openFragment(Fragment fragment, MenuItem menuItem) {
+        getFragmentManager().beginTransaction()
+                .replace(R.id.flContent, fragment)
+                .addToBackStack(fragment.getClass().getSimpleName())
+                .commit();
+
+        setTitle(menuItem.getTitle());
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        //setTitle();
     }
 }

@@ -6,6 +6,15 @@ package material.kangere.com.tandaza;
 public class MinData {
 
     private String title,info;
+    private int image;
+
+    public int getImage() {
+        return image;
+    }
+
+    public void setImage(int image) {
+        this.image = image;
+    }
 
     public String getInfo() {
         return info;

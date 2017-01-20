@@ -1,48 +1,15 @@
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/about_drawer_layout"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_below="@+id/aboutToolbar"
 
-    >
+    android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+
+    <WebView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/wvTgroup"/>
 
-        android:orientation="vertical"
-        tools:context=".NavActivities.T_Group">
+</LinearLayout>
 
-        <include
-            android:id="@+id/connectToolbar"
-            layout="@layout/app_bar" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Upload T-Group Content"
-            android:layout_gravity="center"
-            android:onClick="ShowFileChooser"/>
-        <TextView
-            android:padding="16dp"
-            android:textSize="20sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/desc"
-            android:gravity="center_horizontal"/>
-
-    </LinearLayout>
-
-    <fragment
-        android:id="@+id/connect_fragment_navigation_drawer"
-        android:name="material.kangere.com.tandaza.NavigationFragment"
-
-        android:layout_width="280dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:layout="@layout/navigation_fragment"
-        tools:layout="@layout/navigation_fragment" />
-</android.support.v4.widget.DrawerLayout>

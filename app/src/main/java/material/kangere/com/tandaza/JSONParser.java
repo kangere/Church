@@ -12,7 +12,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -34,19 +33,25 @@ public class JSONParser {
 
     }
 
-    // function get json from url
-    // by making HTTP POST or GET mehtod
+    /** Method posts or gets data from the url specified, and returns
+     * a JSONObject
+     *
+     *
+     * @param url
+     * @param method
+     * @param params
+     * @return - returns jsonbject containing data specified by the Url
+     */
     public JSONObject makeHttpRequest(String url, String method,
                                       List<NameValuePair> params) {
+
 
         // Making HTTP request
         try {
 
             URL my_url = new URL(url);
             HttpURLConnection conn = (HttpURLConnection) my_url.openConnection();
-            conn.setReadTimeout(10000);
-            conn.setConnectTimeout(15000);              //maximum time to wait while connecting
-            conn.setRequestMethod(method);
+
             // check for request method
             if(method == "POST"){
                 // request method is POST
@@ -64,8 +69,8 @@ public class JSONParser {
 
                 conn.connect();*/
                 //conn.setRequestProperty();
-                DataOutputStream outputStream = new DataOutputStream(conn.getOutputStream());
-                outputStream.writeBytes(params.toString());
+                /*DataOutputStream outputStream = new DataOutputStream(conn.getOutputStream());
+                outputStream.writeBytes(params.toString());*/
 
             }else if(method == "GET"){
 
@@ -79,6 +84,10 @@ public class JSONParser {
                 HttpEntity httpEntity = httpResponse.getEntity();
                 is = httpEntity.getContent();*/
 
+
+                conn.setReadTimeout(10000);
+                conn.setConnectTimeout(15000);              //maximum time to wait while connecting
+                conn.setRequestMethod(method);
                 //testing url connection code
                 conn.setDoInput(true);
 
@@ -89,6 +98,7 @@ public class JSONParser {
                 is = conn.getInputStream();
 
 
+
             }
 
             //close connection
@@ -96,7 +106,7 @@ public class JSONParser {
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-        } catch (IOException e) {
+        } catch(IOException e){
             e.printStackTrace();
         }
 
@@ -120,6 +130,7 @@ public class JSONParser {
         } catch (JSONException e) {
             Log.e("JSON Parser", "Error parsing data " + e.toString());
         }
+
 
         // return JSON String
         return jObj;

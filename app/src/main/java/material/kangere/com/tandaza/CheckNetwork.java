@@ -16,7 +16,7 @@ public class CheckNetwork {
 
     public static boolean isInternetAvailable(Context context)
     {
-        NetworkInfo info = (NetworkInfo) ((ConnectivityManager)
+        NetworkInfo info =  ((ConnectivityManager)
                 context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
 
         if (info == null)
@@ -33,7 +33,7 @@ public class CheckNetwork {
             }
             else
             {
-                Log.d(TAG," internet connection");
+                Log.d(TAG," internet connection ");
                 return true;
             }
 

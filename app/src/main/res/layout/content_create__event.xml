@@ -11,9 +11,7 @@
         android:orientation="vertical"
         tools:context="material.kangere.com.tandaza.NavActivities.Create_Event">
 
-        <include
-            android:id="@+id/tbCreateEvent"
-            layout="@layout/app_bar" />
+
 
         <TextView
             android:layout_width="match_parent"
@@ -43,7 +41,6 @@
             android:id="@+id/bDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="SetDate"
             android:padding="8dp"
             android:text="@string/event_date"
             android:textColor="@color/accent_color"
@@ -62,7 +59,6 @@
             android:id="@+id/bTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="SetTime"
             android:padding="8dp"
             android:text="@string/event_time"
             android:textColor="@color/accent_color"
@@ -109,7 +105,6 @@
             android:src="@mipmap/ic_launcher"
             android:layout_marginTop="15dp"/>
         <ProgressBar
-            android:id="@+id/pbPoster"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="100dp"
             android:layout_height="20dp"
@@ -125,7 +120,6 @@
             android:background="@color/accent_color"
             android:textColor="@android:color/white"
             android:textSize="20sp"
-            android:onClick="GetPoster"
             />
 
         <TextView
@@ -168,7 +162,7 @@
             android:background="@color/accent_color"
             android:textColor="@android:color/white"
             android:textSize="20sp"
-            android:onClick="UploadEvent"/>
+            />
 
 
     </LinearLayout>

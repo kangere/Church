@@ -1,11 +1,14 @@
 package material.kangere.com.tandaza.NavActivities;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -14,10 +17,9 @@ import java.util.List;
 import material.kangere.com.tandaza.MinData;
 import material.kangere.com.tandaza.MinistryRecyclerAdapter;
 import material.kangere.com.tandaza.R;
-import material.kangere.com.tandaza.StaticMethods;
 
 
-public class Ministries extends AppCompatActivity implements MinistryRecyclerAdapter.ClickListener {
+public class Ministries extends Fragment implements MinistryRecyclerAdapter.ClickListener {
 
 
     private ListView listView;
@@ -27,33 +29,39 @@ public class Ministries extends AppCompatActivity implements MinistryRecyclerAda
     private String[] titles;
     private String[] info;
 
-    //private int[] images = {R.mipmap.youth, R.mipmap.ark, R.mipmap.sarahs, R.mipmap.kings_men, R.mipmap.ndoa
-    //, R.mipmap.bofu};
+    private int[] images = {R.drawable.youth, R.mipmap.ark, R.mipmap.sarahs, R.mipmap.kings_men, R.mipmap.ndoa
+            , R.mipmap.bofu};
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ministries);
-        //Nav and toolbar initialisation
-        StaticMethods.ClassInitisialisation(this, R.id.ministries_fragment_navigation_drawer, R.id.ministriesToolbar, R.id.ministries_drawer_layout);
+
+//        //Nav and toolbar initialisation
+//        StaticMethods.ClassInitisialisation(this, R.id.ministries_fragment_navigation_drawer, R.id.ministriesToolbar, R.id.ministries_drawer_layout);
         titles = getResources().getStringArray(R.array.ministry_header);
         info = getResources().getStringArray(R.array.minitry_text);
-        //List view initialisation
 
+//        //List view initialisation
+//
+//
+
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.ministries, container, false);
 
         //recyclerView initialisation
-        recyclerView = (RecyclerView) findViewById(R.id.min_recycler_view);
+        recyclerView = (RecyclerView) view.findViewById(R.id.min_recycler_view);
         recyclerView.setHasFixedSize(true);
-        MinistryRecyclerAdapter adapter = new MinistryRecyclerAdapter(this, getData());
+        MinistryRecyclerAdapter adapter = new MinistryRecyclerAdapter(getActivity(), getData());
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
         //GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-
-
-
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        return view;
     }
 
     @Override
@@ -75,10 +83,8 @@ public class Ministries extends AppCompatActivity implements MinistryRecyclerAda
 
     //method to start class from selected card, takes in the class name as parameter
     public void startClass(Class classes) {
-        startActivity(new Intent(this, classes));
+        startActivity(new Intent(getActivity(), classes));
     }
-
-
 
 
     public List<MinData> getData() {
@@ -88,6 +94,7 @@ public class Ministries extends AppCompatActivity implements MinistryRecyclerAda
             MinData current = new MinData();
             current.setInfo(info[i]);
             current.setTitle(titles[i]);
+            current.setImage(images[i]);
 
             data.add(current);
 
@@ -99,14 +106,14 @@ public class Ministries extends AppCompatActivity implements MinistryRecyclerAda
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
         // data.clear();
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
-        //getData();
+        getActivity().setTitle("Ministries");
     }
 }

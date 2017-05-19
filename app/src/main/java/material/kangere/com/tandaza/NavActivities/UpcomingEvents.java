@@ -64,8 +64,8 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
     private static final String TAG_DESCRIPTION = "description";
 
     // products JSONArray
-    private JSONArray events = null;
-    private Button upload;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -120,7 +120,7 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
 
 
         }
-        upload = (Button) layout.findViewById(R.id.bCreateEvent);
+        Button upload = (Button) layout.findViewById(R.id.bCreateEvent);
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -238,6 +238,8 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
 
         @Override
         protected Void doInBackground(Void... args) {
+
+             JSONArray events = null;
 
             // Building Parameters
             List<NameValuePair> params = new ArrayList<>();

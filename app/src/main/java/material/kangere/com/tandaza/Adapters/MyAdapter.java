@@ -83,7 +83,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolderNotifica
         private ImageView imgNotification;
         CardView cv;
 
-        public ViewHolderNotifications(View itemView) {
+        public  ViewHolderNotifications(View itemView) {
             super(itemView);
 
             cv = (CardView) itemView.findViewById(R.id.cv);

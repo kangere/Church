@@ -46,7 +46,6 @@ import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
 import material.kangere.com.tandaza.LocalDB.TablesContract;
 import material.kangere.com.tandaza.MakeNotification;
 import material.kangere.com.tandaza.R;
-import material.kangere.com.tandaza.SessionManager;
 
 
 public class Show_Notifications extends Fragment implements MyAdapter.ClickListener {
@@ -75,11 +74,10 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
     // products JSONArray
     private JSONArray notifications = null;
     private JSONArray json_notification_cache;
-    private SessionManager session;
     private SQLiteHandler db;
     private RecyclerView recyclerView;
     private TextView noCon;
-    private LinearLayout noConnection, connection;
+    private LinearLayout connection;
 
 
     private MyAdapter adapter;
@@ -102,18 +100,18 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
 
         View layout = inflater.inflate(R.layout.content_show__notifications, container, false);
 
+        //clear the notification list
         notificationsList.clear();
 
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
+
         //Connection/No Connection User Interfaces
         noCon = (TextView) layout.findViewById(R.id.tvShowNoteNoConnection);
         connection = (LinearLayout) layout.findViewById(R.id.lLConnection);
-        //noConnection = (LinearLayout) layout.findViewById(R.id.lLNoConnection);
-        //toolbar and navigation bar initialisation
-        //StaticMethods.ClassInitisialisation(getActivity(), R.id.Show_Note_fragment_navigation_drawer, R.id.tbShowNote, R.id.Show_Note_drawer_layout);
+
 
         //Upload button initialisation
         btnUploadClass = (Button) layout.findViewById(R.id.bOpenUploadClass);
@@ -128,6 +126,7 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
                         .commit();
             }
         });
+
         //db initialisation
         db = new SQLiteHandler(getActivity());
 
@@ -139,6 +138,7 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 
+        //used to populate recyclerview
         loadData();
 
 
@@ -213,7 +213,7 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
         try {
             dialog.show();
         } catch (WindowManager.BadTokenException e) {
-
+            Log.e(TAG,e.toString());
         }
         dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -268,15 +268,10 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
 
 
                 for (int i = 0; i < json_notification_cache.length(); i++) {
-                    JSONObject c = json_notification_cache.optJSONObject(i);
+                    JSONObject jsonObject = json_notification_cache.optJSONObject(i);
 
-                    // Storing each json item in variable
-                    String nid = c.getString(TAG_NID);
-                    String title = c.getString(TAG_TITLE);
-                    String content = c.getString(TAG_CONTENT);
-                    String ministry = c.getString(TAG_MINISTRY);
-                    String image_path = c.getString(TAG_IMAGE_PATH);
-                    String time_stamp = c.getString(TAG_TIMESTAMP);
+                    // Storing date json item in variable
+                    String time_stamp = jsonObject.getString(TAG_TIMESTAMP);
 
 
                     try {
@@ -292,11 +287,11 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
                     //storing each variable
                     ItemData notificationsTitles = new ItemData();
 
-                    notificationsTitles.setNid(nid);
-                    notificationsTitles.setTitle(title);
-                    notificationsTitles.setContent(content);
-                    notificationsTitles.setMinistry(ministry);
-                    notificationsTitles.setImagePath(image_path);
+                    notificationsTitles.setNid(jsonObject.getString(TAG_NID));
+                    notificationsTitles.setTitle(jsonObject.getString(TAG_TITLE));
+                    notificationsTitles.setContent(jsonObject.getString(TAG_CONTENT));
+                    notificationsTitles.setMinistry(jsonObject.getString(TAG_MINISTRY));
+                    notificationsTitles.setImagePath(jsonObject.getString(TAG_IMAGE_PATH));
                     notificationsTitles.setTime_stamp(timestamp);
 
                     notificationsList.add(notificationsTitles);
@@ -335,7 +330,7 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
         String img_path = ((TextView) view.findViewById(R.id.tvImgPathGone)).getText().toString();
 
         //single notification content in an array
-        String[] notification = {title, timeStamp, ministry, content, img_path,id};
+        String[] notification = {title, timeStamp, ministry, content, img_path, id};
 
         //create detail note fragment
         ViewNotification viewNotification = new ViewNotification();
@@ -366,7 +361,7 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
     }
 
     //backgound thread
-    class LoadAllNotifications extends AsyncTask<String, String, String> {
+    private class LoadAllNotifications extends AsyncTask<String, String, String> {
 
         /**
          * Before starting background thread Show Progress Dialog
@@ -375,7 +370,7 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
         protected void onPreExecute() {
             super.onPreExecute();
             if (pDialog == null) {
-                pDialog = createProgrssDialog(getActivity());
+                pDialog = new CustomProgressDialog(getActivity(),TAG);
                 pDialog.show();
             } else {
                 pDialog.show();
@@ -445,7 +440,7 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
                             json.put("notification_cache", new JSONArray(notificationsList));
                             String arrayList = json.toString();
 
-                            Log.d("arrayList",arrayList);
+                            Log.d("arrayList", arrayList);
                             db.updateNotificationCache(arrayList);
                         }
                     } else {

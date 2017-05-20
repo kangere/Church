@@ -83,12 +83,17 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
 
         noCon =(TextView) layout.findViewById(R.id.tvEventNoNetwork);
 
+        //clear eventslist to avoid duplicating data
+        eventsList.clear();
+
         db = new SQLiteHandler(getActivity());
         recyclerView = (RecyclerView) layout.findViewById(R.id.rvEvents);
         adapter = new EventAdapter(getActivity());
         adapter.setClickListener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
+
+        //check if internet connection is available
         if (CheckNetwork.isInternetAvailable(getActivity())) {
 
             try {
@@ -229,7 +234,7 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
         protected void onPreExecute() {
             super.onPreExecute();
             if (progressDialog == null) {
-                progressDialog = Show_Notifications.createProgrssDialog(getActivity());
+                progressDialog = new CustomProgressDialog(getActivity(),TAG);
                 progressDialog.show();
             } else {
                 progressDialog.show();

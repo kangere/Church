@@ -145,7 +145,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvLabelDesc"
-            android:layout_margin="10dp"
+
             android:linksClickable="true"
             android:text="@string/dummy_description"
             android:textIsSelectable="true"

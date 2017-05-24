@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import material.kangere.com.tandaza.NavActivities.Create_Event;
+import material.kangere.com.tandaza.NavActivities.CustomProgressDialog;
 import material.kangere.com.tandaza.NavActivities.Show_Notifications;
 import material.kangere.com.tandaza.videoimageupload.UploadActivity;
 
@@ -169,17 +170,18 @@ public class MakeNotification extends Fragment {
 
             } else if (requestCode == PIC_CROP) {
                 Bundle extras = data.getExtras();
-//get the cropped bitmap
+                //get the cropped bitmap
                 Bitmap thePic = extras.getParcelable("data");
                 picView.setVisibility(View.VISIBLE);
                 picView = (ImageView) getActivity().findViewById(R.id.imgPreview);
-//display the returned cropped image
+                //display the returned cropped image
                 picView.setImageBitmap(thePic);
             } else if (requestCode == 2404) {
 
                 //Retrives the image server file path from Upload Activity using the request code.
                 file_path = data.getStringExtra("file_path");
-                Toast.makeText(getActivity(), file_path, Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), !(file_path.isEmpty())? "Image Upload Success \n" + file_path : "Image Upload Failed \n" +  file_path
+                        , Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -200,7 +202,7 @@ public class MakeNotification extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             if (pDialog == null) {
-                pDialog = Show_Notifications.createProgrssDialog(getActivity());
+                pDialog = new CustomProgressDialog(getActivity(),TAG);
                 pDialog.show();
             } else {
                 pDialog.show();
@@ -295,7 +297,7 @@ public class MakeNotification extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch(requestCode){
-
+            // TODO implemenet handling of Permissions
             case MY_PERMISSION_REQUEST_READ_STORAGE: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -305,6 +307,7 @@ public class MakeNotification extends Fragment {
 
 
                 } else {
+
 
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.

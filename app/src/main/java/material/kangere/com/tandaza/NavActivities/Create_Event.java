@@ -80,6 +80,7 @@ public class Create_Event extends Fragment implements View.OnClickListener{
 
 
 
+
     JSONParser jsonParser;
 
 
@@ -209,7 +210,15 @@ public class Create_Event extends Fragment implements View.OnClickListener{
     }
 
     private void UploadEvent() {
-        new UploadEvent().execute();
+        //check if any testfields are emtpty
+        if(!(displayDate.getText().toString().isEmpty()) &&
+                !(displayTime.getText().toString().isEmpty()) &&
+                !(event_venue.getText().toString().isEmpty()) &&
+                !(event_description.getText().toString().isEmpty()) &&
+                !(event_name.getText().toString().isEmpty()))
+                    new UploadEvent().execute();
+        else//if they are give warning
+            Toast.makeText(getActivity(),"One or More Fields is empty cannot upload event" ,Toast.LENGTH_LONG).show();
     }
 
     private class UploadEvent extends AsyncTask<Void, Void, Void> {
@@ -221,7 +230,7 @@ public class Create_Event extends Fragment implements View.OnClickListener{
             super.onPreExecute();
             progressBar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Uploading", Snackbar.LENGTH_LONG);
             if (progressDialog == null) {
-                progressDialog = Show_Notifications.createProgrssDialog(getActivity());
+                progressDialog = new CustomProgressDialog(getActivity(),TAG);
                 progressDialog.show();
             } else {
                 progressDialog.show();

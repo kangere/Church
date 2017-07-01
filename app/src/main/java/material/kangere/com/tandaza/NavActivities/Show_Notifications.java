@@ -208,19 +208,6 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
         }
     }
 
-    public static ProgressDialog createProgrssDialog(Context mContext) {
-        ProgressDialog dialog = new ProgressDialog(mContext);
-        try {
-            dialog.show();
-        } catch (WindowManager.BadTokenException e) {
-            Log.e(TAG,e.toString());
-        }
-        dialog.setCancelable(false);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialog.setContentView(R.layout.progressdialog);
-
-        return dialog;
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

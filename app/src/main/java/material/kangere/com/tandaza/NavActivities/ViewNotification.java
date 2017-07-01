@@ -32,11 +32,12 @@ import material.kangere.com.tandaza.AppConfig;
 import material.kangere.com.tandaza.JSONParser;
 import material.kangere.com.tandaza.R;
 
-import static material.kangere.com.tandaza.NavActivities.Show_Notifications.createProgrssDialog;
+
 
 
 public class ViewNotification extends Fragment {
 
+    private final String TAG = ViewNotification.class.getSimpleName();
     private TextView title, content, ministry, timeStamp;
     private ImageView sourceImage;
     private static final String NOTE_ID = "note_array";
@@ -170,7 +171,7 @@ public class ViewNotification extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             if (pDialog == null) {
-                pDialog = createProgrssDialog(getActivity());
+                pDialog = new CustomProgressDialog(getActivity(),TAG);
                 pDialog.show();
             } else {
                 pDialog.show();

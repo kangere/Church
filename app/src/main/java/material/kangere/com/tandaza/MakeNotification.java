@@ -135,11 +135,22 @@ public class MakeNotification extends Fragment {
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new UploadNote().execute();
+                if(isEmpty())
+                    Toast.makeText(getActivity(),"One or More Fields is Empty",Toast.LENGTH_LONG).show();
+                else
+                    new UploadNote().execute();
             }
         });
 
         return view;
+    }
+
+    private boolean isEmpty(){
+        if(title.getText().toString().isEmpty() ||
+                content.getText().toString().isEmpty())
+            return true;
+
+        return false;
     }
 
     /**

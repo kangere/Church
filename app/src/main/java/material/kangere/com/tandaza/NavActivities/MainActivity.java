@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
 import material.kangere.com.tandaza.LocalDB.TablesContract;
 import material.kangere.com.tandaza.R;
-import material.kangere.com.tandaza.SessionManager;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -27,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
 
     private SQLiteHandler db;
-    private SessionManager session;
+
 
     Toolbar toolbar;
     // boolean isIntentSafe;

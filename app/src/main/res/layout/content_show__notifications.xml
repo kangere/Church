@@ -1,31 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<LinearLayout android:id="@+id/lLConnection"
-    android:layout_height="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lLConnection"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <Button
         android:id="@+id/bOpenUploadClass"
-        android:layout_gravity="center_horizontal"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:text="Upload Notification"
         android:textSize="25sp" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvShowNote"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent" />
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/note_swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvShowNote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <TextView
-        android:gravity="center"
         android:id="@+id/tvShowNoteNoConnection"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:gravity="center"
         android:text="@string/noInternet"
         android:visibility="gone" />
 </LinearLayout>

@@ -8,11 +8,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
@@ -20,7 +19,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -80,16 +78,13 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
     private LinearLayout connection;
 
 
+
     private MyAdapter adapter;
     private long NOW = new Date().getTime();
     private Date parsedDate;
     private final String NOTE_ID = "note_array";
     private Button btnUploadClass, refresh;
 
-    //onNotificationSelectedListener notificationSelectedListener;
-    public Show_Notifications() {
-
-    }
 
     /* public interface onNotificationSelectedListener{
           void NotificationSelected(int position,String[] content);
@@ -103,10 +98,6 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
         //clear the notification list
         notificationsList.clear();
 
-        if (android.os.Build.VERSION.SDK_INT > 9) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
 
         //Connection/No Connection User Interfaces
         noCon = (TextView) layout.findViewById(R.id.tvShowNoteNoConnection);
@@ -141,6 +132,18 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
         //used to populate recyclerview
         loadData();
 
+        final SwipeRefreshLayout refreshLayout = (SwipeRefreshLayout) layout.findViewById(R.id.note_swipeRefresh);
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.i(TAG, "Refreshing RecyclerView");
+
+                loadData();
+
+                refreshLayout.setRefreshing(false);
+            }
+        });
 
         return layout;
     }
@@ -175,15 +178,18 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
         //check to see if internet connection is available
         if (CheckNetwork.isInternetAvailable(getActivity())) //returns true if internet available
         {
-
+            notificationsList.clear();
 
             try {
                 new LoadAllNotifications().execute();
             } catch (RuntimeException e) {
                 e.printStackTrace();
+            } finally {
+                connection.setVisibility(View.VISIBLE);
+                noCon.setVisibility(View.GONE);
+
             }
-            connection.setVisibility(View.VISIBLE);
-            noCon.setVisibility(View.GONE);
+
 
         } else {//if not load data from cache in local database
             LoadCache();
@@ -203,6 +209,7 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
             TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
             tv.setTextColor(Color.WHITE);
             snack.show();
+
 
 
         }
@@ -357,7 +364,7 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
         protected void onPreExecute() {
             super.onPreExecute();
             if (pDialog == null) {
-                pDialog = new CustomProgressDialog(getActivity(),TAG);
+                pDialog = new CustomProgressDialog(getActivity(), TAG);
                 pDialog.show();
             } else {
                 pDialog.show();

@@ -13,11 +13,19 @@
         android:onClick="CreateEvent"
         android:text="@string/btn_event" />
 
-    <android.support.v7.widget.RecyclerView
-
-        android:id="@+id/rvEvents"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/events_refreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+
+            android:id="@+id/rvEvents"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
     <TextView
         android:id="@+id/tvEventNoNetwork"

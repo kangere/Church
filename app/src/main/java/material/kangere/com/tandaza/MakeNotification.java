@@ -44,16 +44,16 @@ public class MakeNotification extends Fragment {
 
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
-    private static  final  String TAG = MakeNotification.class.getSimpleName();
+    private static final String TAG = MakeNotification.class.getSimpleName();
     private ProgressDialog pDialog;
     public String picturePath;
-    private EditText title,content;
+    private EditText title, content;
     private Spinner ministries;
-    private Button upload,pick;
+    private Button upload, pick;
     private static final int MY_PERMISSION_REQUEST_READ_STORAGE = 3;
 
     public String file_path;
-    private String y_title,y_content,n_ministries ;
+    private String y_title, y_content, n_ministries;
     private static final int PICK_FROM_GALLERY = 2;
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     ImageView picView;
@@ -62,7 +62,6 @@ public class MakeNotification extends Fragment {
     final int PIC_CROP = 2;
 
     private Uri fileUri; // file url to store image/video
-
 
 
     JSONParser jsonParser = new JSONParser();
@@ -83,9 +82,9 @@ public class MakeNotification extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.content_make_notification,container,false);
+        View view = inflater.inflate(R.layout.content_make_notification, container, false);
 
-        upload  = (Button) view.findViewById(R.id.bNoteUpload);
+        upload = (Button) view.findViewById(R.id.bNoteUpload);
         pick = (Button) view.findViewById(R.id.bPick);
         title = (EditText) view.findViewById(R.id.etYouthTitle);
         content = (EditText) view.findViewById(R.id.etYouthContent);
@@ -105,14 +104,9 @@ public class MakeNotification extends Fragment {
             @Override
             public void onClick(View view) {
                 // capture picture
-                /*int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE);
 
-                if(permissionCheck != PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(MakeNotification.this,new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},MY_PERMISSION_REQUEST_READ_STORAGE);
-                }*/
                 Create_Event.verifyStoragePermissions(getActivity());
                 try {
-
 
 
                     Intent intent = new Intent(
@@ -134,11 +128,22 @@ public class MakeNotification extends Fragment {
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new UploadNote().execute();
+                if(isFieldEmpty())
+                    Toast.makeText(getActivity(),"One or more fields are empty",Toast.LENGTH_LONG).show();
+                else new UploadNote().execute();
             }
         });
 
         return view;
+    }
+
+    private boolean isFieldEmpty() {
+        if (title.getText().toString().isEmpty() ||
+                content.getText().toString().isEmpty() ||
+                    ministries.getSelectedItem().toString().isEmpty())
+            return true;
+
+        return false;
     }
 
     /**
@@ -162,7 +167,7 @@ public class MakeNotification extends Fragment {
                 //Log.w("path of image from gallery......******************.........", picturePath+"");
                 picView.setVisibility(View.VISIBLE);
                 picView.setImageBitmap(thumbnail);
-                Log.d(TAG,picturePath);
+                Log.d(TAG, picturePath);
                 Toast.makeText(getActivity(), picturePath, Toast.LENGTH_LONG).show();
                 launchUploadActivity();
 
@@ -183,6 +188,7 @@ public class MakeNotification extends Fragment {
             }
         }
     }
+
     private void launchUploadActivity() {
         //sends the android file path to the Upload Activity
         Intent i = new Intent(getActivity(), UploadActivity.class);
@@ -191,6 +197,7 @@ public class MakeNotification extends Fragment {
         startActivityForResult(i, 2404);
 
     }
+
     class UploadNote extends AsyncTask<String, String, String> {
 
         /**
@@ -284,8 +291,8 @@ public class MakeNotification extends Fragment {
         }
 
     }
-    public  void getText()
-    {
+
+    public void getText() {
         y_title = title.getText().toString();
         y_content = content.getText().toString();
         n_ministries = ministries.getSelectedItem().toString();
@@ -294,7 +301,7 @@ public class MakeNotification extends Fragment {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch(requestCode){
+        switch (requestCode) {
 
             case MY_PERMISSION_REQUEST_READ_STORAGE: {
                 if (grantResults.length > 0

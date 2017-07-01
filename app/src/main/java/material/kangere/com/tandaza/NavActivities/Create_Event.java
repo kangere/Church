@@ -29,6 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -67,8 +68,10 @@ public class Create_Event extends Fragment implements View.OnClickListener{
     private ImageView picView;
     private Spinner sministries;
     private EditText event_name, event_venue, event_description;
+    AutoCompleteTextView autoCompleteTextView;
     static EditText displayDate, displayTime;
     private ProgressDialog progressDialog;
+    private String placeVenue;
 
 
     // Storage Permissions
@@ -77,7 +80,6 @@ public class Create_Event extends Fragment implements View.OnClickListener{
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
-
 
 
     JSONParser jsonParser;
@@ -108,10 +110,11 @@ public class Create_Event extends Fragment implements View.OnClickListener{
         event_description = (EditText) view.findViewById(R.id.etEventDescription);
         event_venue = (EditText) view.findViewById(R.id.etEventVenue);
         picView = (ImageView) view.findViewById(R.id.ivPoster);
+        autoCompleteTextView = (AutoCompleteTextView) view.findViewById(R.id.tvAutoVenue);
 
         //init button
         Button date = (Button) view.findViewById(R.id.bDate);
-        Button time  = (Button)view.findViewById(R.id.bTime);
+        Button time = (Button) view.findViewById(R.id.bTime);
         Button poster = (Button) view.findViewById(R.id.bEventPoster);
         Button upload = (Button) view.findViewById(R.id.bEventUpload);
         //set clickListeners
@@ -120,6 +123,7 @@ public class Create_Event extends Fragment implements View.OnClickListener{
         poster.setOnClickListener(this);
         upload.setOnClickListener(this);
 
+        //placeAutocompleteFragment.setOnPlaceSelectedListener(this);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.ministries,
@@ -156,10 +160,32 @@ public class Create_Event extends Fragment implements View.OnClickListener{
                 GetPoster();
                 break;
             case R.id.bEventUpload:
-                UploadEvent();
+
+                if(fieldsAreEmpty())
+                   Toast.makeText(getActivity(),"One of The Fields is Empty", Toast.LENGTH_LONG).show();
+                else UploadEvent();
                 break;
+
         }
     }
+
+    /**
+     * Method checks if one or more fields are empty
+     * @return true if none of the fields are empty otherwise returns false
+     */
+    private boolean fieldsAreEmpty() {
+        if (event_name.getText().toString().isEmpty() ||
+                event_venue.getText().toString().isEmpty() ||
+                    event_description.getText().toString().isEmpty() ||
+                        sministries.getSelectedItem().toString().isEmpty() ||
+                            displayDate.getText().toString().isEmpty() ||
+                                displayTime.getText().toString().isEmpty())
+            return true;
+
+        return false;
+    }
+
+
 
     public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
@@ -298,9 +324,10 @@ public class Create_Event extends Fragment implements View.OnClickListener{
         date = displayDate.getText().toString();
         time = displayTime.getText().toString();
     }
+
     /**
      * Checks if the app has permission to write to device storage
-     *
+     * <p>
      * If the app does not has permission then the user will be prompted to grant permissions
      *
      * @param activity
@@ -370,7 +397,7 @@ public class Create_Event extends Fragment implements View.OnClickListener{
 
                 //Retrives the image server file path from Upload Activity using the request code.
                 file_path = data.getStringExtra("file_path");
-                Log.d(TAG,file_path);
+                Log.d(TAG, file_path);
                 Toast.makeText(getActivity(), file_path, Toast.LENGTH_LONG).show();
                 //Log.d(TAG,file_path);
             }

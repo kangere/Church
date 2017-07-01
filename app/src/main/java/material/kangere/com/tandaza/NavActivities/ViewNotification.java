@@ -164,7 +164,7 @@ public class ViewNotification extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    class Delete extends AsyncTask<String,Integer,String> {
+    private class Delete extends AsyncTask<String,Integer,String> {
 
         @Override
         protected void onPreExecute() {

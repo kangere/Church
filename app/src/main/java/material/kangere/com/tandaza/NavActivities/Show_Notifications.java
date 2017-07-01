@@ -180,7 +180,7 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
             try {
                 new LoadAllNotifications().execute();
             } catch (RuntimeException e) {
-                e.printStackTrace();
+                Log.e(TAG, e.toString());
             }
             connection.setVisibility(View.VISIBLE);
             noCon.setVisibility(View.GONE);

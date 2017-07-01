@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawer;
     private NavigationView navigationView;
 
-    private SQLiteHandler db;
+
     private SessionManager session;
 
     Toolbar toolbar;
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitleTextColor(ContextCompat.getColor(getBaseContext(), R.color.white));
 
         // SqLite database handler
-        db = new SQLiteHandler(getApplicationContext());
+        SQLiteHandler db = new SQLiteHandler(getApplicationContext());
 
         //create cache tables in local database
         db.addTable(TablesContract.EventsEntry.TABLE_NAME, TablesContract.EventsEntry.COLUMN_EVENT_CACHE);

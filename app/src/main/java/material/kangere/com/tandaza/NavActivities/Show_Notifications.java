@@ -7,10 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,11 +27,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import material.kangere.com.tandaza.Adapters.MyAdapter;
 import material.kangere.com.tandaza.AppConfig;
@@ -193,24 +193,6 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
 
         } else {//if not load data from cache in local database
             LoadCache();
-            Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), "No Internet Connection", Snackbar.LENGTH_LONG);
-
-            snack.setAction("RETRY", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    /*finish();
-                    overridePendingTransition(0, 0);
-                    startActivity(getIntent());
-                    overridePendingTransition(0, 0);*/
-                }
-            });
-            snack.setActionTextColor(getResources().getColor(R.color.accent_color));
-            View view = snack.getView();
-            TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-            tv.setTextColor(Color.WHITE);
-            snack.show();
-
-
 
         }
     }
@@ -269,12 +251,12 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
 
 
                     try {
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                         parsedDate = dateFormat.parse(time_stamp);
-                    } catch (Exception e) {//this generic but you can control another types of exception
-                        e.printStackTrace();
+                    } catch (ParseException e) {//this generic but you can control another types of exception
+                        Log.e(TAG,e.getMessage());
                     }
-                    DateUtils.getRelativeTimeSpanString(parsedDate.getTime(), NOW, DateUtils.MINUTE_IN_MILLIS);
+                    //DateUtils.getRelativeTimeSpanString(parsedDate.getTime(), NOW, DateUtils.MINUTE_IN_MILLIS);
 
                     String timestamp = String.valueOf(DateUtils.getRelativeTimeSpanString(parsedDate.getTime(), NOW, DateUtils.MINUTE_IN_MILLIS));
 

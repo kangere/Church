@@ -26,17 +26,26 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import material.kangere.com.tandaza.NavActivities.Create_Event;
 import material.kangere.com.tandaza.NavActivities.CustomProgressDialog;
 import material.kangere.com.tandaza.NavActivities.Show_Notifications;
+import material.kangere.com.tandaza.util.RequestQueueSingleton;
 import material.kangere.com.tandaza.videoimageupload.UploadActivity;
 
 import static android.app.Activity.RESULT_OK;
@@ -135,17 +144,17 @@ public class MakeNotification extends Fragment {
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isEmpty())
+                if(fieldsAreEmpty())
                     Toast.makeText(getActivity(),"One or More Fields is Empty",Toast.LENGTH_LONG).show();
                 else
-                    new UploadNote().execute();
+                    postData();/*new UploadNote().execute();*/
             }
         });
 
         return view;
     }
 
-    private boolean isEmpty(){
+    private boolean fieldsAreEmpty(){
         if(title.getText().toString().isEmpty() ||
                 content.getText().toString().isEmpty())
             return true;
@@ -153,6 +162,58 @@ public class MakeNotification extends Fragment {
         return false;
     }
 
+    private void postData(){
+        y_title = title.getText().toString();
+        y_content = content.getText().toString();
+        n_ministries = ministries.getSelectedItem().toString();
+
+        //Create request to post data
+        StringRequest request = new StringRequest(Request.Method.POST, AppConfig.URL_UPLOAD,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(TAG,response);
+
+                        //go to previous fragment
+                        Show_Notifications showNotifications = new Show_Notifications();
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                        // Replace whatever is in the fragment_container view with this fragment,
+                        // and add the transaction to the back stack
+                        transaction.replace(R.id.flContent, showNotifications);
+                        transaction.addToBackStack(null);
+
+                        // Commit the transaction
+                        transaction.commit();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG,error.getMessage());
+                    }
+                }
+        ){
+
+
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                // Building Parameters
+                Map<String,String> params = new HashMap<>();
+                params.put("title", y_title);
+
+                params.put("content", y_content);
+                params.put("ministry", n_ministries);
+
+                params.put("imgpath", file_path);
+
+                return params;
+            }
+        };
+
+        RequestQueueSingleton.getInstance(getActivity()).addToRequestQueue(request);
+    }
     /**
      * Receiving activity result method will be called after closing the camera
      */

@@ -17,11 +17,9 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,18 +35,23 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import material.kangere.com.tandaza.AppConfig;
 import material.kangere.com.tandaza.JSONParser;
 import material.kangere.com.tandaza.R;
+import material.kangere.com.tandaza.util.RequestQueueSingleton;
 import material.kangere.com.tandaza.videoimageupload.UploadActivity;
 
 public class Create_Event extends Fragment implements View.OnClickListener{
@@ -127,8 +130,8 @@ public class Create_Event extends Fragment implements View.OnClickListener{
                 R.layout.myspinner);
         sministries.setAdapter(adapter);
 
-        //requestQueue = Volley.newRequestQueue(getActivity());
-        jsonParser = new JSONParser();
+
+        //jsonParser = new JSONParser();
         return view;
     }
 
@@ -216,12 +219,83 @@ public class Create_Event extends Fragment implements View.OnClickListener{
                 !(event_venue.getText().toString().isEmpty()) &&
                 !(event_description.getText().toString().isEmpty()) &&
                 !(event_name.getText().toString().isEmpty()))
-                    new UploadEvent().execute();
+                    postData();/*new UploadEvent().execute();*/
         else//if they are give warning
             Toast.makeText(getActivity(),"One or More Fields is empty cannot upload event" ,Toast.LENGTH_LONG).show();
     }
 
-    private class UploadEvent extends AsyncTask<Void, Void, Void> {
+    private void postData(){
+
+        name = event_name.getText().toString();
+        venue = event_venue.getText().toString();
+        description = event_description.getText().toString();
+        ministries = sministries.getSelectedItem().toString();
+        date = displayDate.getText().toString();
+        time = displayTime.getText().toString();
+
+        StringRequest request = new StringRequest(Request.Method.POST, AppConfig.EVENT_UPLOAD_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(TAG,response);
+
+                        int success = 0;
+                        try{
+                            JSONObject object = new JSONObject(response);
+                            success = object.getInt(TAG_SUCCESS);
+
+                        }catch(JSONException e){
+                            Log.e(TAG, e.toString());
+                        }
+
+                        if(success == 1){
+
+                            Toast.makeText(getActivity(),"Notification created successfully",Toast.LENGTH_LONG).show();
+
+                            //go to previous fragment
+                            UpcomingEvents upcomingEvents = new UpcomingEvents();
+                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                            // Replace whatever is in the fragment_container view with this fragment,
+                            // and add the transaction to the back stack
+                            transaction.replace(R.id.flContent, upcomingEvents);
+                            transaction.addToBackStack(null);
+
+                            // Commit the transaction
+                            transaction.commit();
+                        }else
+                            Toast.makeText(getActivity(),"Notification created successfully",Toast.LENGTH_LONG).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String,String> params = new HashMap<>();
+
+                params.put("event_name", name);
+                params.put("event_date", date);
+                params.put("event_time", time);
+                params.put("ministry", ministries);
+                params.put("venue", venue);
+                params.put("posterpath", file_path);
+                params.put("description", description);
+
+                return params;
+            }
+        };
+
+        RequestQueueSingleton.getInstance(getActivity()).addToRequestQueue(request);
+
+    }
+
+    /*private class UploadEvent extends AsyncTask<Void, Void, Void> {
 
         Snackbar progressBar;
 
@@ -297,16 +371,16 @@ public class Create_Event extends Fragment implements View.OnClickListener{
             progressBar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Upload Successful", Snackbar.LENGTH_LONG);
             progressBar.dismiss();
         }
-    }
+    }*/
 
-    private void getText() {
+    /*private void getText() {
         name = event_name.getText().toString();
         venue = event_venue.getText().toString();
         description = event_description.getText().toString();
         ministries = sministries.getSelectedItem().toString();
         date = displayDate.getText().toString();
         time = displayTime.getText().toString();
-    }
+    }*/
     /**
      * Checks if the app has permission to write to device storage
      *
@@ -369,11 +443,11 @@ public class Create_Event extends Fragment implements View.OnClickListener{
 
             } else if (requestCode == PIC_CROP) {
                 Bundle extras = data.getExtras();
-//get the cropped bitmap
+                //get the cropped bitmap
                 Bitmap thePic = extras.getParcelable("data");
                 picView.setVisibility(View.VISIBLE);
                 picView = (ImageView) getActivity().findViewById(R.id.imgPreview);
-//display the returned cropped image
+                //display the returned cropped image
                 picView.setImageBitmap(thePic);
             } else if (requestCode == 2404) {
 

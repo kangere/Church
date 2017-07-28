@@ -174,17 +174,40 @@ public class MakeNotification extends Fragment {
                     public void onResponse(String response) {
                         Log.d(TAG,response);
 
-                        //go to previous fragment
-                        Show_Notifications showNotifications = new Show_Notifications();
-                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
-                        // Replace whatever is in the fragment_container view with this fragment,
-                        // and add the transaction to the back stack
-                        transaction.replace(R.id.flContent, showNotifications);
-                        transaction.addToBackStack(null);
+                        int success = 0;
+                        String message = "";
 
-                        // Commit the transaction
-                        transaction.commit();
+                        try {
+                            JSONObject temp = new JSONObject(response);
+                            success = temp.getInt(TAG_SUCCESS);
+
+                        }catch (JSONException e){
+                            Log.e(TAG,e.toString());
+                        }
+
+                        if(success == 1) {
+                            message = "Notification created successfully";
+
+                            Toast.makeText(getActivity(),"Notification created successfully",Toast.LENGTH_LONG).show();
+
+                            //go to previous fragment
+                            Show_Notifications showNotifications = new Show_Notifications();
+                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                            // Replace whatever is in the fragment_container view with this fragment,
+                            // and add the transaction to the back stack
+                            transaction.replace(R.id.flContent, showNotifications);
+                            transaction.addToBackStack(null);
+
+                            // Commit the transaction
+                            transaction.commit();
+
+                        }else message = "Failed to create notification, Try Again";
+
+                        Toast.makeText(getActivity(),message,Toast.LENGTH_LONG).show();
+
+
                     }
                 },
                 new Response.ErrorListener() {

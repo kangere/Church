@@ -29,7 +29,6 @@ import org.json.JSONObject;
 import java.io.File;
 
 import material.kangere.com.tandaza.AppConfig;
-import material.kangere.com.tandaza.JSONParser;
 import material.kangere.com.tandaza.MakeNotification;
 import material.kangere.com.tandaza.R;
 
@@ -40,7 +39,7 @@ public class UploadActivity extends Activity {
 
 
 
-   private String filePath = null;
+   private String filePath = "";
     private ProgressBar progressBar;
     private TextView txtPercentage;
     private ImageView imgPreview;
@@ -138,10 +137,19 @@ public class UploadActivity extends Activity {
             return uploadFile();
         }
 
-        @SuppressWarnings("deprecation")
+        //@SuppressWarnings("deprecation")
         private String uploadFile() {
             String responseString ;
 
+//            Optional<URL> url = Optional.empty();
+//            try {
+//                url.get() = new URL(AppConfig.FILE_UPLOAD_URL);
+//            }catch(MalformedURLException e){
+//                Log.e(TAG,e.toString());
+//            }
+//
+//            HttpURLConnection urlConnection = (HttpURLConnection) url.get().openConnection();
+            //HttpURLConnection urlConnection =
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(AppConfig.FILE_UPLOAD_URL);
 

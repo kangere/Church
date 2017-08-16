@@ -1,79 +1,89 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rvNotes"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardview="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical">
-
-    <TextView
-
-        android:id="@+id/title"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLength="70"
-        android:maxLines="3"
-        android:paddingLeft="5dp"
-        android:text="SOme Text"
-        android:textColor="#000"
-        android:textSize="20dp" />
+    cardview:cardCornerRadius="4dp"
+    cardview:cardElevation="8dp"
+    android:layout_margin="4dp">
 
 
-    <TextView
-        android:id="@+id/tvContentGone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/title"
-        android:layout_toLeftOf="@+id/img_notification"
-        android:layout_alignParentLeft="true"
-        android:paddingLeft="5dp"
-        android:maxLines="3"
-        android:textColor="#000"
-        android:text="DUmmy Text here"/>
-
-
-    <ImageView
-        android:id="@+id/img_notification"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_alignParentRight="true"
-        android:layout_toRightOf="@+id/title"
-        android:padding="8dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/church_icon" />
-
-    <TextView
-
-        android:id="@+id/notificationTimeStamp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SOme text"
-        android:textColor="#000"
-        android:textSize="15sp"
-
-        android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/nid"
+    <RelativeLayout
+        android:id="@+id/rvNotes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/img_notification"
-        android:textColor="#000"
-        android:visibility="gone" />
+        android:gravity="center_vertical">
+
+        <TextView
+
+            android:id="@+id/title"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLength="70"
+            android:maxLines="3"
+            android:paddingLeft="5dp"
+            android:text="SOme Text"
+            android:textColor="#000"
+            android:textSize="20dp" />
 
 
-    <TextView
-        android:id="@+id/tvMinistryGone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/tvImgPathGone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:visibility="gone" />
+        <TextView
+            android:id="@+id/tvContentGone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/title"
+            android:layout_toLeftOf="@+id/img_notification"
+            android:maxLines="3"
+            android:paddingLeft="5dp"
+            android:text="DUmmy Text here"
+            android:textColor="#000" />
 
 
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/img_notification"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/title"
+            android:padding="8dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/church_icon" />
+
+        <TextView
+
+            android:id="@+id/notificationTimeStamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SOme text"
+            android:textColor="#000"
+            android:textSize="15sp"
+
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/nid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/img_notification"
+            android:textColor="#000"
+            android:visibility="gone" />
+
+
+        <TextView
+            android:id="@+id/tvMinistryGone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvImgPathGone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:visibility="gone" />
+
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

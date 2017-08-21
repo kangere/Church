@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -62,6 +63,10 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
     private static final String TAG_POSTER = "posterpath";
     private static final String TAG_VENUE = "venue";
     private static final String TAG_DESCRIPTION = "description";
+
+    private ProgressDialog dialog;
+
+    private final int EVENTS_PROGRESS_DELAY = 1000;
 
     // products JSONArray
 
@@ -125,6 +130,9 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
         //check if internet connection is available
         if (CheckNetwork.isInternetAvailable(getActivity())) {
 
+            dialog = new ProgressDialog(getActivity());
+            dialog.setMessage("Loading events...");
+            dialog.show();
             eventsList.clear();
             /*try {
                 new EventsLoader().execute();
@@ -188,11 +196,25 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
 
             try {
                 RequestQueueSingleton.getInstance(getActivity()).addToRequestQueue(objectRequest);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                /* Create an Intent that will start the Menu-Activity. */
+                        dialog.dismiss();
+                    }
+                }, EVENTS_PROGRESS_DELAY);
             }catch (NullPointerException e){
                 Log.e(TAG,e.getMessage());
             }
         } else {
             loadCache();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                /* Create an Intent that will start the Menu-Activity. */
+                    dialog.dismiss();
+                }
+            }, EVENTS_PROGRESS_DELAY);
 
         }
     }

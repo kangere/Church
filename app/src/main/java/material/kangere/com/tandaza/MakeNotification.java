@@ -13,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -72,6 +73,10 @@ public class MakeNotification extends Fragment {
     final int PIC_CROP = 2;
 
     private Uri fileUri; // file url to store image/video
+
+    private ProgressDialog dialog;
+
+    private final int NOTIFICATION_PROGRESS_DELAY = 1000;
 
 
 
@@ -167,6 +172,10 @@ public class MakeNotification extends Fragment {
         y_content = content.getText().toString();
         n_ministries = ministries.getSelectedItem().toString();
 
+        dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Posting notification..");
+        dialog.show();
+
         //Create request to post data
         StringRequest request = new StringRequest(Request.Method.POST, AppConfig.URL_UPLOAD,
                 new Response.Listener<String>() {
@@ -236,6 +245,13 @@ public class MakeNotification extends Fragment {
         };
 
         RequestQueueSingleton.getInstance(getActivity()).addToRequestQueue(request);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                /* Create an Intent that will start the Menu-Activity. */
+                dialog.dismiss();
+            }
+        }, NOTIFICATION_PROGRESS_DELAY);
     }
     /**
      * Receiving activity result method will be called after closing the camera

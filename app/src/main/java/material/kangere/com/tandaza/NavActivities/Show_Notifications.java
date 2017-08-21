@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -84,7 +85,9 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
     private Date parsedDate;
     private final String NOTE_ID = "note_array";
     private Button btnUploadClass, refresh;
+    private ProgressDialog dialog;
 
+    private final int NOTIFICATION_PROGRESS_DELAY = 1000;
 
     /* public interface onNotificationSelectedListener{
           void NotificationSelected(int position,String[] content);
@@ -176,8 +179,12 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
 
     private void loadData() {
         //check to see if internet connection is available
-        if (CheckNetwork.isInternetAvailable(getActivity()))
-        {
+
+        dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Loading news...");
+        dialog.show();
+
+        if (CheckNetwork.isInternetAvailable(getActivity())) {
             notificationsList.clear();
 
             /*try {
@@ -213,7 +220,7 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
 
 
                                     try {
-                                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.getDefault());
+                                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                                         parsedDate = dateFormat.parse(time_stamp);
                                     } catch (Exception e) {//this generic but you can control another types of exception
                                         e.printStackTrace();
@@ -257,14 +264,29 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Log.e(TAG,error.toString());
+                            Log.e(TAG, error.toString());
                         }
                     });
 
             RequestQueueSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                /* Create an Intent that will start the Menu-Activity. */
+                    dialog.dismiss();
+                }
+            }, NOTIFICATION_PROGRESS_DELAY);
+
 
         } else {//if not load data from cache in local database
             LoadCache();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                /* Create an Intent that will start the Menu-Activity. */
+                    dialog.dismiss();
+                }
+            }, NOTIFICATION_PROGRESS_DELAY);
 
         }
     }
@@ -360,6 +382,8 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
             }
         }
         cursor.close();
+
+
     }
 
     /**
@@ -414,8 +438,8 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
     /*private class LoadAllNotifications extends AsyncTask<String, String, String> {
 
         *//**
-         * Before starting background thread Show Progress Dialog
-         *//*
+     * Before starting background thread Show Progress Dialog
+     *//*
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -429,8 +453,8 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
 
 
         *//**
-         * getting All products from url
-         *//*
+     * getting All products from url
+     *//*
         protected String doInBackground(String... args) {
             // Building Parameters
             List<NameValuePair> params = new ArrayList<>();
@@ -517,9 +541,9 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
         }
 
         *//**
-         * After completing background task Dismiss the progress dialog
-         * *
-         *//*
+     * After completing background task Dismiss the progress dialog
+     * *
+     *//*
         protected void onPostExecute(String file_url) {
             // dismiss the dialog after getting all products
             pDialog.dismiss();
@@ -527,9 +551,11 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
             getActivity().runOnUiThread(new Runnable() {
                 public void run() {
 
-                    *//**
-                     * Updating parsed JSON data into ListView
-                     * *//*
+                    */
+
+    /**
+     * Updating parsed JSON data into ListView
+     *//*
                     adapter.setNotificationsList(notificationsList);
 
 
@@ -541,7 +567,6 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
 
 
     }*/
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();

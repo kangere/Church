@@ -49,10 +49,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import material.kangere.com.tandaza.AppConfig;
-import material.kangere.com.tandaza.JSONParser;
 import material.kangere.com.tandaza.R;
+import material.kangere.com.tandaza.util.Permissions;
 import material.kangere.com.tandaza.util.RequestQueueSingleton;
 import material.kangere.com.tandaza.videoimageupload.UploadActivity;
+
+import static android.app.Activity.RESULT_OK;
 
 public class Create_Event extends Fragment implements View.OnClickListener{
 
@@ -84,7 +86,7 @@ public class Create_Event extends Fragment implements View.OnClickListener{
 
 
 
-    JSONParser jsonParser;
+
 
 
     @Override
@@ -156,7 +158,7 @@ public class Create_Event extends Fragment implements View.OnClickListener{
                 SetDate();
                 break;
             case R.id.bEventPoster:
-                verifyStoragePermissions(getActivity());
+                Permissions.verifyStoragePermissions(getActivity());
                 GetPoster();
                 break;
             case R.id.bEventUpload:
@@ -419,7 +421,8 @@ public class Create_Event extends Fragment implements View.OnClickListener{
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == getActivity().RESULT_OK) {
+
+        if (resultCode == RESULT_OK) {
 
             if (requestCode == PICK_FROM_GALLERY) {
 

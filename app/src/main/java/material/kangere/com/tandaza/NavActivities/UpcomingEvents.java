@@ -32,7 +32,6 @@ import material.kangere.com.tandaza.Adapters.EventAdapter;
 import material.kangere.com.tandaza.AppConfig;
 import material.kangere.com.tandaza.CheckNetwork;
 import material.kangere.com.tandaza.EventData;
-import material.kangere.com.tandaza.JSONParser;
 import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
 import material.kangere.com.tandaza.LocalDB.TablesContract;
 import material.kangere.com.tandaza.R;
@@ -45,7 +44,7 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
     private SQLiteHandler db;
     private RecyclerView recyclerView;
     private TextView noCon;
-    private JSONParser jParser = new JSONParser();
+
     private JSONArray json_events_cache;
     private static final String TAG = UpcomingEvents.class.getSimpleName();
 

@@ -40,7 +40,6 @@ import material.kangere.com.tandaza.Adapters.MyAdapter;
 import material.kangere.com.tandaza.AppConfig;
 import material.kangere.com.tandaza.CheckNetwork;
 import material.kangere.com.tandaza.ItemData;
-import material.kangere.com.tandaza.JSONParser;
 import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
 import material.kangere.com.tandaza.LocalDB.TablesContract;
 import material.kangere.com.tandaza.MakeNotification;
@@ -56,7 +55,7 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
     // Progress Dialog
     private ProgressDialog pDialog;
     // Creating JSON Parser object
-    private JSONParser jParser = new JSONParser();
+
 
     //array list to be passed into recycler view adapter
     private ArrayList<ItemData> notificationsList = new ArrayList<>();
@@ -84,7 +83,7 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
     private long NOW = new Date().getTime();
     private Date parsedDate;
     private final String NOTE_ID = "note_array";
-    private Button btnUploadClass, refresh;
+    private Button btnUploadClass;
     private ProgressDialog dialog;
 
     private final int NOTIFICATION_PROGRESS_DELAY = 1000;

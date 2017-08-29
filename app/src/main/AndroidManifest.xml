@@ -35,38 +35,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".NavActivities.Ministries"
-            android:label="@string/title_activity_ministries" />
 
 
         <activity
             android:name=".NavActivities.YouthMinistry"
-            android:label="@string/title_activity_youth_ministry"
-            android:parentActivityName=".NavActivities.Ministries">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".NavActivities.Ministries" />
-        </activity>
+            android:label="@string/title_activity_youth_ministry" />
+
         <activity
             android:name=".NavActivities.ChildrenMinistry"
-            android:label="@string/title_activity_children_ministry"
-            android:parentActivityName=".NavActivities.Ministries">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".NavActivities.Ministries" />
-
-        </activity>
+            android:label="@string/title_activity_children_ministry" />
 
 
         <activity
             android:name=".Notifications_settings"
             android:label="@string/title_activity_notifications_settings"
             android:theme="@style/AppTheme" />
-        <activity
-            android:name=".MakeNotification"
-            android:label="@string/title_activity_make_notification"
-            android:theme="@style/AppTheme" />
+        <!-- <activity
+             android:name=".MakeNotification"
+             android:label="@string/title_activity_make_notification"
+             android:theme="@style/AppTheme" />-->
         <!--<activity
             android:name=".NavActivities.Show_Notifications"
             android:label="@string/title_activity_show__notifications"
@@ -84,6 +71,7 @@
                  android:name="android.support.PARENT_ACTIVITY"
                  android:value=".NavActivities.Show_Notifications" />
          </activity> -->
+        <Service android:name="Services.UploadService" />
 
 
     </application>

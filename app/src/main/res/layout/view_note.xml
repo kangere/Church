@@ -9,13 +9,31 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/bDeleteNote"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:background="@color/accent_color"
-            android:text="Delete Article" />
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/bDeleteNote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:padding="8dp"
+                android:background="@color/accent_color"
+                android:text="Delete Article" />
+
+            <Button
+                android:id="@+id/bUpdateNote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:layout_margin="16dp"
+                android:background="@color/accent_color"
+                android:text="Update Article"
+                android:layout_toRightOf="@+id/bDeleteNote"/>
+
+        </RelativeLayout>
+
 
         <TextView
             android:id="@+id/tvDetailNoteTitle"

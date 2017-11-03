@@ -71,7 +71,7 @@
                  android:name="android.support.PARENT_ACTIVITY"
                  android:value=".NavActivities.Show_Notifications" />
          </activity> -->
-        <Service android:name="Services.UploadService" />
+        <service android:name="Services.UploadService" />
 
 
     </application>

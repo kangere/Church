@@ -29,6 +29,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -205,6 +209,17 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
                                 JSONArray array = response.getJSONArray(TAG_NOTIFICATIONS);
 
                                 JSONObject forCache = new JSONObject();
+
+                                File temp = getActivity().getCacheDir();
+
+                                try {
+                                    OutputStream outputStream = new FileOutputStream(temp);
+
+                                    
+                                } catch(FileNotFoundException e){
+
+                                }
+
 
                                 for (int i = 0; i < array.length(); i++) {
                                     JSONObject c = array.getJSONObject(i);

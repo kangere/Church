@@ -2,9 +2,9 @@
     xmlns:cardview="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="4dp"
     cardview:cardCornerRadius="4dp"
-    cardview:cardElevation="8dp"
-    android:layout_margin="4dp">
+    cardview:cardElevation="8dp">
 
 
     <RelativeLayout
@@ -37,13 +37,14 @@
             android:maxLines="3"
             android:paddingLeft="5dp"
             android:text="DUmmy Text here"
-            android:textColor="#000" />
+            android:textColor="#000"
+            android:visibility="gone" />
 
 
         <ImageView
             android:id="@+id/img_notification"
             android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_height="150dp"
             android:layout_alignParentRight="true"
             android:layout_toRightOf="@+id/title"
             android:padding="8dp"
@@ -51,15 +52,14 @@
             android:src="@drawable/church_icon" />
 
         <TextView
-
+            android:layout_margin="8dp"
             android:id="@+id/notificationTimeStamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SOme text"
             android:textColor="#000"
             android:textSize="15sp"
-
-            android:visibility="gone" />
+            android:layout_below="@+id/title" />
 
         <TextView
             android:id="@+id/nid"
@@ -75,7 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#000"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/tvImgPathGone"

@@ -37,8 +37,6 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONException;
@@ -48,8 +46,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import material.kangere.com.tandaza.AppConfig;
 import material.kangere.com.tandaza.R;
+import material.kangere.com.tandaza.util.AppConfig;
 import material.kangere.com.tandaza.util.Permissions;
 import material.kangere.com.tandaza.util.RequestQueueSingleton;
 import material.kangere.com.tandaza.videoimageupload.UploadActivity;
@@ -107,19 +105,19 @@ public class Create_Event extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_create__event, container, false);
 
-        displayDate = (EditText) view.findViewById(R.id.etSHowDate);
-        displayTime = (EditText) view.findViewById(R.id.etSHowTime);
-        sministries = (Spinner) view.findViewById(R.id.sEventMinistries);
-        event_name = (EditText) view.findViewById(R.id.etEventName);
-        event_description = (EditText) view.findViewById(R.id.etEventDescription);
-        event_venue = (EditText) view.findViewById(R.id.etEventVenue);
-        picView = (ImageView) view.findViewById(R.id.ivPoster);
+        displayDate =  view.findViewById(R.id.etSHowDate);
+        displayTime = view.findViewById(R.id.etSHowTime);
+        sministries =  view.findViewById(R.id.sEventMinistries);
+        event_name = view.findViewById(R.id.etEventName);
+        event_description =  view.findViewById(R.id.etEventDescription);
+        event_venue =  view.findViewById(R.id.etEventVenue);
+        picView =  view.findViewById(R.id.ivPoster);
 
         //init button
-        Button date = (Button) view.findViewById(R.id.bDate);
-        Button time  = (Button)view.findViewById(R.id.bTime);
-        Button poster = (Button) view.findViewById(R.id.bEventPoster);
-        Button upload = (Button) view.findViewById(R.id.bEventUpload);
+        Button date =  view.findViewById(R.id.bDate);
+        Button time  = view.findViewById(R.id.bTime);
+        Button poster =  view.findViewById(R.id.bEventPoster);
+        Button upload =  view.findViewById(R.id.bEventUpload);
         //set clickListeners
         date.setOnClickListener(this);
         time.setOnClickListener(this);
@@ -236,9 +234,7 @@ public class Create_Event extends Fragment implements View.OnClickListener{
         time = displayTime.getText().toString();
 
         StringRequest request = new StringRequest(Request.Method.POST, AppConfig.EVENT_UPLOAD_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
+                (response)-> {
                         Log.d(TAG,response);
 
                         int success = 0;
@@ -267,14 +263,11 @@ public class Create_Event extends Fragment implements View.OnClickListener{
                             transaction.commit();
                         }else
                             Toast.makeText(getActivity(),"Notification created successfully",Toast.LENGTH_LONG).show();
-                    }
+
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, error.toString());
-                    }
-                }
+                error-> Log.e(TAG, error.toString())
+
+
         ) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {

@@ -29,12 +29,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import material.kangere.com.tandaza.Adapters.EventAdapter;
-import material.kangere.com.tandaza.AppConfig;
-import material.kangere.com.tandaza.CheckNetwork;
 import material.kangere.com.tandaza.EventData;
 import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
 import material.kangere.com.tandaza.LocalDB.TablesContract;
 import material.kangere.com.tandaza.R;
+import material.kangere.com.tandaza.util.AppConfig;
+import material.kangere.com.tandaza.util.CheckNetwork;
 import material.kangere.com.tandaza.util.RequestQueueSingleton;
 
 

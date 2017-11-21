@@ -30,7 +30,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.text.ParseException;
@@ -41,13 +40,13 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import material.kangere.com.tandaza.Adapters.MyAdapter;
-import material.kangere.com.tandaza.AppConfig;
-import material.kangere.com.tandaza.CheckNetwork;
 import material.kangere.com.tandaza.ItemData;
 import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
 import material.kangere.com.tandaza.LocalDB.TablesContract;
 import material.kangere.com.tandaza.MakeNotification;
 import material.kangere.com.tandaza.R;
+import material.kangere.com.tandaza.util.AppConfig;
+import material.kangere.com.tandaza.util.CheckNetwork;
 import material.kangere.com.tandaza.util.RequestQueueSingleton;
 
 
@@ -212,11 +211,12 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
 
                                 File temp = getActivity().getCacheDir();
 
-                                try {
-                                    OutputStream outputStream = new FileOutputStream(temp);
+                                try (OutputStream outputStream = new FileOutputStream(temp))
+                                {
+
 
                                     
-                                } catch(FileNotFoundException e){
+                                } catch(Exception e){
 
                                 }
 

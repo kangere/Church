@@ -39,6 +39,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import material.kangere.com.tandaza.NavActivities.Show_Notifications;
+import material.kangere.com.tandaza.util.AppConfig;
 import material.kangere.com.tandaza.util.Permissions;
 import material.kangere.com.tandaza.util.RequestQueueSingleton;
 import material.kangere.com.tandaza.videoimageupload.UploadActivity;
@@ -82,12 +83,12 @@ public class MakeNotification extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_make_notification, container, false);
 
-        upload = (Button) view.findViewById(R.id.bNoteUpload);
-        pick = (Button) view.findViewById(R.id.bPick);
-        title = (EditText) view.findViewById(R.id.etYouthTitle);
-        content = (EditText) view.findViewById(R.id.etYouthContent);
-        ministries = (Spinner) view.findViewById(R.id.sMinistries);
-        picView = (ImageView) view.findViewById(R.id.imgPreview);
+        upload =  view.findViewById(R.id.bNoteUpload);
+        pick =  view.findViewById(R.id.bPick);
+        title = view.findViewById(R.id.etYouthTitle);
+        content =  view.findViewById(R.id.etYouthContent);
+        ministries = view.findViewById(R.id.sMinistries);
+        picView =  view.findViewById(R.id.imgPreview);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.ministries,

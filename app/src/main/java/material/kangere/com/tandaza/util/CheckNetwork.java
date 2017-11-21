@@ -1,4 +1,4 @@
-package material.kangere.com.tandaza;
+package material.kangere.com.tandaza.util;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

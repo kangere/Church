@@ -1,20 +1,22 @@
-package material.kangere.com.tandaza;
+package material.kangere.com.tandaza.util;
 
 /**
  * Created by user on 10/7/2015.
  */
-public class AppConfig {
+public interface AppConfig {
 
 
-   public static String URL_GET_ALL_NOTIFICATIONS = "http://www.kisilokitaka.com/tandaza/get_all_notifications.php";
+   String URL_GET_ALL_NOTIFICATIONS = "http://www.kisilokitaka.com/tandaza/get_all_notifications.php";
 
 
     // Server user register url
-    public static String URL_DELETE = "http://www.kisilokitaka.com/tandaza/delete_note.php";
-    public static String URL_UPLOAD = "http://www.kisilokitaka.com/tandaza/upload_note.php";
-    public static String FILE_UPLOAD_URL = "http://www.kisilokitaka.com/tandaza/file_upload.php";
-    public static String EVENT_UPLOAD_URL = "http://www.kisilokitaka.com/tandaza/upload_event.php";
-    public static String URL_GET_EVENTS = "http://www.kisilokitaka.com/tandaza/get_events.php";
+    String URL_DELETE = "http://www.kisilokitaka.com/tandaza/delete_note.php";
+    String URL_UPLOAD = "http://www.kisilokitaka.com/tandaza/upload_note.php";
+    String FILE_UPLOAD_URL = "http://www.kisilokitaka.com/tandaza/file_upload.php";
+    String EVENT_UPLOAD_URL = "http://www.kisilokitaka.com/tandaza/upload_event.php";
+    String URL_GET_EVENTS = "http://www.kisilokitaka.com/tandaza/get_events.php";
+    String URL_UPDATE_NOTE = "http://www.kisilokitaka.com/tandaza/update_note.php";
+   // public static
 
     public static String[] PERMISSIONS_STORAGE = {
             android.Manifest.permission.READ_EXTERNAL_STORAGE,

@@ -28,9 +28,9 @@ import org.json.JSONObject;
 
 import java.io.File;
 
-import material.kangere.com.tandaza.AppConfig;
 import material.kangere.com.tandaza.MakeNotification;
 import material.kangere.com.tandaza.R;
+import material.kangere.com.tandaza.util.AppConfig;
 
 
 public class UploadActivity extends Activity {

@@ -5,8 +5,6 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 
-import material.kangere.com.tandaza.AppConfig;
-
 /**
  * Created by user on 28/08/2017.
  */

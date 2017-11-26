@@ -186,6 +186,10 @@ public class ViewNotification extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    private void delete_note()
+    {
+
+    }
     class Delete extends AsyncTask<String,Integer,String> {
 
         @Override

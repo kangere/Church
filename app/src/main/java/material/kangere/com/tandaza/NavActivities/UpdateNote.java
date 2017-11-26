@@ -1,6 +1,7 @@
 package material.kangere.com.tandaza.NavActivities;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,15 +12,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.Map;
 
 import material.kangere.com.tandaza.R;
 import material.kangere.com.tandaza.util.AppConfig;
+import material.kangere.com.tandaza.util.RequestQueueSingleton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,9 +42,10 @@ public class UpdateNote extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private String [] noteContent;
+    private TextView id;
+    private EditText title,content;
+    private String[] noteContent;
     private final String TAG = UpdateNote.class.getSimpleName();
-
 
 
     // TODO: Rename and change types of parameters
@@ -86,17 +94,20 @@ public class UpdateNote extends Fragment {
         // Inflate the layout for this fragment
         View layout = inflater.inflate(R.layout.fragment_update_note, container, false);
 
-        TextView id = layout.findViewById(R.id.tvUpdateId);
-        EditText title = layout.findViewById(R.id.etUpdateTitle);
-        EditText content = layout.findViewById(R.id.etUpdateContent);
+        id = layout.findViewById(R.id.tvUpdateId);
+        title = layout.findViewById(R.id.etUpdateTitle);
+        content = layout.findViewById(R.id.etUpdateContent);
         Button update = layout.findViewById(R.id.bUpdate);
 
         title.setText(noteContent[0]);
         content.setText(noteContent[3]);
         id.setText(noteContent[5]);
+
+        update.setOnClickListener(
+                view -> updateNote()
+        );
         return layout;
     }
-
 
 
     @Override
@@ -132,19 +143,60 @@ public class UpdateNote extends Fragment {
     }
 
     //volley operations
-    private void updateNote()
-    {
-        StringRequest request = new StringRequest(Request.Method.POST,AppConfig.URL_UPDATE_NOTE,
-                response->{
+    private void updateNote() {
+
+        //get text from edittexts to be updated in online database
+        String post_id = id.getText().toString();
+        String post_title = title.getText().toString();
+        String post_content = content.getText().toString();
+
+        StringRequest request = new StringRequest(Request.Method.POST, AppConfig.URL_UPDATE_NOTE,
+                response -> {
+
+                    Log.d(TAG, response);
+
+                    int success = 0;
+                    try {
+                        JSONObject object = new JSONObject(response);
+                        success = object.getInt("success");
+                    } catch (JSONException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+
+                    //check if result is successful
+                    if(success == 1){
+
+                        Toast.makeText(getActivity(),"Notification created successfully",Toast.LENGTH_LONG).show();
+
+                        //go to notifications fragment to load updated data
+                        Show_Notifications show_notifications = new Show_Notifications();
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                        // Replace whatever is in the fragment_container view with this fragment,
+                        // and add the transaction to the back stack
+                        transaction.replace(R.id.flContent, show_notifications);
+                        transaction.addToBackStack(null);
+
+                        // Commit the transaction
+                        transaction.commit();
+                    }
 
                 },
-                error -> Log.d(TAG,error.getMessage())
-        )
-        {
+                error -> Log.e(TAG, error.getMessage())
+        ) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                return super.getParams();
+
+                Map<String,String> params = new HashMap<>();
+
+                params.put("id",post_id);
+                params.put("title",post_title);
+                params.put("content",post_content);
+
+                return params;
             }
         };
+
+        RequestQueueSingleton.getInstance(getActivity()).addToRequestQueue(request);
     }
 }

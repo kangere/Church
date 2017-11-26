@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         setupNavView();
 
         //toolbar initialisation
-        toolbar = (Toolbar) findViewById(R.id.toolBarMain);
+        toolbar =  findViewById(R.id.toolBarMain);
         setSupportActionBar(toolbar);
         final ActionBar actionBar = getSupportActionBar();
 

@@ -97,7 +97,7 @@
             cardview:cardElevation="2dp"
             cardview:contentPadding="8dp">
 
-            <EditText
+            <TextView
                 android:inputType="none"
                 android:id="@+id/tvDetailNoteContent"
                 android:layout_width="match_parent"

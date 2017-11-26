@@ -127,7 +127,7 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
         db = new SQLiteHandler(getActivity());
 
         //recycler view initialisation
-        recyclerView = (RecyclerView) layout.findViewById(R.id.rvShowNote);
+        recyclerView = layout.findViewById(R.id.rvShowNote);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new MyAdapter(getActivity());

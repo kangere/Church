@@ -13,6 +13,7 @@ public interface AppConfig {
     String URL_DELETE = "http://www.kisilokitaka.com/tandaza/delete_note.php";
     String URL_UPLOAD = "http://www.kisilokitaka.com/tandaza/upload_note.php";
     String FILE_UPLOAD_URL = "http://www.kisilokitaka.com/tandaza/file_upload.php";
+    String URL_UPDATE_EVENT = "http://www.kisilokitaka.com/tandaza/update_event.php";
     String EVENT_UPLOAD_URL = "http://www.kisilokitaka.com/tandaza/upload_event.php";
     String URL_GET_EVENTS = "http://www.kisilokitaka.com/tandaza/get_events.php";
     String URL_UPDATE_NOTE = "http://www.kisilokitaka.com/tandaza/update_note.php";

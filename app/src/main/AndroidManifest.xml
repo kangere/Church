@@ -60,6 +60,8 @@
             android:name=".videoimageupload.UploadActivity"
             android:label="@string/title_activity_show__notifications"
             android:theme="@style/AppTheme" />
+
+
         <!--
          <activity
              android:name=".NavActivities.ViewNotification"
@@ -73,9 +75,18 @@
         -->
         <service android:name="Services.UploadService" />
 
-        <activity android:name=".NavActivities.ViewEvent"
+        <activity
+            android:name=".NavActivities.ViewEvent"
             android:parentActivityName=".NavActivities.MainActivity">
 
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".NavActivities.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".NavActivities.UpdateEvent"
+            android:parentActivityName=".NavActivities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".NavActivities.MainActivity" />

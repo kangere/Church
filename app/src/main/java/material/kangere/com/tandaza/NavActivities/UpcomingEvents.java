@@ -3,11 +3,10 @@ package material.kangere.com.tandaza.NavActivities;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,8 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.toolbox.JsonObjectRequest;
 
@@ -24,13 +23,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import material.kangere.com.tandaza.Adapters.EventAdapter;
 import material.kangere.com.tandaza.EventData;
 import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
-import material.kangere.com.tandaza.LocalDB.TablesContract;
 import material.kangere.com.tandaza.R;
 import material.kangere.com.tandaza.util.ApiFields;
 import material.kangere.com.tandaza.util.AppConfig;
@@ -40,14 +41,15 @@ import material.kangere.com.tandaza.util.RequestQueueSingleton;
 
 public class UpcomingEvents extends Fragment implements EventAdapter.EventsClickListener {
 
-    ProgressDialog progressDialog;
+
     private SQLiteHandler db;
     private RecyclerView recyclerView;
     private TextView noCon;
 
-    private JSONArray json_events_cache;
+
     private static final String TAG = UpcomingEvents.class.getSimpleName();
 
+    private JSONArray json_events_cache = new JSONArray();
     private ArrayList<EventData> eventsList = new ArrayList<>();
     private EventAdapter adapter;
 
@@ -85,7 +87,7 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
         //Load data to populate adapter
         loadData();
 
-        Button upload = layout.findViewById(R.id.bCreateEvent);
+        FloatingActionButton upload = layout.findViewById(R.id.bCreateEvent);
         upload.setOnClickListener(
                 view -> {
                     Create_Event create_event = new Create_Event();
@@ -111,22 +113,22 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
      * Loads Data required to populate recyclerview
      */
     private void loadData() {
+
+        dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Loading events...");
+        dialog.show();
+
         //check if internet connection is available
         if (CheckNetwork.isInternetAvailable(getActivity())) {
 
-            dialog = new ProgressDialog(getActivity());
-            dialog.setMessage("Loading events...");
-            dialog.show();
+
             eventsList.clear();
-            /*try {
-                new EventsLoader().execute();
-            } catch (RuntimeException e) {
-                e.printStackTrace();
-            }*/
 
             JsonObjectRequest objectRequest = new JsonObjectRequest(AppConfig.URL_GET_EVENTS, null,
 
                     response -> {
+
+                    Log.d(TAG,response.toString());
 
                         try {
                             JSONArray array = response.getJSONArray(ApiFields.TAG_EVENTS);
@@ -135,6 +137,7 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
                                 JSONObject c = array.optJSONObject(i);
 
                                 // Storing each json item in variable
+                                String id = c.getString(ApiFields.TAG_EVENT_ID);
                                 String title = c.getString(ApiFields.TAG_TITLE);
                                 String date = c.getString(ApiFields.TAG_DATE);
                                 String time = c.getString(ApiFields.TAG_TIME);
@@ -146,7 +149,7 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
                                 //storing each variable
                                 EventData eventTitles = new EventData();
 
-
+                                eventTitles.setId(id);
                                 eventTitles.setTitle(title);
                                 eventTitles.setDate(date);
                                 eventTitles.setTime(time);
@@ -163,6 +166,28 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
                             }
 
                             adapter.setEventsList(eventsList);
+
+                            //store Jsonarray in cache
+                            File cacheDir =  getActivity().getCacheDir();
+                            File file = new File(cacheDir.getAbsolutePath(),"events.txt");
+
+                            //delete file if already exists
+                            //avoids duplicate cache files
+                            if (file.exists() && file.delete()) {
+                                file = new File(cacheDir.getAbsolutePath(),"events.txt");
+                            }
+
+                            Log.d(TAG,array.toString());
+
+                            //write cache data to file
+                            try (FileOutputStream fos = new FileOutputStream(file)) {
+
+                                fos.write(array.toString().getBytes());
+
+                            }catch (IOException e) {
+                                Log.e(TAG,e.getMessage());
+                            }
+
                         } catch (JSONException e) {
                             Log.e(TAG, e.toString());
 
@@ -183,8 +208,15 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
             } catch (NullPointerException e) {
                 Log.e(TAG, "null" + e.getMessage());
             }
+
         } else {
+
+            //Alert user their is no internet connection
+            Toast.makeText(getActivity(),"No Internet Connection", Toast.LENGTH_LONG).show();
+
+
             loadCache();
+
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -201,13 +233,36 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
      * if their is no internet connection.
      */
     private void loadCache() {
-        SQLiteDatabase database = db.getReadableDatabase();
 
-        String eventQuery = "SELECT * FROM " + TablesContract.EventsEntry.TABLE_NAME;
-        Cursor cursor = database.rawQuery(eventQuery, null);
-        cursor.moveToFirst();
+
+
+        //get application cache dir
+        File cacheDir = getActivity().getCacheDir();
+        File file = new File(cacheDir.getAbsolutePath(),"events.txt");
+        byte[] byteJSON = new byte[(int)file.length()];
+
+        //read cache from dir
+        try(FileInputStream fis = new FileInputStream(file))
+        {
+            if(fis.read(byteJSON)== -1){
+                throw new IOException("EOF reached while reading file");
+            }
+
+        }catch (IOException  e)
+        {
+            Log.e(TAG,e.getMessage());
+        }
+
+        try {
+            json_events_cache = new JSONArray(new String(byteJSON));
+        }catch (JSONException e)
+        {
+            Log.e(TAG,e.getMessage());
+        }
+
+
         //check if cache is empty
-        if (cursor.isNull(cursor.getColumnIndex(TablesContract.EventsEntry.COLUMN_EVENT_CACHE))) {
+        if (!file.exists()) {
             //if cache is empty
             //prompt user to connect to internet atleast once
             recyclerView.setVisibility(View.GONE);
@@ -217,16 +272,8 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
             //if cache is not null
             //load data from cache
             try {
-                HashMap<String, String> note_cache = db.getEventCacheDetails();
 
-
-                String eventcache = note_cache.get("event_cache");
-
-                JSONObject json = new JSONObject(eventcache);
-                json_events_cache = json.optJSONArray("events");
-
-                Log.d("All Events: ", json.toString());
-
+                eventsList.clear();
 
                 for (int i = 0; i < json_events_cache.length(); i++) {
                     JSONObject c = json_events_cache.optJSONObject(i);
@@ -254,27 +301,28 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
                     eventTitles.setDescription(description);
 
 
-                    Log.d("One Event: ", title);
+//                    Log.d("One Event: ", title);
 
                     //getSupportActionBar().setIcon(new BitmapDrawable(getResources(), letterTile));
 
 
                     eventsList.add(eventTitles);
 
-                    getActivity().runOnUiThread(new Runnable() {
+                   /* getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             adapter.setEventsList(eventsList);
                         }
-                    });
+                    });*/
 
                 }
+                adapter.setEventsList(eventsList);
 
             } catch (JSONException e) {
                 Log.d(TAG, e.toString());
             }
         }
-        cursor.close();
+
     }
 
     @Override
@@ -283,6 +331,7 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
         Log.d(TAG, "item " + position + " clicked");
 
         //get data from single card
+        String id = ((TextView)view.findViewById(R.id.tvGoneEventId)).getText().toString();
         String title = ((TextView)view.findViewById(R.id.tvEventsTitle)).getText().toString();
         String imgpath = ((TextView)view.findViewById(R.id.tvGoneEventImgpath)).getText().toString();
         String date = ((TextView)view.findViewById(R.id.tvGoneEventDate)).getText().toString();
@@ -291,7 +340,7 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
         String venue = ((TextView)view.findViewById(R.id.tvGoneEventVenue)).getText().toString();
         String description = ((TextView)view.findViewById(R.id.tvEventDescription)).getText().toString();
 
-        String [] event = {title,imgpath,date,time,ministry,venue,description};
+        String [] event = {title,imgpath,date,time,ministry,venue,description,id};
 
         Intent intent = new Intent(getActivity(),ViewEvent.class);
         Bundle bundle = new Bundle();
@@ -302,122 +351,6 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
     }
 
 
-    //TODO: move towards using Volley
-    /*private class EventsLoader extends AsyncTask<Void, Void, Void> {
-
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            if (progressDialog == null) {
-                progressDialog = new CustomProgressDialog(getActivity(), TAG);
-                progressDialog.show();
-            } else {
-                progressDialog.show();
-            }
-        }
-
-        @Override
-        protected Void doInBackground(Void... args) {
-
-            JSONArray events = null;
-
-            // Building Parameters
-            List<NameValuePair> params = new ArrayList<>();
-            // getting JSON string from URL
-            JSONObject json = jParser.makeHttpRequest(AppConfig.URL_GET_EVENTS, "GET", params);
-
-            if (json != null) {
-                Log.d("All events: ", json.toString());
-                try {
-                    // Checking for SUCCESS TAG
-                    int success = json.getInt(TAG_SUCCESS);
-
-                    if (success == 1) {
-                        // products found
-                        // Getting Array of Products
-                        events = json.getJSONArray(TAG_EVENTS);
-
-                        // looping through All Products
-                        for (int i = 0; i < events.length(); i++) {
-                            JSONObject c = events.getJSONObject(i);
-
-                            // Storing each json item in variable
-                            String name = c.getString(TAG_TITLE);
-                            String date = c.getString(TAG_DATE);
-                            String time = c.getString(TAG_TIME);
-                            String poster = c.getString(TAG_POSTER);
-                            String ministry = c.getString(TAG_MINISTRY);
-                            String venue = c.getString(TAG_VENUE);
-                            String description = c.getString(TAG_DESCRIPTION);
-
-
-
-                           /* try {
-                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                parsedDate = dateFormat.parse(time_stamp);
-                            } catch (Exception e) {//this generic but you can control another types of exception
-                                e.printStackTrace();
-                            }
-                            DateUtils.getRelativeTimeSpanString(parsedDate.getTime(), NOW, DateUtils.MINUTE_IN_MILLIS);
-
-                            String timestamp = String.valueOf(DateUtils.getRelativeTimeSpanString(parsedDate.getTime(), NOW, DateUtils.MINUTE_IN_MILLIS));
-                            */
-    //storing each variable
-                            /*EventData eventsTitles = new EventData();
-
-                            eventsTitles.setTitle(name);
-                            eventsTitles.setPosterpath(poster);
-                            eventsTitles.setDate(date);
-                            eventsTitles.setTime(time);
-                            eventsTitles.setMinistry(ministry);
-                            eventsTitles.setVenue(venue);
-                            eventsTitles.setDescription(description);
-
-
-                            eventsList.add(eventsTitles);
-                            json.put("events_cache", new JSONArray(eventsList));
-                            String arrayList = json.toString();
-
-                            db.updateEventsCache(arrayList);
-                        }
-                    } else {
-                        Log.d(TAG, "Error retreiving json object");
-
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            } else {
-                loadCache();
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_LONG).show();
-                    }
-                });
-
-            }
-
-            json = null;
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            progressDialog.dismiss();
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    adapter.setEventsList(eventsList);
-                }
-            });
-        }
-    }
-*/
     @Override
     public void onResume() {
         super.onResume();

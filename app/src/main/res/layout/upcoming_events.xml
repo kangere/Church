@@ -1,43 +1,57 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-
-    <Button
-        android:id="@+id/bCreateEvent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="@color/accent_color"
-        android:onClick="CreateEvent"
-        android:text="@string/btn_event" />
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/events_refreshLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.RecyclerView
-
-            android:id="@+id/rvEvents"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-
-    <TextView
-        android:id="@+id/tvEventNoNetwork"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="No Internet Connection"
-        android:textSize="20sp"
-        android:visibility="gone"
+        android:orientation="vertical">
 
-        />
 
-</LinearLayout>
+        <!--<Button-->
+            <!--android:id="@+id/bCreateEvent"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="10dp"-->
+            <!--android:background="@color/accent_color"-->
+            <!--android:onClick="CreateEvent"-->
+            <!--android:text="@string/btn_event" />-->
 
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/events_refreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+
+                android:id="@+id/rvEvents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+
+
+
+        <TextView
+            android:id="@+id/tvEventNoNetwork"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="No Internet Connection"
+            android:textSize="20sp"
+            android:visibility="gone"
+
+            />
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/bCreateEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:src="@android:drawable/ic_input_add"/>
+
+</android.support.design.widget.CoordinatorLayout>

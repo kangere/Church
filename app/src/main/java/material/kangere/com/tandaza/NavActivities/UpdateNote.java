@@ -180,6 +180,10 @@ public class UpdateNote extends Fragment {
                         // Commit the transaction
                         transaction.commit();
                     }
+                    else
+                    {
+                        Toast.makeText(getActivity(),"Unable to update Event",Toast.LENGTH_LONG).show();
+                    }
 
                 },
                 error -> Log.e(TAG, error.getMessage())

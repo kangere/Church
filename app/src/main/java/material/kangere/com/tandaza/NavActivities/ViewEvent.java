@@ -1,5 +1,6 @@
 package material.kangere.com.tandaza.NavActivities;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -7,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -68,5 +70,16 @@ public class ViewEvent extends AppCompatActivity {
         {
             Log.d(TAG,"No event passed");
         }
+
+        Button edit = findViewById(R.id.bEditEvent);
+
+        edit.setOnClickListener(
+                view -> {
+
+                    Intent intent = new Intent(this,UpdateEvent.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+        );
     }
 }

@@ -23,6 +23,7 @@ import java.util.List;
 /**
  * Created by user on 10/16/2015.
  */
+@Deprecated
 public class JSONParser {
     static InputStream is = null;
     static JSONObject jObj = null;

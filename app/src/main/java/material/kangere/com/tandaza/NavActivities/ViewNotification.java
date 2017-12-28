@@ -28,9 +28,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import material.kangere.com.tandaza.AppConfig;
 import material.kangere.com.tandaza.JSONParser;
 import material.kangere.com.tandaza.R;
+import material.kangere.com.tandaza.util.AppConfig;
 
 
 
@@ -43,7 +43,7 @@ public class ViewNotification extends Fragment {
     private static final String NOTE_ID = "note_array";
     private String[] notification;
     private String id;
-    private Button delete;
+    private Button delete,update;
     private ProgressDialog pDialog;
     private JSONParser jsonParser = new JSONParser();
 
@@ -59,8 +59,7 @@ public class ViewNotification extends Fragment {
 
 
         //get arguments from activity to display
-        Bundle args = getArguments();
-        notification = args.getStringArray(NOTE_ID);
+        notification = getArguments().getStringArray(NOTE_ID);
 
        /* Intent i = getIntent();
         String titleDummy = i.getExtras().getString("title");
@@ -95,12 +94,13 @@ public class ViewNotification extends Fragment {
         } catch (NullPointerException e) {
             Log.e("ViewNote", e.toString());
         }
-        title = (TextView) layout.findViewById(R.id.tvDetailNoteTitle);
-        content = (TextView) layout.findViewById(R.id.tvDetailNoteContent);
-        ministry = (TextView) layout.findViewById(R.id.tvDetailMinistry);
-        timeStamp = (TextView) layout.findViewById(R.id.tvDetailTimeStamp);
-        sourceImage = (ImageView) layout.findViewById(R.id.ivDetailNoteImage);
-        delete = (Button) layout.findViewById(R.id.bDeleteNote);
+        title = layout.findViewById(R.id.tvDetailNoteTitle);
+        content =  layout.findViewById(R.id.tvDetailNoteContent);
+        ministry =  layout.findViewById(R.id.tvDetailMinistry);
+        timeStamp =  layout.findViewById(R.id.tvDetailTimeStamp);
+        sourceImage = layout.findViewById(R.id.ivDetailNoteImage);
+        delete =  layout.findViewById(R.id.bDeleteNote);
+        update = layout.findViewById(R.id.bUpdateNote);
 
 
         if (notification != null) {
@@ -130,12 +130,33 @@ public class ViewNotification extends Fragment {
 
         }
 
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        //button operations
+        delete.setOnClickListener((view)-> {
                 new Delete().execute();
             }
+        );
+
+        update.setOnClickListener((view)-> {
+
+            //go to previous fragment
+            UpdateNote updateNote = new UpdateNote();
+
+            Bundle args = new Bundle();
+            args.putStringArray("note_array",notification);
+
+            updateNote.setArguments(args);
+
+            FragmentTransaction transaction = getFragmentManager()
+                    .beginTransaction();
+
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back stack
+            transaction.replace(R.id.flContent, updateNote);
+            transaction.addToBackStack(null);
+            transaction.commit();
         });
+
+
         return layout;
     }
 
@@ -165,6 +186,10 @@ public class ViewNotification extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    private void delete_note()
+    {
+
+    }
     class Delete extends AsyncTask<String,Integer,String> {
 
         @Override

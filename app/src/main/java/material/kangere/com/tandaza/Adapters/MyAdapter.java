@@ -2,12 +2,12 @@ package material.kangere.com.tandaza.Adapters;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -81,12 +81,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolderNotifica
 
         private TextView nid,title,content,ministry,notificationTimeStamp,imgPath;
         private ImageView imgNotification;
-        CardView cv;
+        RelativeLayout relativeLayout;
 
         public  ViewHolderNotifications(View itemView) {
             super(itemView);
 
-            cv = (CardView) itemView.findViewById(R.id.cv);
+            relativeLayout = (RelativeLayout) itemView.findViewById(R.id.rvNotes);
             nid = (TextView) itemView.findViewById(R.id.nid);
             title = (TextView) itemView.findViewById(R.id.title);
             notificationTimeStamp = (TextView) itemView.findViewById(R.id.notificationTimeStamp);

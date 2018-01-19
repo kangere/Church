@@ -6,7 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-
+@Deprecated
 public class StaticMethods {
 
    /* private Toolbar toolbar;

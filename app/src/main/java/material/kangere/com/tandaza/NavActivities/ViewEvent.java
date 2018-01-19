@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -64,7 +65,7 @@ public class ViewEvent extends AppCompatActivity {
 
             Glide.with(this).load(uri).into(poster);
 
-            Log.d(TAG,formatted_date);
+//            Log.d(TAG,formatted_date);
         }
         else
         {
@@ -81,5 +82,21 @@ public class ViewEvent extends AppCompatActivity {
                     startActivity(intent);
                 }
         );
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home)
+        {
+            onBackPressed();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

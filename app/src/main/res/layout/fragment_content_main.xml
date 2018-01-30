@@ -50,11 +50,12 @@
                 android:layout_width="match_parent">
 
                 <ImageView
+
                     android:id="@+id/ivMain"
                     android:layout_height="200dp"
                     android:layout_width="match_parent"
                     android:scaleType="fitXY"
-                    android:src="@drawable/main" />
+                    android:src="@drawable/tandaza_church" />
 
                 <TextView
                     android:background="@null"

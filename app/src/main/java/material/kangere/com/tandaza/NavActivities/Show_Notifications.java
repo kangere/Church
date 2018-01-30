@@ -5,14 +5,10 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.support.design.widget.Snackbar;
+import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
@@ -20,32 +16,34 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.apache.http.NameValuePair;
+import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.Locale;
 
 import material.kangere.com.tandaza.Adapters.MyAdapter;
-import material.kangere.com.tandaza.AppConfig;
-import material.kangere.com.tandaza.CheckNetwork;
 import material.kangere.com.tandaza.ItemData;
-import material.kangere.com.tandaza.JSONParser;
-import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
-import material.kangere.com.tandaza.LocalDB.TablesContract;
 import material.kangere.com.tandaza.MakeNotification;
 import material.kangere.com.tandaza.R;
+import material.kangere.com.tandaza.util.AppConfig;
+import material.kangere.com.tandaza.util.CheckNetwork;
+import material.kangere.com.tandaza.util.RequestQueueSingleton;
 
 
 public class Show_Notifications extends Fragment implements MyAdapter.ClickListener {
@@ -56,7 +54,7 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
     // Progress Dialog
     private ProgressDialog pDialog;
     // Creating JSON Parser object
-    private JSONParser jParser = new JSONParser();
+
 
     //array list to be passed into recycler view adapter
     private ArrayList<ItemData> notificationsList = new ArrayList<>();
@@ -72,10 +70,7 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
     private static final String TAG_TIMESTAMP = "created_at";
 
     // products JSONArray
-    private JSONArray notifications = null;
-    private JSONArray json_notification_cache;
-    private SQLiteHandler db;
-    private RecyclerView recyclerView;
+    private JSONArray json_notification_cache = new JSONArray();
     private TextView noCon;
     private LinearLayout connection;
 
@@ -83,17 +78,10 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
     private MyAdapter adapter;
     private long NOW = new Date().getTime();
     private Date parsedDate;
-    private final String NOTE_ID = "note_array";
-    private Button btnUploadClass, refresh;
+    private ProgressDialog dialog;
 
-    //onNotificationSelectedListener notificationSelectedListener;
-    public Show_Notifications() {
+    private final int NOTIFICATION_PROGRESS_DELAY = 1000;
 
-    }
-
-    /* public interface onNotificationSelectedListener{
-          void NotificationSelected(int position,String[] content);
-     }*/
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -103,10 +91,6 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
         //clear the notification list
         notificationsList.clear();
 
-        if (android.os.Build.VERSION.SDK_INT > 9) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
 
         //Connection/No Connection User Interfaces
         noCon = (TextView) layout.findViewById(R.id.tvShowNoteNoConnection);
@@ -114,24 +98,19 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
 
 
         //Upload button initialisation
-        btnUploadClass = (Button) layout.findViewById(R.id.bOpenUploadClass);
-        btnUploadClass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //startActivity(new Intent(Show_Notifications.this, MakeNotification.class));
-                MakeNotification makeNotification = new MakeNotification();
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.flContent, makeNotification)
-                        .addToBackStack(makeNotification.getClass().getSimpleName())
-                        .commit();
-            }
-        });
-
-        //db initialisation
-        db = new SQLiteHandler(getActivity());
+        FloatingActionButton openCreateNote = layout.findViewById(R.id.bUploadNote);
+        openCreateNote.setOnClickListener(
+                view -> {
+                    MakeNotification makeNotification = new MakeNotification();
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.flContent, makeNotification)
+                            .addToBackStack(makeNotification.getClass().getSimpleName())
+                            .commit();
+                }
+        );
 
         //recycler view initialisation
-        recyclerView = (RecyclerView) layout.findViewById(R.id.rvShowNote);
+        RecyclerView recyclerView = layout.findViewById(R.id.rvShowNote);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new MyAdapter(getActivity());
@@ -141,6 +120,17 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
         //used to populate recyclerview
         loadData();
 
+        final SwipeRefreshLayout refreshLayout =  layout.findViewById(R.id.note_swipeRefresh);
+
+        refreshLayout.setOnRefreshListener(
+                () -> {
+                Log.i(TAG, "Refreshing RecyclerView");
+
+                loadData();
+
+                refreshLayout.setRefreshing(false);
+
+        });
 
         return layout;
     }
@@ -155,13 +145,6 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        try {
-            //notificationSelectedListener = (onNotificationSelectedListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement OnHeadlineSelectedListener");
-        }
-
     }
 
     @Override
@@ -173,37 +156,119 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
 
     private void loadData() {
         //check to see if internet connection is available
-        if (CheckNetwork.isInternetAvailable(getActivity())) //returns true if internet available
-        {
+
+        dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Loading news...");
+        dialog.show();
+
+        if (CheckNetwork.isInternetAvailable(getActivity())) {
+            notificationsList.clear();
+
+            //Volley handles network requests
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(AppConfig.URL_GET_ALL_NOTIFICATIONS, null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                JSONArray array = response.getJSONArray(TAG_NOTIFICATIONS);
 
 
-            try {
-                new LoadAllNotifications().execute();
-            } catch (RuntimeException e) {
-                Log.e(TAG, e.toString());
-            }
-            connection.setVisibility(View.VISIBLE);
-            noCon.setVisibility(View.GONE);
+                                for (int i = 0; i < array.length(); i++) {
+                                    JSONObject c = array.getJSONObject(i);
 
-        } else {//if not load data from cache in local database
+                                    // Storing each json item in variable
+                                    String nid = c.getString(TAG_NID);
+                                    String title = c.getString(TAG_TITLE);
+                                    String content = c.getString(TAG_CONTENT);
+                                    String ministry = c.getString(TAG_MINISTRY);
+                                    String image_path = c.getString(TAG_IMAGE_PATH);
+                                    String time_stamp = c.getString(TAG_TIMESTAMP);
+
+
+                                    try {
+                                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                                        parsedDate = dateFormat.parse(time_stamp);
+                                    } catch (Exception e) {//this generic but you can control another types of exception
+                                        e.printStackTrace();
+                                    }
+                                    DateUtils.getRelativeTimeSpanString(parsedDate.getTime(), NOW, DateUtils.MINUTE_IN_MILLIS);
+
+                                    String timestamp = String.valueOf(DateUtils.getRelativeTimeSpanString(parsedDate.getTime(), NOW, DateUtils.MINUTE_IN_MILLIS));
+
+                                    //storing each variable
+                                    ItemData notificationsTitles = new ItemData();
+
+                                    notificationsTitles.setNid(nid);
+                                    notificationsTitles.setTitle(title);
+                                    notificationsTitles.setContent(content);
+                                    notificationsTitles.setMinistry(ministry);
+                                    notificationsTitles.setImagePath(image_path);
+                                    notificationsTitles.setTime_stamp(timestamp);
+
+
+                                    notificationsList.add(notificationsTitles);
+
+
+
+                                }
+
+                                adapter.setNotificationsList(notificationsList);
+
+                                //store data in cache
+                                File cacheDir = getActivity().getCacheDir();
+
+                                File file = new File(cacheDir.getAbsolutePath(),"stories.txt");
+
+                                //delete file if already exists
+                                //avoids duplicate cache files
+                                if (file.exists() && file.delete()) {
+                                    file = new File(cacheDir.getAbsolutePath(),"stories.txt");
+                                }
+                                Log.d(TAG,array.toString());
+                                //write cache data to file
+                                try (FileOutputStream fos = new FileOutputStream(file))
+                                {
+
+                                    fos.write(array.toString().getBytes());
+
+                                } catch (IOException e) {
+                                    Log.e(TAG,e.getMessage());
+                                }
+
+
+                            } catch (JSONException e) {
+                                Log.e(TAG, e.getMessage());
+                            }
+
+
+                        }
+                    },
+
+                     error -> Log.e(TAG, error.toString())
+                    );
+
+            RequestQueueSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest);
+            new Handler().postDelayed(
+                    () -> {
+                /* Create an Intent that will start the Menu-Activity. */
+                    dialog.dismiss();
+
+            }, NOTIFICATION_PROGRESS_DELAY);
+
+
+        } else {//if not load data from cache in local cache
+
+            //Alert user their is no internet connection
+            Toast.makeText(getActivity(),"No Internet Connection", Toast.LENGTH_LONG).show();
+
             LoadCache();
-            Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), "No Internet Connection", Snackbar.LENGTH_LONG);
 
-            snack.setAction("RETRY", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    /*finish();
-                    overridePendingTransition(0, 0);
-                    startActivity(getIntent());
-                    overridePendingTransition(0, 0);*/
-                }
-            });
-            snack.setActionTextColor(getResources().getColor(R.color.accent_color));
-            View view = snack.getView();
-            TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-            tv.setTextColor(Color.WHITE);
-            snack.show();
+            new Handler().postDelayed(
+                    () -> {
+                /* Create an Intent that will start the Menu-Activity. */
+                    dialog.dismiss();
 
+            }, NOTIFICATION_PROGRESS_DELAY);
 
         }
     }
@@ -228,31 +293,43 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
     /*
     Function to load stored cache from the local database if device is not connected to the internet
      */
+
     private void LoadCache() {
 
-        String query = "SELECT * FROM " + TablesContract.NotificationsCache.TABLE_NAME;
+        //using cache dir
+        File cacheDir = getActivity().getCacheDir();
+        File file = new File(cacheDir.getAbsolutePath(),"stories.txt");
+        byte[] byteJSON = new byte[(int)file.length()];
 
-        SQLiteDatabase database = db.getReadableDatabase();
-        Cursor cursor = database.rawQuery(query, null);
-        cursor.moveToFirst();
+        try(FileInputStream fis = new FileInputStream(file)) {
 
-        if (cursor.isNull(cursor.getColumnIndex(TablesContract.NotificationsCache.COLUMN_NOTE_CACHE))) {
+            if(fis.read(byteJSON)== -1){
+                throw new IOException("EOF reached while reading file");
+            }
+
+        }catch (IOException  e) {
+            Log.e(TAG,e.getMessage());
+        }
+
+
+        try {
+            json_notification_cache = new JSONArray(new String(byteJSON));
+        }catch (JSONException e)
+        {
+            Log.e(TAG,e.getMessage());
+        }
+
+
+
+        if (!file.exists()) {
             connection.setVisibility(View.GONE);
             noCon.setVisibility(View.VISIBLE);
 
 
         } else {
             try {
-                HashMap<String, String> note_cache = db.getNotificationCache();
 
-
-                String notecache = note_cache.get("notification_cache");
-
-                JSONObject json = new JSONObject(notecache);
-                json_notification_cache = json.optJSONArray("notifications");
-
-                Log.d("All Notifications: ", json.toString());
-
+                notificationsList.clear();
 
                 for (int i = 0; i < json_notification_cache.length(); i++) {
                     JSONObject jsonObject = json_notification_cache.optJSONObject(i);
@@ -262,12 +339,12 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
 
 
                     try {
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                         parsedDate = dateFormat.parse(time_stamp);
-                    } catch (Exception e) {//this generic but you can control another types of exception
-                        e.printStackTrace();
+                    } catch (ParseException e) {//this generic but you can control another types of exception
+                        Log.e(TAG, e.getMessage());
                     }
-                    DateUtils.getRelativeTimeSpanString(parsedDate.getTime(), NOW, DateUtils.MINUTE_IN_MILLIS);
+                    //DateUtils.getRelativeTimeSpanString(parsedDate.getTime(), NOW, DateUtils.MINUTE_IN_MILLIS);
 
                     String timestamp = String.valueOf(DateUtils.getRelativeTimeSpanString(parsedDate.getTime(), NOW, DateUtils.MINUTE_IN_MILLIS));
 
@@ -283,20 +360,18 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
 
                     notificationsList.add(notificationsTitles);
 
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            adapter.setNotificationsList(notificationsList);
-                        }
-                    });
+
 
                 }
+                adapter.setNotificationsList(notificationsList);
 
             } catch (JSONException e) {
                 Log.d(TAG, e.toString());
             }
         }
-        cursor.close();
+
+
+
     }
 
     /**
@@ -308,6 +383,7 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
     @Override
     public void itemClicked(View view, int position) {
 
+        final String NOTE_ID = "note_array";
         //retrieve notification details once clicked
         String id = ((TextView) view.findViewById(R.id.nid)).getText().toString();
         String title = ((TextView) view.findViewById(R.id.title)).getText().toString();
@@ -347,137 +423,6 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
 
     }
 
-    //backgound thread
-    private class LoadAllNotifications extends AsyncTask<String, String, String> {
-
-        /**
-         * Before starting background thread Show Progress Dialog
-         */
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            if (pDialog == null) {
-                pDialog = new CustomProgressDialog(getActivity(),TAG);
-                pDialog.show();
-            } else {
-                pDialog.show();
-            }
-        }
-
-
-        /**
-         * getting All products from url
-         */
-        protected String doInBackground(String... args) {
-            // Building Parameters
-            List<NameValuePair> params = new ArrayList<>();
-            // getting JSON string from URL
-            JSONObject json = jParser.makeHttpRequest(AppConfig.URL_GET_ALL_NOTIFICATIONS, "GET", params);
-
-            if (json != null) {
-                // Check your log cat for JSON reponse
-                Log.d("All Notifications: ", json.toString());
-
-                try {
-                    // Checking for SUCCESS TAG
-                    int success = json.getInt(TAG_SUCCESS);
-
-                    if (success == 1) {
-                        // products found
-                        // Getting Array of Products
-                        notifications = json.getJSONArray(TAG_NOTIFICATIONS);
-
-                        // looping through All Products
-                        for (int i = 0; i < notifications.length(); i++) {
-                            JSONObject c = notifications.getJSONObject(i);
-
-                            // Storing each json item in variable
-                            String nid = c.getString(TAG_NID);
-                            String title = c.getString(TAG_TITLE);
-                            String content = c.getString(TAG_CONTENT);
-                            String ministry = c.getString(TAG_MINISTRY);
-                            String image_path = c.getString(TAG_IMAGE_PATH);
-                            String time_stamp = c.getString(TAG_TIMESTAMP);
-
-                            //Toast.makeText(NotificationsActivity.this,nid+title,Toast.LENGTH_LONG).show();
-
-                            try {
-                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                parsedDate = dateFormat.parse(time_stamp);
-                            } catch (Exception e) {//this generic but you can control another types of exception
-                                e.printStackTrace();
-                            }
-                            DateUtils.getRelativeTimeSpanString(parsedDate.getTime(), NOW, DateUtils.MINUTE_IN_MILLIS);
-
-                            String timestamp = String.valueOf(DateUtils.getRelativeTimeSpanString(parsedDate.getTime(), NOW, DateUtils.MINUTE_IN_MILLIS));
-
-                            //storing each variable
-                            ItemData notificationsTitles = new ItemData();
-
-                            notificationsTitles.setNid(nid);
-                            notificationsTitles.setTitle(title);
-                            notificationsTitles.setContent(content);
-                            notificationsTitles.setMinistry(ministry);
-                            notificationsTitles.setImagePath(image_path);
-                            notificationsTitles.setTime_stamp(timestamp);
-
-
-                            notificationsList.add(notificationsTitles);
-
-                            json.put("notification_cache", new JSONArray(notificationsList));
-                            String arrayList = json.toString();
-
-                            Log.d("arrayList", arrayList);
-                            db.updateNotificationCache(arrayList);
-                        }
-                    } else {
-                        Log.d(TAG, "Error retreiving json object");
-
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                LoadCache();
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getActivity(), "No Internet Connection", Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-            json = null;
-
-
-            return null;
-        }
-
-        /**
-         * After completing background task Dismiss the progress dialog
-         * *
-         */
-        protected void onPostExecute(String file_url) {
-            // dismiss the dialog after getting all products
-            pDialog.dismiss();
-            // updating UI from Background Thread
-            getActivity().runOnUiThread(new Runnable() {
-                public void run() {
-
-                    /**
-                     * Updating parsed JSON data into ListView
-                     * */
-                    adapter.setNotificationsList(notificationsList);
-
-
-                }
-            });
-
-
-        }
-
-
-    }
 
     @Override
     public void onDestroyView() {

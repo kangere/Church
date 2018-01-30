@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
 import material.kangere.com.tandaza.LocalDB.TablesContract;
 import material.kangere.com.tandaza.R;
-import material.kangere.com.tandaza.SessionManager;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -26,8 +25,8 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawer;
     private NavigationView navigationView;
 
+    private SQLiteHandler db;
 
-    private SessionManager session;
 
     Toolbar toolbar;
     // boolean isIntentSafe;
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         setupNavView();
 
         //toolbar initialisation
-        toolbar = (Toolbar) findViewById(R.id.toolBarMain);
+        toolbar =  findViewById(R.id.toolBarMain);
         setSupportActionBar(toolbar);
         final ActionBar actionBar = getSupportActionBar();
 
@@ -59,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitleTextColor(ContextCompat.getColor(getBaseContext(), R.color.white));
 
         // SqLite database handler
-        SQLiteHandler db = new SQLiteHandler(getApplicationContext());
+        db = new SQLiteHandler(getApplicationContext());
 
         //create cache tables in local database
         db.addTable(TablesContract.EventsEntry.TABLE_NAME, TablesContract.EventsEntry.COLUMN_EVENT_CACHE);

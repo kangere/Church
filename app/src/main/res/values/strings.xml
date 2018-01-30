@@ -2,6 +2,15 @@
     <string name="app_name">Tandaza</string>
     <string name="home">Home</string>
     <string name="news">News</string>
+    <string name="some_text">Some Dummy Text</string>
+
+    <!--> Hints for creating / updating content/stories<-->
+    <string name="title">Title Here</string>
+    <string name="ministry">Ministry Here</string>
+    <string name="content">Content Here</string>
+    <string name="note_header">Content Editor</string>
+    <string name="update_note">Update Note</string>
+
 
     <string name="drawer_open">Open</string>
     <string name="drawer_closed">Closed</string>
@@ -12,7 +21,7 @@
     <string name="title_activity_sarahs_treasure">Sarah\'s Treasure</string>
     <string name="title_activity_kings_men">Kingsmen</string>
     <string name="dev">Application in Development </string>
-   <string name="vision">
+    <string name="vision">
 
 A community of transformed persons connected through small groups and courageous witnesses of Christ in every sphere of society\n
 
@@ -78,6 +87,9 @@ This is the reason “THE ARK” for the children’s ministry at Kileleshwa Cov
     <string name="noInternet">No Internet Connection. Connect to Internet at least once</string>
     <string name="find_a_group">Find a Group</string>
     <string name="sign_up_to_serve">Sign Up To Serve</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 

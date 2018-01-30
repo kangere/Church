@@ -6,17 +6,17 @@ import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -26,49 +26,86 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-import material.kangere.com.tandaza.NavActivities.Create_Event;
 import material.kangere.com.tandaza.NavActivities.Show_Notifications;
+import material.kangere.com.tandaza.util.ApiFields;
+import material.kangere.com.tandaza.util.AppConfig;
+import material.kangere.com.tandaza.util.CheckNetwork;
+import material.kangere.com.tandaza.util.Permissions;
+import material.kangere.com.tandaza.util.RequestQueueSingleton;
 import material.kangere.com.tandaza.videoimageupload.UploadActivity;
 
 import static android.app.Activity.RESULT_OK;
 
-public class MakeNotification extends Fragment {
+public class MakeNotification extends Fragment implements View.OnClickListener {
 
     // JSON Node names
-    private static final String TAG_SUCCESS = "success";
     private static final String TAG = MakeNotification.class.getSimpleName();
-    private ProgressDialog pDialog;
     public String picturePath;
     private EditText title, content;
     private Spinner ministries;
     private Button upload, pick;
-    private static final int MY_PERMISSION_REQUEST_READ_STORAGE = 3;
 
     public String file_path;
     private String y_title, y_content, n_ministries;
     private static final int PICK_FROM_GALLERY = 2;
-    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     ImageView picView;
 
 
     final int PIC_CROP = 2;
 
-    private Uri fileUri; // file url to store image/video
+    private ProgressDialog dialog;
+
+    private final int NOTIFICATION_PROGRESS_DELAY = 1000;
 
 
-    JSONParser jsonParser = new JSONParser();
+//    JSONParser jsonParser = new JSONParser();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.content_make_notification, container, false);
+
+        upload = view.findViewById(R.id.bNoteUpload);
+        pick = view.findViewById(R.id.bPick);
+        title = view.findViewById(R.id.etYouthTitle);
+        content = view.findViewById(R.id.etYouthContent);
+        ministries = view.findViewById(R.id.sMinistries);
+        picView = view.findViewById(R.id.imgPreview);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.ministries,
+                R.layout.myspinner);
+        ministries.setAdapter(adapter);
+
+        pick.setOnClickListener(this);
+        upload.setOnClickListener(this);
+
+
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
         ActionBar actionBar = getActivity().getActionBar();
         try {
@@ -79,72 +116,147 @@ public class MakeNotification extends Fragment {
         }
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.content_make_notification, container, false);
+    public void onClick(View v) {
 
-        upload = (Button) view.findViewById(R.id.bNoteUpload);
-        pick = (Button) view.findViewById(R.id.bPick);
-        title = (EditText) view.findViewById(R.id.etYouthTitle);
-        content = (EditText) view.findViewById(R.id.etYouthContent);
-        ministries = (Spinner) view.findViewById(R.id.sMinistries);
-        picView = (ImageView) view.findViewById(R.id.imgPreview);
+        switch (v.getId()) {
+            case R.id.bNoteUpload:
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.ministries,
-                R.layout.myspinner);
-        ministries.setAdapter(adapter);
+                if (fieldsAreEmpty())
+                    Toast.makeText(getActivity(), "One or More Fields is Empty", Toast.LENGTH_LONG).show();
+                else
+                    postData();/*new UploadNote().execute();*/
 
+                break;
 
-        //file_path = "dummy path";
+            case R.id.bPick:
 
-
-        pick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // capture picture
-
-                Create_Event.verifyStoragePermissions(getActivity());
+                Permissions.verifyStoragePermissions(getActivity());
                 try {
-
 
                     Intent intent = new Intent(
                             Intent.ACTION_PICK,
-                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    //intent.addCategory(Intent.CATEGORY_OPENABLE);
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
                     intent.setType("image/*");
                     startActivityForResult(
                             Intent.createChooser(intent, "Select File"),
                             PICK_FROM_GALLERY);
-                } catch (ActivityNotFoundException anfe) {
+
+                } catch (ActivityNotFoundException e) {
                     Toast.makeText(getActivity(), "Phone does not support camera", Toast.LENGTH_LONG).show();
 
                 }
-
-            }
-        });
-
-        upload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(isFieldEmpty())
-                    Toast.makeText(getActivity(),"One or more fields are empty",Toast.LENGTH_LONG).show();
-                else new UploadNote().execute();
-            }
-        });
-
-        return view;
+                break;
+        }
     }
 
-    private boolean isFieldEmpty() {
+    private boolean fieldsAreEmpty() {
         if (title.getText().toString().isEmpty() ||
-                content.getText().toString().isEmpty() ||
-                    ministries.getSelectedItem().toString().isEmpty())
+                content.getText().toString().isEmpty())
             return true;
 
         return false;
     }
+
+    /**
+     * Method performs the network operations for uploading of the news content to the server
+     * It implements Volley using StringRequest to upload the content
+     */
+    private void postData() {
+        y_title = title.getText().toString();
+        y_content = content.getText().toString();
+        n_ministries = ministries.getSelectedItem().toString();
+
+        //check if connected to internet first
+        if (CheckNetwork.isInternetAvailable(getActivity())) {
+            dialog = new ProgressDialog(getActivity());
+            dialog.setMessage("Posting notification..");
+            dialog.show();
+
+            //Create request to post data
+            StringRequest request = new StringRequest(Request.Method.POST, AppConfig.URL_UPLOAD,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d(TAG, response);
+
+
+                            int success = 0;
+
+
+                            try {
+                                JSONObject temp = new JSONObject(response);
+                                success = temp.getInt(ApiFields.TAG_SUCCESS);
+
+                            } catch (JSONException e) {
+                                Log.e(TAG, e.toString());
+                            }
+
+                            if (success == 1) {
+
+
+                                Toast.makeText(getActivity(), "Notification created successfully", Toast.LENGTH_LONG).show();
+
+                                //go to previous fragment
+                                Show_Notifications showNotifications = new Show_Notifications();
+                                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                                // Replace whatever is in the fragment_container view with this fragment,
+                                // and add the transaction to the back stack
+                                transaction.replace(R.id.flContent, showNotifications);
+                                transaction.addToBackStack(null);
+
+                                // Commit the transaction
+                                transaction.commit();
+
+                            } else {
+
+                                Toast.makeText(getActivity(), "Failed to create notification, Try Again", Toast.LENGTH_LONG).show();
+
+                            }
+
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e(TAG, error.getMessage());
+                        }
+                    }
+            ) {
+
+
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    // Building Parameters
+                    Map<String, String> params = new HashMap<>();
+                    params.put("title", y_title);
+
+                    params.put("content", y_content);
+                    params.put("ministry", n_ministries);
+
+                    params.put("imgpath", file_path);
+
+                    return params;
+                }
+            };
+
+            RequestQueueSingleton.getInstance(getActivity()).addToRequestQueue(request);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                /* Create an Intent that will start the Menu-Activity. */
+                    dialog.dismiss();
+                }
+            }, NOTIFICATION_PROGRESS_DELAY);
+        } else {
+
+            Toast.makeText(getActivity(),"You are not connected to the internet",Toast.LENGTH_LONG).show();
+
+        }
+    }
+
 
     /**
      * Receiving activity result method will be called after closing the camera
@@ -174,17 +286,18 @@ public class MakeNotification extends Fragment {
 
             } else if (requestCode == PIC_CROP) {
                 Bundle extras = data.getExtras();
-//get the cropped bitmap
+                //get the cropped bitmap
                 Bitmap thePic = extras.getParcelable("data");
                 picView.setVisibility(View.VISIBLE);
                 picView = (ImageView) getActivity().findViewById(R.id.imgPreview);
-//display the returned cropped image
+                //display the returned cropped image
                 picView.setImageBitmap(thePic);
             } else if (requestCode == 2404) {
 
                 //Retrives the image server file path from Upload Activity using the request code.
                 file_path = data.getStringExtra("file_path");
-                Toast.makeText(getActivity(), file_path, Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), !(file_path.isEmpty()) ? "Image Upload Success \n" + file_path : "Image Upload Failed \n" + file_path
+                        , Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -198,16 +311,40 @@ public class MakeNotification extends Fragment {
 
     }
 
-    class UploadNote extends AsyncTask<String, String, String> {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
 
-        /**
-         * Before starting background thread Show Progress Dialog
-         */
+        switch (item.getItemId()) {
+            case android.R.id.home:
+
+                //go to previous fragment
+                Show_Notifications showNotifications = new Show_Notifications();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                // Replace whatever is in the fragment_container view with this fragment,
+                // and add the transaction to the back stack
+                transaction.replace(R.id.flContent, showNotifications);
+                transaction.addToBackStack(null);
+
+                // Commit the transaction
+                transaction.commit();
+
+                break;
+        }
+        return true;
+    }
+
+    /*class UploadNote extends AsyncTask<String, String, String> {
+
+        *//**
+     * Before starting background thread Show Progress Dialog
+     *//*
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             if (pDialog == null) {
-                pDialog = Show_Notifications.createProgrssDialog(getActivity());
+                pDialog = new CustomProgressDialog(getActivity(),TAG);
                 pDialog.show();
             } else {
                 pDialog.show();
@@ -215,9 +352,9 @@ public class MakeNotification extends Fragment {
         }
 
 
-        /**
-         * Creating product
-         */
+        *//**
+     * Creating product
+     *//*
         protected String doInBackground(String... args) {
 
 
@@ -279,10 +416,12 @@ public class MakeNotification extends Fragment {
             return null;
         }
 
-        /**
-         * After completing background task Dismiss the progress dialog
-         * *
-         */
+        */
+
+    /**
+     * After completing background task Dismiss the progress dialog
+     * *
+     *//*
 
 
         protected void onPostExecute(String file_url) {
@@ -290,35 +429,13 @@ public class MakeNotification extends Fragment {
             pDialog.dismiss();
         }
 
-    }
-
-    public void getText() {
+    }*/
+    /*public  void getText()
+    {
         y_title = title.getText().toString();
         y_content = content.getText().toString();
         n_ministries = ministries.getSelectedItem().toString();
 
-    }
+    }*/
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-
-            case MY_PERMISSION_REQUEST_READ_STORAGE: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // storage-related task you need to do.
-
-
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-
-                return;
-            }
-        }
-    }
 }

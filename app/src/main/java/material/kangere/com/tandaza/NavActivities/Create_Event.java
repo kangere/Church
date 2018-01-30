@@ -17,11 +17,9 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,7 +27,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -38,19 +35,25 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-import material.kangere.com.tandaza.AppConfig;
-import material.kangere.com.tandaza.JSONParser;
 import material.kangere.com.tandaza.R;
+import material.kangere.com.tandaza.util.AppConfig;
+import material.kangere.com.tandaza.util.CheckNetwork;
+import material.kangere.com.tandaza.util.Permissions;
+import material.kangere.com.tandaza.util.RequestQueueSingleton;
 import material.kangere.com.tandaza.videoimageupload.UploadActivity;
+
+import static android.app.Activity.RESULT_OK;
 
 public class Create_Event extends Fragment implements View.OnClickListener{
 
@@ -68,10 +71,8 @@ public class Create_Event extends Fragment implements View.OnClickListener{
     private ImageView picView;
     private Spinner sministries;
     private EditText event_name, event_venue, event_description;
-    AutoCompleteTextView autoCompleteTextView;
     static EditText displayDate, displayTime;
     private ProgressDialog progressDialog;
-    private String placeVenue;
 
 
     // Storage Permissions
@@ -82,7 +83,9 @@ public class Create_Event extends Fragment implements View.OnClickListener{
     };
 
 
-    JSONParser jsonParser;
+
+
+
 
 
     @Override
@@ -103,35 +106,33 @@ public class Create_Event extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_create__event, container, false);
 
-        displayDate = (EditText) view.findViewById(R.id.etSHowDate);
-        displayTime = (EditText) view.findViewById(R.id.etSHowTime);
-        sministries = (Spinner) view.findViewById(R.id.sEventMinistries);
-        event_name = (EditText) view.findViewById(R.id.etEventName);
-        event_description = (EditText) view.findViewById(R.id.etEventDescription);
-        event_venue = (EditText) view.findViewById(R.id.etEventVenue);
-        picView = (ImageView) view.findViewById(R.id.ivPoster);
-        autoCompleteTextView = (AutoCompleteTextView) view.findViewById(R.id.tvAutoVenue);
+        displayDate =  view.findViewById(R.id.etSHowDate);
+        displayTime = view.findViewById(R.id.etSHowTime);
+        sministries =  view.findViewById(R.id.sEventMinistries);
+        event_name = view.findViewById(R.id.etEventName);
+        event_description =  view.findViewById(R.id.etEventDescription);
+        event_venue =  view.findViewById(R.id.etEventVenue);
+        picView =  view.findViewById(R.id.ivPoster);
 
         //init button
-        Button date = (Button) view.findViewById(R.id.bDate);
-        Button time = (Button) view.findViewById(R.id.bTime);
-        Button poster = (Button) view.findViewById(R.id.bEventPoster);
-        Button upload = (Button) view.findViewById(R.id.bEventUpload);
+        Button date =  view.findViewById(R.id.bDate);
+        Button time  = view.findViewById(R.id.bTime);
+        Button poster =  view.findViewById(R.id.bEventPoster);
+        Button upload =  view.findViewById(R.id.bEventUpload);
         //set clickListeners
         date.setOnClickListener(this);
         time.setOnClickListener(this);
         poster.setOnClickListener(this);
         upload.setOnClickListener(this);
 
-        //placeAutocompleteFragment.setOnPlaceSelectedListener(this);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.ministries,
                 R.layout.myspinner);
         sministries.setAdapter(adapter);
 
-        //requestQueue = Volley.newRequestQueue(getActivity());
-        jsonParser = new JSONParser();
+
+        //jsonParser = new JSONParser();
         return view;
     }
 
@@ -156,36 +157,14 @@ public class Create_Event extends Fragment implements View.OnClickListener{
                 SetDate();
                 break;
             case R.id.bEventPoster:
-                verifyStoragePermissions(getActivity());
+                Permissions.verifyStoragePermissions(getActivity());
                 GetPoster();
                 break;
             case R.id.bEventUpload:
-
-                if(fieldsAreEmpty())
-                   Toast.makeText(getActivity(),"One of The Fields is Empty", Toast.LENGTH_LONG).show();
-                else UploadEvent();
+                UploadEvent();
                 break;
-
         }
     }
-
-    /**
-     * Method checks if one or more fields are empty
-     * @return true if none of the fields are empty otherwise returns false
-     */
-    private boolean fieldsAreEmpty() {
-        if (event_name.getText().toString().isEmpty() ||
-                event_venue.getText().toString().isEmpty() ||
-                    event_description.getText().toString().isEmpty() ||
-                        sministries.getSelectedItem().toString().isEmpty() ||
-                            displayDate.getText().toString().isEmpty() ||
-                                displayTime.getText().toString().isEmpty())
-            return true;
-
-        return false;
-    }
-
-
 
     public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
@@ -235,10 +214,91 @@ public class Create_Event extends Fragment implements View.OnClickListener{
     }
 
     private void UploadEvent() {
-        new UploadEvent().execute();
+        //check if any testfields are emtpty
+        if(!(displayDate.getText().toString().isEmpty()) &&
+                !(displayTime.getText().toString().isEmpty()) &&
+                !(event_venue.getText().toString().isEmpty()) &&
+                !(event_description.getText().toString().isEmpty()) &&
+                !(event_name.getText().toString().isEmpty()))
+                    postData();/*new UploadEvent().execute();*/
+        else//if they are give warning
+            Toast.makeText(getActivity(),"One or More Fields is empty cannot upload event" ,Toast.LENGTH_LONG).show();
     }
 
-    private class UploadEvent extends AsyncTask<Void, Void, Void> {
+    private void postData(){
+
+        name = event_name.getText().toString();
+        venue = event_venue.getText().toString();
+        description = event_description.getText().toString();
+        ministries = sministries.getSelectedItem().toString();
+        date = displayDate.getText().toString();
+        time = displayTime.getText().toString();
+
+        //check if connected to the internet
+        if(CheckNetwork.isInternetAvailable(getActivity())) {
+
+            StringRequest request = new StringRequest(Request.Method.POST, AppConfig.EVENT_UPLOAD_URL,
+                    (response) -> {
+                        Log.d(TAG, response);
+
+                        int success = 0;
+                        try {
+                            JSONObject object = new JSONObject(response);
+                            success = object.getInt(TAG_SUCCESS);
+
+                        } catch (JSONException e) {
+                            Log.e(TAG, e.toString());
+                        }
+
+                        if (success == 1) {
+
+                            Toast.makeText(getActivity(), "Notification created successfully", Toast.LENGTH_LONG).show();
+
+                            //go to previous fragment
+                            UpcomingEvents upcomingEvents = new UpcomingEvents();
+                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                            // Replace whatever is in the fragment_container view with this fragment,
+                            // and add the transaction to the back stack
+                            transaction.replace(R.id.flContent, upcomingEvents);
+                            transaction.addToBackStack(null);
+
+                            // Commit the transaction
+                            transaction.commit();
+                        } else
+                            Toast.makeText(getActivity(), "Notification created successfully", Toast.LENGTH_LONG).show();
+
+                    },
+                    error -> Log.e(TAG, error.toString())
+
+
+            ) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+
+                    Map<String, String> params = new HashMap<>();
+
+                    params.put("event_name", name);
+                    params.put("event_date", date);
+                    params.put("event_time", time);
+                    params.put("ministry", ministries);
+                    params.put("venue", venue);
+                    params.put("posterpath", file_path);
+                    params.put("description", description);
+
+                    return params;
+                }
+            };
+
+            RequestQueueSingleton.getInstance(getActivity()).addToRequestQueue(request);
+
+        } else {
+
+            Toast.makeText(getActivity(),"No internet conncection",Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /*private class UploadEvent extends AsyncTask<Void, Void, Void> {
 
         Snackbar progressBar;
 
@@ -247,7 +307,7 @@ public class Create_Event extends Fragment implements View.OnClickListener{
             super.onPreExecute();
             progressBar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Uploading", Snackbar.LENGTH_LONG);
             if (progressDialog == null) {
-                progressDialog = Show_Notifications.createProgrssDialog(getActivity());
+                progressDialog = new CustomProgressDialog(getActivity(),TAG);
                 progressDialog.show();
             } else {
                 progressDialog.show();
@@ -314,20 +374,19 @@ public class Create_Event extends Fragment implements View.OnClickListener{
             progressBar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Upload Successful", Snackbar.LENGTH_LONG);
             progressBar.dismiss();
         }
-    }
+    }*/
 
-    private void getText() {
+    /*private void getText() {
         name = event_name.getText().toString();
         venue = event_venue.getText().toString();
         description = event_description.getText().toString();
         ministries = sministries.getSelectedItem().toString();
         date = displayDate.getText().toString();
         time = displayTime.getText().toString();
-    }
-
+    }*/
     /**
      * Checks if the app has permission to write to device storage
-     * <p>
+     *
      * If the app does not has permission then the user will be prompted to grant permissions
      *
      * @param activity
@@ -363,7 +422,8 @@ public class Create_Event extends Fragment implements View.OnClickListener{
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == getActivity().RESULT_OK) {
+
+        if (resultCode == RESULT_OK) {
 
             if (requestCode == PICK_FROM_GALLERY) {
 
@@ -387,17 +447,17 @@ public class Create_Event extends Fragment implements View.OnClickListener{
 
             } else if (requestCode == PIC_CROP) {
                 Bundle extras = data.getExtras();
-//get the cropped bitmap
+                //get the cropped bitmap
                 Bitmap thePic = extras.getParcelable("data");
                 picView.setVisibility(View.VISIBLE);
                 picView = (ImageView) getActivity().findViewById(R.id.imgPreview);
-//display the returned cropped image
+                //display the returned cropped image
                 picView.setImageBitmap(thePic);
             } else if (requestCode == 2404) {
 
                 //Retrives the image server file path from Upload Activity using the request code.
                 file_path = data.getStringExtra("file_path");
-                Log.d(TAG, file_path);
+                Log.d(TAG,file_path);
                 Toast.makeText(getActivity(), file_path, Toast.LENGTH_LONG).show();
                 //Log.d(TAG,file_path);
             }

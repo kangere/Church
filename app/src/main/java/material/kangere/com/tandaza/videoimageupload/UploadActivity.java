@@ -28,10 +28,9 @@ import org.json.JSONObject;
 
 import java.io.File;
 
-import material.kangere.com.tandaza.AppConfig;
-import material.kangere.com.tandaza.JSONParser;
 import material.kangere.com.tandaza.MakeNotification;
 import material.kangere.com.tandaza.R;
+import material.kangere.com.tandaza.util.AppConfig;
 
 
 public class UploadActivity extends Activity {
@@ -40,7 +39,7 @@ public class UploadActivity extends Activity {
 
 
 
-   private String filePath = null;
+   private String filePath = "";
     private ProgressBar progressBar;
     private TextView txtPercentage;
     private ImageView imgPreview;
@@ -52,9 +51,9 @@ public class UploadActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.upload_activity);
 
-        progressBar = (ProgressBar) findViewById(R.id.pbUploadImage);
-        txtPercentage = (TextView) findViewById(R.id.txtPercentage);
-        imgPreview = (ImageView) findViewById(R.id.imgPreview);
+        progressBar = findViewById(R.id.pbUploadImage);
+        txtPercentage =  findViewById(R.id.txtPercentage);
+        imgPreview =  findViewById(R.id.imgPreview);
         Intent i = getIntent();
 
         // image or video path that is captured in previous activity
@@ -138,10 +137,19 @@ public class UploadActivity extends Activity {
             return uploadFile();
         }
 
-        @SuppressWarnings("deprecation")
+
         private String uploadFile() {
             String responseString ;
 
+//            Optional<URL> url = Optional.empty();
+//            try {
+//                url.get() = new URL(AppConfig.FILE_UPLOAD_URL);
+//            }catch(MalformedURLException e){
+//                Log.e(TAG,e.toString());
+//            }
+//
+//            HttpURLConnection urlConnection = (HttpURLConnection) url.get().openConnection();
+            //HttpURLConnection urlConnection =
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(AppConfig.FILE_UPLOAD_URL);
 

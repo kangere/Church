@@ -9,7 +9,7 @@ public class EventData {
     }
 
 
-    private String title,date,time,ministry,venue,description,posterpath;
+    private String id,title,date,time,ministry,venue,description,posterpath;
 
     public String getMinistry() {
         return ministry;
@@ -17,6 +17,14 @@ public class EventData {
 
     public void setMinistry(String ministry) {
         this.ministry = ministry;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitle() {

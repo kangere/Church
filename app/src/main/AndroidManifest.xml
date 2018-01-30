@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -26,7 +25,7 @@
             android:value="AIzaSyDzQItVUasl2IwfrxsntcVcwpc-Y-h5l2I" />
 
         <activity
-            android:name=".NavActivities.MainActivity"
+            android:name="material.kangere.com.tandaza.NavActivities.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -36,46 +35,35 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NavActivities.Ministries"
-            android:label="@string/title_activity_ministries" />
-
-
+            android:name="material.kangere.com.tandaza.NavActivities.YouthMinistry"
+            android:label="@string/title_activity_youth_ministry" />
         <activity
-            android:name=".NavActivities.YouthMinistry"
-            android:label="@string/title_activity_youth_ministry"
-            android:parentActivityName=".NavActivities.Ministries">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".NavActivities.Ministries" />
-        </activity>
-        <activity
-            android:name=".NavActivities.ChildrenMinistry"
-            android:label="@string/title_activity_children_ministry"
-            android:parentActivityName=".NavActivities.Ministries">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".NavActivities.Ministries" />
-
-        </activity>
-
-
+            android:name="material.kangere.com.tandaza.NavActivities.ChildrenMinistry"
+            android:label="@string/title_activity_children_ministry" />
         <activity
             android:name=".Notifications_settings"
             android:label="@string/title_activity_notifications_settings"
             android:theme="@style/AppTheme" />
-        <activity
-            android:name=".MakeNotification"
-            android:label="@string/title_activity_make_notification"
-            android:theme="@style/AppTheme" />
-        <!--<activity
+        <!--
+             <activity
+             android:name=".MakeNotification"
+             android:label="@string/title_activity_make_notification"
+             android:theme="@style/AppTheme" />
+        -->
+        <!--
+            <activity
             android:name=".NavActivities.Show_Notifications"
             android:label="@string/title_activity_show__notifications"
-            android:theme="@style/AppTheme" /> -->
+            android:theme="@style/AppTheme" />
+        -->
         <activity
-            android:name=".videoimageupload.UploadActivity"
+            android:name="material.kangere.com.tandaza.videoimageupload.UploadActivity"
             android:label="@string/title_activity_show__notifications"
             android:theme="@style/AppTheme" />
-        <!-- <activity
+
+
+        <!--
+         <activity
              android:name=".NavActivities.ViewNotification"
              android:label="Details"
              android:parentActivityName=".NavActivities.Show_Notifications"
@@ -83,9 +71,14 @@
              <meta-data
                  android:name="android.support.PARENT_ACTIVITY"
                  android:value=".NavActivities.Show_Notifications" />
-         </activity> -->
+         </activity>
+        -->
+        <service android:name=".Services.UploadService" />
+
+        <activity android:name="material.kangere.com.tandaza.NavActivities.ViewEvent" />
 
 
+        <activity android:name="material.kangere.com.tandaza.NavActivities.UpdateEvent" />
     </application>
 
 </manifest>

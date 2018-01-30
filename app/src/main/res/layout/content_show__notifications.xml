@@ -1,34 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
-<LinearLayout android:id="@+id/lLConnection"
-    android:layout_height="match_parent"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/bOpenUploadClass"
-        android:layout_gravity="center_horizontal"
-        android:layout_height="wrap_content"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/lLConnection"
         android:layout_width="match_parent"
-        android:text="Upload Notification"
-        android:textSize="25sp" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvShowNote"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent" />
+        <!--<Button
+            android:id="@+id/bOpenUploadClass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Upload Notification"
+            android:textSize="25sp" />-->
 
-    <TextView
-        android:gravity="center"
-        android:id="@+id/tvShowNoteNoConnection"
-        android:layout_height="wrap_content"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/note_swipeRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvShowNote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/floating_action_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:layout_margin="16dp" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+
+        <TextView
+            android:id="@+id/tvShowNoteNoConnection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/noInternet"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/bUploadNote"
         android:layout_width="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/noInternet"
-        android:visibility="gone" />
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:src="@android:drawable/ic_input_add"/>
+
+</android.support.design.widget.CoordinatorLayout>
+
 
 
 

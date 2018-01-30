@@ -3,7 +3,6 @@ package material.kangere.com.tandaza.Adapters;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,15 +54,16 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolderEv
     @Override
     public void onBindViewHolder(ViewHolderEvents holder, int position) {
         EventData current = eventsList.get(position);
-        Log.d(TAG,current.getPosterpath());
+//        Log.d(TAG,current.getPosterpath());
 
         Uri uri = Uri.parse(current.getPosterpath());
 
         //load image to imageview with glide library
         Glide.with(context).load(uri).into(holder.poster);
-
+        holder.imgpathgone.setText(current.getPosterpath());
 
         //set text to appropriate textview for the event card
+        holder.id.setText(current.getId());
         holder.title.setText(current.getTitle());
         holder.date.setText(current.getDate());
         holder.time.setText(current.getTime());
@@ -77,17 +77,22 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolderEv
 
     class ViewHolderEvents extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private TextView title,date,ministry,venue,time,description;
+        private TextView id,title,date,ministry,venue,time,description,imgpathgone;
         private ImageView poster;
         public ViewHolderEvents(View view){
             super(view);
-            ministry = (TextView)view.findViewById(R.id.tvEventMinistry);
-            title = (TextView) view.findViewById(R.id.tvEventsTitle);
-            date = (TextView) view.findViewById(R.id.tvEventDate);
-            venue = (TextView) view.findViewById(R.id.tvEventVenue);
-            time = (TextView) view.findViewById(R.id.tvEventTime);
-            description = (TextView) view.findViewById(R.id.tvEventDescription);
-            poster = (ImageView) view.findViewById(R.id.ivEventImage);
+
+            id = view.findViewById(R.id.tvGoneEventId);
+            ministry = view.findViewById(R.id.tvGoneEventMinistry);
+            date =  view.findViewById(R.id.tvGoneEventDate);
+            venue =  view.findViewById(R.id.tvGoneEventVenue);
+            time =  view.findViewById(R.id.tvGoneEventTime);
+            imgpathgone = view.findViewById(R.id.tvGoneEventImgpath);
+
+            title =  view.findViewById(R.id.tvEventsTitle);
+            description =  view.findViewById(R.id.tvEventDescription);
+            poster = view.findViewById(R.id.ivEventImage);
+
             view.setOnClickListener(this);
         }
         @Override

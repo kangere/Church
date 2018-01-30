@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,29 +21,20 @@ import material.kangere.com.tandaza.R;
 public class Ministries extends Fragment implements MinistryRecyclerAdapter.ClickListener {
 
 
-    private ListView listView;
-    private RecyclerView recyclerView;
-    private MinistryRecyclerAdapter adapter;
-    List<MinData> data = new ArrayList<>();
+    private List<MinData> data = new ArrayList<>();
     private String[] titles;
     private String[] info;
 
     private int[] images = {R.drawable.youth, R.mipmap.ark, R.mipmap.sarahs, R.mipmap.kings_men, R.mipmap.ndoa
-            , R.mipmap.bofu};
+            , R.drawable.chinese_ministry};
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        //Nav and toolbar initialisation
-//        StaticMethods.ClassInitisialisation(this, R.id.ministries_fragment_navigation_drawer, R.id.ministriesToolbar, R.id.ministries_drawer_layout);
         titles = getResources().getStringArray(R.array.ministry_header);
         info = getResources().getStringArray(R.array.minitry_text);
-
-//        //List view initialisation
-//
-//
 
     }
 
@@ -54,7 +44,7 @@ public class Ministries extends Fragment implements MinistryRecyclerAdapter.Clic
         View view = inflater.inflate(R.layout.ministries, container, false);
 
         //recyclerView initialisation
-        recyclerView = (RecyclerView) view.findViewById(R.id.min_recycler_view);
+        RecyclerView recyclerView =  view.findViewById(R.id.min_recycler_view);
         recyclerView.setHasFixedSize(true);
         MinistryRecyclerAdapter adapter = new MinistryRecyclerAdapter(getActivity(), getData());
         adapter.setClickListener(this);
@@ -108,7 +98,6 @@ public class Ministries extends Fragment implements MinistryRecyclerAdapter.Clic
     @Override
     public void onStop() {
         super.onStop();
-        // data.clear();
     }
 
     @Override

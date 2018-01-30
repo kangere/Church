@@ -51,9 +51,9 @@ public class UploadActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.upload_activity);
 
-        progressBar = (ProgressBar) findViewById(R.id.pbUploadImage);
-        txtPercentage = (TextView) findViewById(R.id.txtPercentage);
-        imgPreview = (ImageView) findViewById(R.id.imgPreview);
+        progressBar = findViewById(R.id.pbUploadImage);
+        txtPercentage =  findViewById(R.id.txtPercentage);
+        imgPreview =  findViewById(R.id.imgPreview);
         Intent i = getIntent();
 
         // image or video path that is captured in previous activity
@@ -137,7 +137,7 @@ public class UploadActivity extends Activity {
             return uploadFile();
         }
 
-        //@SuppressWarnings("deprecation")
+
         private String uploadFile() {
             String responseString ;
 

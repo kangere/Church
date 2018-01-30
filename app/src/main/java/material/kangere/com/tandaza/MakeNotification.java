@@ -39,7 +39,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import material.kangere.com.tandaza.NavActivities.Show_Notifications;
+import material.kangere.com.tandaza.util.ApiFields;
 import material.kangere.com.tandaza.util.AppConfig;
+import material.kangere.com.tandaza.util.CheckNetwork;
 import material.kangere.com.tandaza.util.Permissions;
 import material.kangere.com.tandaza.util.RequestQueueSingleton;
 import material.kangere.com.tandaza.videoimageupload.UploadActivity;
@@ -49,7 +51,6 @@ import static android.app.Activity.RESULT_OK;
 public class MakeNotification extends Fragment implements View.OnClickListener {
 
     // JSON Node names
-    private static final String TAG_SUCCESS = "success";
     private static final String TAG = MakeNotification.class.getSimpleName();
     public String picturePath;
     private EditText title, content;
@@ -83,12 +84,12 @@ public class MakeNotification extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_make_notification, container, false);
 
-        upload =  view.findViewById(R.id.bNoteUpload);
-        pick =  view.findViewById(R.id.bPick);
+        upload = view.findViewById(R.id.bNoteUpload);
+        pick = view.findViewById(R.id.bPick);
         title = view.findViewById(R.id.etYouthTitle);
-        content =  view.findViewById(R.id.etYouthContent);
+        content = view.findViewById(R.id.etYouthContent);
         ministries = view.findViewById(R.id.sMinistries);
-        picView =  view.findViewById(R.id.imgPreview);
+        picView = view.findViewById(R.id.imgPreview);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.ministries,
@@ -167,86 +168,93 @@ public class MakeNotification extends Fragment implements View.OnClickListener {
         y_content = content.getText().toString();
         n_ministries = ministries.getSelectedItem().toString();
 
-        dialog = new ProgressDialog(getActivity());
-        dialog.setMessage("Posting notification..");
-        dialog.show();
+        //check if connected to internet first
+        if (CheckNetwork.isInternetAvailable(getActivity())) {
+            dialog = new ProgressDialog(getActivity());
+            dialog.setMessage("Posting notification..");
+            dialog.show();
 
-        //Create request to post data
-        StringRequest request = new StringRequest(Request.Method.POST, AppConfig.URL_UPLOAD,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d(TAG, response);
+            //Create request to post data
+            StringRequest request = new StringRequest(Request.Method.POST, AppConfig.URL_UPLOAD,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d(TAG, response);
 
 
-                        int success = 0;
+                            int success = 0;
 
 
-                        try {
-                            JSONObject temp = new JSONObject(response);
-                            success = temp.getInt(TAG_SUCCESS);
+                            try {
+                                JSONObject temp = new JSONObject(response);
+                                success = temp.getInt(ApiFields.TAG_SUCCESS);
 
-                        } catch (JSONException e) {
-                            Log.e(TAG, e.toString());
+                            } catch (JSONException e) {
+                                Log.e(TAG, e.toString());
+                            }
+
+                            if (success == 1) {
+
+
+                                Toast.makeText(getActivity(), "Notification created successfully", Toast.LENGTH_LONG).show();
+
+                                //go to previous fragment
+                                Show_Notifications showNotifications = new Show_Notifications();
+                                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                                // Replace whatever is in the fragment_container view with this fragment,
+                                // and add the transaction to the back stack
+                                transaction.replace(R.id.flContent, showNotifications);
+                                transaction.addToBackStack(null);
+
+                                // Commit the transaction
+                                transaction.commit();
+
+                            } else {
+
+                                Toast.makeText(getActivity(), "Failed to create notification, Try Again", Toast.LENGTH_LONG).show();
+
+                            }
+
                         }
-
-                        if (success == 1) {
-
-
-                            Toast.makeText(getActivity(), "Notification created successfully", Toast.LENGTH_LONG).show();
-
-                            //go to previous fragment
-                            Show_Notifications showNotifications = new Show_Notifications();
-                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-                            // Replace whatever is in the fragment_container view with this fragment,
-                            // and add the transaction to the back stack
-                            transaction.replace(R.id.flContent, showNotifications);
-                            transaction.addToBackStack(null);
-
-                            // Commit the transaction
-                            transaction.commit();
-
-                        } else {
-
-                            Toast.makeText(getActivity(), "Failed to create notification, Try Again", Toast.LENGTH_LONG).show();
-
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e(TAG, error.getMessage());
                         }
+                    }
+            ) {
 
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, error.getMessage());
-                    }
+
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    // Building Parameters
+                    Map<String, String> params = new HashMap<>();
+                    params.put("title", y_title);
+
+                    params.put("content", y_content);
+                    params.put("ministry", n_ministries);
+
+                    params.put("imgpath", file_path);
+
+                    return params;
                 }
-        ) {
+            };
 
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                // Building Parameters
-                Map<String, String> params = new HashMap<>();
-                params.put("title", y_title);
-
-                params.put("content", y_content);
-                params.put("ministry", n_ministries);
-
-                params.put("imgpath", file_path);
-
-                return params;
-            }
-        };
-
-        RequestQueueSingleton.getInstance(getActivity()).addToRequestQueue(request);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
+            RequestQueueSingleton.getInstance(getActivity()).addToRequestQueue(request);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
                 /* Create an Intent that will start the Menu-Activity. */
-                dialog.dismiss();
-            }
-        }, NOTIFICATION_PROGRESS_DELAY);
+                    dialog.dismiss();
+                }
+            }, NOTIFICATION_PROGRESS_DELAY);
+        } else {
+
+            Toast.makeText(getActivity(),"You are not connected to the internet",Toast.LENGTH_LONG).show();
+
+        }
     }
 
 
@@ -307,7 +315,7 @@ public class MakeNotification extends Fragment implements View.OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
 
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
 
                 //go to previous fragment
@@ -324,7 +332,7 @@ public class MakeNotification extends Fragment implements View.OnClickListener {
 
                 break;
         }
-        return true ;
+        return true;
     }
 
     /*class UploadNote extends AsyncTask<String, String, String> {

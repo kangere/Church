@@ -7,16 +7,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
-        <!--<Button-->
-            <!--android:id="@+id/bCreateEvent"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="10dp"-->
-            <!--android:background="@color/accent_color"-->
-            <!--android:onClick="CreateEvent"-->
-            <!--android:text="@string/btn_event" />-->
-
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/events_refreshLayout"
             android:layout_width="match_parent"

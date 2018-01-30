@@ -1,12 +1,12 @@
 package material.kangere.com.tandaza.NavActivities;
 
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import material.kangere.com.tandaza.R;
-import material.kangere.com.tandaza.StaticMethods;
 
 public class ChildrenMinistry extends AppCompatActivity {
 
@@ -15,7 +15,14 @@ public class ChildrenMinistry extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_children_ministry);
-        StaticMethods.toolBar(this, R.id.childrenToolbar);
+        //StaticMethods.toolBar(this, R.id.childrenToolbar);
+
+        //Toolbar implementation
+        Toolbar toolbar = findViewById(R.id.childrenToolbar);
+        setSupportActionBar(toolbar);
+
+        toolbar.setTitleTextColor(Color.WHITE);
+
         try{
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
@@ -38,7 +45,7 @@ public class ChildrenMinistry extends AppCompatActivity {
             return true;
         }
         if(id == android.R.id.home){
-            NavUtils.navigateUpFromSameTask(this);
+            onBackPressed();
         }
 
         return super.onOptionsItemSelected(item);

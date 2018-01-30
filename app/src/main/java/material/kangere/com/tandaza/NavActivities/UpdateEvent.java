@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -60,6 +61,7 @@ public class UpdateEvent extends AppCompatActivity {
 
         //enable up navigation
         ActionBar bar = getSupportActionBar();
+        bar.setHomeButtonEnabled(true);
         bar.setDisplayHomeAsUpEnabled(true);
 
 
@@ -82,6 +84,7 @@ public class UpdateEvent extends AppCompatActivity {
 
         if(single_event != null)
         {
+            Log.d("Date" ,single_event[2]);
             Date date1 = Date.valueOf(single_event[2]);
             String formatted_date = DateFormat.getDateInstance().format(date1);
 
@@ -209,5 +212,16 @@ public class UpdateEvent extends AppCompatActivity {
         };
 
         RequestQueueSingleton.getInstance(this).addToRequestQueue(request);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId() == android.R.id.home)
+        {
+            onBackPressed();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

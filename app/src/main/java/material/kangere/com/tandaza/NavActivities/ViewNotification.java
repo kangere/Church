@@ -4,7 +4,6 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -18,21 +17,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import material.kangere.com.tandaza.JSONParser;
 import material.kangere.com.tandaza.R;
+import material.kangere.com.tandaza.util.ApiFields;
 import material.kangere.com.tandaza.util.AppConfig;
-
-
+import material.kangere.com.tandaza.util.RequestQueueSingleton;
 
 
 public class ViewNotification extends Fragment {
@@ -132,8 +132,9 @@ public class ViewNotification extends Fragment {
 
         //button operations
         delete.setOnClickListener((view)-> {
-                new Delete().execute();
-            }
+//                new Delete().execute();
+                delete_note();
+        }
         );
 
         update.setOnClickListener((view)-> {
@@ -188,9 +189,61 @@ public class ViewNotification extends Fragment {
 
     private void delete_note()
     {
+        StringRequest request = new StringRequest(Request.Method.POST, AppConfig.URL_DELETE,
+                response ->{
 
+                    Log.d(TAG, response);
+
+
+                    int success = 0;
+
+
+                    try {
+                        JSONObject temp = new JSONObject(response);
+                        success = temp.getInt(ApiFields.TAG_SUCCESS);
+
+                    } catch (JSONException e) {
+                        Log.e(TAG, e.toString());
+                    }
+
+                    if (success == 1) {
+
+
+                        Toast.makeText(getActivity(), "Notification deleted successfully", Toast.LENGTH_LONG).show();
+
+                        //go to previous fragment
+                        Show_Notifications showNotifications = new Show_Notifications();
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                        // Replace whatever is in the fragment_container view with this fragment,
+                        // and add the transaction to the back stack
+                        transaction.replace(R.id.flContent, showNotifications);
+                        transaction.addToBackStack(null);
+
+                        // Commit the transaction
+                        transaction.commit();
+
+                    } else {
+
+                        Toast.makeText(getActivity(), "Failed to create notification, Try Again", Toast.LENGTH_LONG).show();
+
+                    }
+
+                },
+                error -> Log.d(TAG,error.getMessage())
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put("id",id);
+
+                return params;
+            }
+        };
+
+        RequestQueueSingleton.getInstance(getActivity()).addToRequestQueue(request);
     }
-    class Delete extends AsyncTask<String,Integer,String> {
+    /*class Delete extends AsyncTask<String,Integer,String> {
 
         @Override
         protected void onPreExecute() {
@@ -267,6 +320,6 @@ public class ViewNotification extends Fragment {
             pDialog.dismiss();
         }
     }
-
+*/
 
 }

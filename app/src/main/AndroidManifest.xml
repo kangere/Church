@@ -25,7 +25,7 @@
             android:value="AIzaSyDzQItVUasl2IwfrxsntcVcwpc-Y-h5l2I" />
 
         <activity
-            android:name=".NavActivities.MainActivity"
+            android:name="material.kangere.com.tandaza.NavActivities.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -35,10 +35,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NavActivities.YouthMinistry"
+            android:name="material.kangere.com.tandaza.NavActivities.YouthMinistry"
             android:label="@string/title_activity_youth_ministry" />
         <activity
-            android:name=".NavActivities.ChildrenMinistry"
+            android:name="material.kangere.com.tandaza.NavActivities.ChildrenMinistry"
             android:label="@string/title_activity_children_ministry" />
         <activity
             android:name=".Notifications_settings"
@@ -57,7 +57,7 @@
             android:theme="@style/AppTheme" />
         -->
         <activity
-            android:name=".videoimageupload.UploadActivity"
+            android:name="material.kangere.com.tandaza.videoimageupload.UploadActivity"
             android:label="@string/title_activity_show__notifications"
             android:theme="@style/AppTheme" />
 
@@ -73,24 +73,12 @@
                  android:value=".NavActivities.Show_Notifications" />
          </activity>
         -->
-        <service android:name="Services.UploadService" />
+        <service android:name=".Services.UploadService" />
 
-        <activity
-            android:name=".NavActivities.ViewEvent"
-            android:parentActivityName=".NavActivities.MainActivity">
+        <activity android:name="material.kangere.com.tandaza.NavActivities.ViewEvent" />
 
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".NavActivities.MainActivity" />
-        </activity>
 
-        <activity
-            android:name=".NavActivities.UpdateEvent"
-            android:parentActivityName=".NavActivities.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".NavActivities.MainActivity" />
-        </activity>
+        <activity android:name="material.kangere.com.tandaza.NavActivities.UpdateEvent" />
     </application>
 
 </manifest>

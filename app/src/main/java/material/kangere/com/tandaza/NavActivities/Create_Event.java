@@ -48,6 +48,7 @@ import java.util.Map;
 
 import material.kangere.com.tandaza.R;
 import material.kangere.com.tandaza.util.AppConfig;
+import material.kangere.com.tandaza.util.CheckNetwork;
 import material.kangere.com.tandaza.util.Permissions;
 import material.kangere.com.tandaza.util.RequestQueueSingleton;
 import material.kangere.com.tandaza.videoimageupload.UploadActivity;
@@ -233,22 +234,25 @@ public class Create_Event extends Fragment implements View.OnClickListener{
         date = displayDate.getText().toString();
         time = displayTime.getText().toString();
 
-        StringRequest request = new StringRequest(Request.Method.POST, AppConfig.EVENT_UPLOAD_URL,
-                (response)-> {
-                        Log.d(TAG,response);
+        //check if connected to the internet
+        if(CheckNetwork.isInternetAvailable(getActivity())) {
+
+            StringRequest request = new StringRequest(Request.Method.POST, AppConfig.EVENT_UPLOAD_URL,
+                    (response) -> {
+                        Log.d(TAG, response);
 
                         int success = 0;
-                        try{
+                        try {
                             JSONObject object = new JSONObject(response);
                             success = object.getInt(TAG_SUCCESS);
 
-                        }catch(JSONException e){
+                        } catch (JSONException e) {
                             Log.e(TAG, e.toString());
                         }
 
-                        if(success == 1){
+                        if (success == 1) {
 
-                            Toast.makeText(getActivity(),"Notification created successfully",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Notification created successfully", Toast.LENGTH_LONG).show();
 
                             //go to previous fragment
                             UpcomingEvents upcomingEvents = new UpcomingEvents();
@@ -261,33 +265,37 @@ public class Create_Event extends Fragment implements View.OnClickListener{
 
                             // Commit the transaction
                             transaction.commit();
-                        }else
-                            Toast.makeText(getActivity(),"Notification created successfully",Toast.LENGTH_LONG).show();
+                        } else
+                            Toast.makeText(getActivity(), "Notification created successfully", Toast.LENGTH_LONG).show();
 
-                },
-                error-> Log.e(TAG, error.toString())
+                    },
+                    error -> Log.e(TAG, error.toString())
 
 
-        ) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            ) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
 
-                Map<String,String> params = new HashMap<>();
+                    Map<String, String> params = new HashMap<>();
 
-                params.put("event_name", name);
-                params.put("event_date", date);
-                params.put("event_time", time);
-                params.put("ministry", ministries);
-                params.put("venue", venue);
-                params.put("posterpath", file_path);
-                params.put("description", description);
+                    params.put("event_name", name);
+                    params.put("event_date", date);
+                    params.put("event_time", time);
+                    params.put("ministry", ministries);
+                    params.put("venue", venue);
+                    params.put("posterpath", file_path);
+                    params.put("description", description);
 
-                return params;
-            }
-        };
+                    return params;
+                }
+            };
 
-        RequestQueueSingleton.getInstance(getActivity()).addToRequestQueue(request);
+            RequestQueueSingleton.getInstance(getActivity()).addToRequestQueue(request);
 
+        } else {
+
+            Toast.makeText(getActivity(),"No internet conncection",Toast.LENGTH_LONG).show();
+        }
     }
 
     /*private class UploadEvent extends AsyncTask<Void, Void, Void> {

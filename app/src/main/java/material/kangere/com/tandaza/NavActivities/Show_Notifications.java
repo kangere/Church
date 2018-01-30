@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +16,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -78,15 +78,10 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
     private MyAdapter adapter;
     private long NOW = new Date().getTime();
     private Date parsedDate;
-    private final String NOTE_ID = "note_array";
-    private Button btnUploadClass;
     private ProgressDialog dialog;
 
     private final int NOTIFICATION_PROGRESS_DELAY = 1000;
 
-    /* public interface onNotificationSelectedListener{
-          void NotificationSelected(int position,String[] content);
-     }*/
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -103,18 +98,16 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
 
 
         //Upload button initialisation
-        btnUploadClass = (Button) layout.findViewById(R.id.bOpenUploadClass);
-        btnUploadClass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MakeNotification makeNotification = new MakeNotification();
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.flContent, makeNotification)
-                        .addToBackStack(makeNotification.getClass().getSimpleName())
-                        .commit();
-            }
-        });
-
+        FloatingActionButton openCreateNote = layout.findViewById(R.id.bUploadNote);
+        openCreateNote.setOnClickListener(
+                view -> {
+                    MakeNotification makeNotification = new MakeNotification();
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.flContent, makeNotification)
+                            .addToBackStack(makeNotification.getClass().getSimpleName())
+                            .commit();
+                }
+        );
 
         //recycler view initialisation
         RecyclerView recyclerView = layout.findViewById(R.id.rvShowNote);
@@ -179,7 +172,6 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
                             try {
                                 JSONArray array = response.getJSONArray(TAG_NOTIFICATIONS);
 
-//                                JSONObject forCache = new JSONObject();
 
                                 for (int i = 0; i < array.length(); i++) {
                                     JSONObject c = array.getJSONObject(i);
@@ -391,6 +383,7 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
     @Override
     public void itemClicked(View view, int position) {
 
+        final String NOTE_ID = "note_array";
         //retrieve notification details once clicked
         String id = ((TextView) view.findViewById(R.id.nid)).getText().toString();
         String title = ((TextView) view.findViewById(R.id.title)).getText().toString();

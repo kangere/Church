@@ -14,8 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
-import material.kangere.com.tandaza.LocalDB.TablesContract;
 import material.kangere.com.tandaza.R;
 
 
@@ -23,9 +21,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     private DrawerLayout mDrawer;
-    private NavigationView navigationView;
 
-    private SQLiteHandler db;
+//    private SQLiteHandler db;
 
 
     Toolbar toolbar;
@@ -58,11 +55,11 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitleTextColor(ContextCompat.getColor(getBaseContext(), R.color.white));
 
         // SqLite database handler
-        db = new SQLiteHandler(getApplicationContext());
-
-        //create cache tables in local database
-        db.addTable(TablesContract.EventsEntry.TABLE_NAME, TablesContract.EventsEntry.COLUMN_EVENT_CACHE);
-        db.addTable(TablesContract.NotificationsCache.TABLE_NAME, TablesContract.NotificationsCache.COLUMN_NOTE_CACHE);
+//        db = new SQLiteHandler(getApplicationContext());
+//
+//        //create cache tables in local database
+//        db.addTable(TablesContract.EventsEntry.TABLE_NAME, TablesContract.EventsEntry.COLUMN_EVENT_CACHE);
+//        db.addTable(TablesContract.NotificationsCache.TABLE_NAME, TablesContract.NotificationsCache.COLUMN_NOTE_CACHE);
 
 
     }
@@ -93,9 +90,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupNavView() {
 
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawer =  findViewById(R.id.drawer_layout);
 
-        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        NavigationView navigationView =  findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {

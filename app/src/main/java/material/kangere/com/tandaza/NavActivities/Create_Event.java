@@ -252,7 +252,7 @@ public class Create_Event extends Fragment implements View.OnClickListener{
 
                         if (success == 1) {
 
-                            Toast.makeText(getActivity(), "Notification created successfully", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Event created successfully", Toast.LENGTH_LONG).show();
 
                             //go to previous fragment
                             UpcomingEvents upcomingEvents = new UpcomingEvents();
@@ -266,7 +266,7 @@ public class Create_Event extends Fragment implements View.OnClickListener{
                             // Commit the transaction
                             transaction.commit();
                         } else
-                            Toast.makeText(getActivity(), "Notification created successfully", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Error Creating event", Toast.LENGTH_LONG).show();
 
                     },
                     error -> Log.e(TAG, error.toString())

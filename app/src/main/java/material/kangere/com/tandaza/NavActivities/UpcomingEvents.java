@@ -340,6 +340,8 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
         String venue = ((TextView)view.findViewById(R.id.tvGoneEventVenue)).getText().toString();
         String description = ((TextView)view.findViewById(R.id.tvEventDescription)).getText().toString();
 
+        //TODO Use better data structure
+                            /*0     1       2   3       4       5       6       7*/
         String [] event = {title,imgpath,date,time,ministry,venue,description,id};
 
         Intent intent = new Intent(getActivity(),ViewEvent.class);

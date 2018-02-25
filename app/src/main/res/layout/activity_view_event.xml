@@ -100,11 +100,6 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-
-    <Button
-        android:visibility="gone"
-        android:id="@+id/bEditEvent"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 

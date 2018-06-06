@@ -1,11 +1,12 @@
 package material.kangere.com.tandaza.NavActivities;
 
 
-import android.app.Fragment;
+import android.arch.lifecycle.LifecycleOwner;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.multidex.MultiDex;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -15,14 +16,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import material.kangere.com.tandaza.R;
+import material.kangere.com.tandaza.util.StoriesViewModel;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LifecycleOwner{
 
 
     private DrawerLayout mDrawer;
 
-//    private SQLiteHandler db;
+    private static StoriesViewModel viewModel = null;
 
 
     Toolbar toolbar;
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction().replace(R.id.flContent, new MainContent()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContent, new MainContent()).commit();
 
         }
 
@@ -62,6 +64,18 @@ public class MainActivity extends AppCompatActivity {
 //        db.addTable(TablesContract.NotificationsCache.TABLE_NAME, TablesContract.NotificationsCache.COLUMN_NOTE_CACHE);
 
 
+    }
+
+    public StoriesViewModel getViewModel() {
+
+        if(viewModel == null)
+            viewModel = new StoriesViewModel(getApplication());
+
+        viewModel.getStories().observe(this,
+                stories -> {
+
+                });
+        return viewModel;
     }
 
 
@@ -156,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openFragment(Fragment fragment, MenuItem menuItem) {
-        getFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                 .replace(R.id.flContent, fragment)
                 .addToBackStack(fragment.getClass().getSimpleName())
                 .commit();

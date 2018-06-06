@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import material.kangere.com.tandaza.ItemData;
 import material.kangere.com.tandaza.R;
@@ -23,7 +24,7 @@ import material.kangere.com.tandaza.R;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolderNotifications> {
 
 
-    private ArrayList<ItemData> notificationsList = new ArrayList<>();
+    private List<ItemData> notificationsList = new ArrayList<>();
     private LayoutInflater layoutInflater;
 
     private Context mContext;
@@ -35,7 +36,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolderNotifica
         layoutInflater = LayoutInflater.from(context);
     }
 
-    public void setNotificationsList(ArrayList<ItemData> notificationsList) {
+    public void setNotificationsList(List<ItemData> notificationsList) {
         this.notificationsList = notificationsList;
         notifyItemRangeChanged(0, notificationsList.size());
     }

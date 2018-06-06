@@ -1,13 +1,13 @@
 package material.kangere.com.tandaza.NavActivities;
 
 
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -46,7 +46,7 @@ import material.kangere.com.tandaza.util.CheckNetwork;
 import material.kangere.com.tandaza.util.RequestQueueSingleton;
 
 
-public class Show_Notifications extends Fragment implements MyAdapter.ClickListener {
+public class Show_Notifications extends Fragment implements MyAdapter.ClickListener{
 
     private static final String TAG = Show_Notifications.class.getSimpleName();
 
@@ -163,6 +163,12 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
 
         if (CheckNetwork.isInternetAvailable(getActivity())) {
             notificationsList.clear();
+
+            //Viewmodel to get network data
+//            StoriesViewModel viewModel = ViewModelProviders.of(getActivity()).get(StoriesViewModel.class);
+//            adapter.setNotificationsList(viewModel.getStories().getValue());
+
+
 
             //Volley handles network requests
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(AppConfig.URL_GET_ALL_NOTIFICATIONS, null,

@@ -250,8 +250,8 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
                         }
                     },
 
-                     error -> Log.e(TAG, error.toString())
-                    );
+                    error -> Log.e(TAG, error.toString())
+            );
 
             RequestQueueSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest);
             new Handler().postDelayed(

@@ -2,6 +2,7 @@ package material.kangere.com.tandaza.NavActivities;
 
 
 import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -63,21 +64,13 @@ public class MainActivity extends AppCompatActivity implements LifecycleOwner{
 //        db.addTable(TablesContract.EventsEntry.TABLE_NAME, TablesContract.EventsEntry.COLUMN_EVENT_CACHE);
 //        db.addTable(TablesContract.NotificationsCache.TABLE_NAME, TablesContract.NotificationsCache.COLUMN_NOTE_CACHE);
 
+         viewModel = ViewModelProviders.of(this).get(StoriesViewModel.class);
 
     }
 
-    public StoriesViewModel getViewModel() {
-
-        if(viewModel == null)
-            viewModel = new StoriesViewModel(getApplication());
-
-        viewModel.getStories().observe(this,
-                stories -> {
-
-                });
+    public static StoriesViewModel getViewModel() {
         return viewModel;
     }
-
 
     @Override
     protected void attachBaseContext(Context newBase) {

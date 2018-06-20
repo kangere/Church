@@ -38,6 +38,11 @@ public class StoriesViewModel extends AndroidViewModel {
         return stories;
     }
 
+    public void refresh(){
+        stories.clear();
+        loadStories();
+    }
+
     private void loadStories(){
 
         if(!CheckNetwork.isInternetAvailable(application))

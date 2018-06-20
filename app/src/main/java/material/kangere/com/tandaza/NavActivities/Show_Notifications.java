@@ -130,7 +130,9 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
     private void loadData() {
 
 
-        if (MainActivity.getViewModel().getStories().size() > 0) {
+        List<ItemData> stories = MainActivity.getViewModel().getStories();
+
+        if (stories.size() > 0) {
 
             dialog = new ProgressDialog(getActivity());
             dialog.setMessage("Loading news...");
@@ -138,17 +140,17 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
 
 
 
-            adapter.setNotificationsList(MainActivity.getViewModel().getStories());
+            adapter.setNotificationsList(stories);
 
             new Handler().postDelayed(
                     () -> {
-                        /* Create an Intent that will start the Menu-Activity. */
+
                         dialog.dismiss();
 
                     }, 1000);
         } else {
 
-            //Alert user their is no internet connection
+
             Toast.makeText(getActivity(),"No Internet Connection", Toast.LENGTH_LONG).show();
 
             LoadCache();
@@ -173,9 +175,7 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
     }
 
 
-    /*
-    Function to load stored cache from the local file if device is not connected to the internet
-     */
+
 
     private void LoadCache() {
 

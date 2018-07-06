@@ -84,7 +84,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolderNotifica
         private ImageView imgNotification;
         RelativeLayout relativeLayout;
 
-        public  ViewHolderNotifications(View itemView) {
+        private  ViewHolderNotifications(View itemView) {
             super(itemView);
 
             relativeLayout = (RelativeLayout) itemView.findViewById(R.id.rvNotes);

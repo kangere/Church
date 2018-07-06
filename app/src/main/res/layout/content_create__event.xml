@@ -12,7 +12,6 @@
         tools:context="material.kangere.com.tandaza.NavActivities.Create_Event">
 
 
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,8 +38,9 @@
 
         <Button
             android:id="@+id/bDate"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:padding="8dp"
             android:text="@string/event_date"
             android:textColor="@color/accent_color"
@@ -57,8 +57,9 @@
 
         <Button
             android:id="@+id/bTime"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:padding="8dp"
             android:text="@string/event_time"
             android:textColor="@color/accent_color"
@@ -89,6 +90,7 @@
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
             android:padding="8dp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -97,30 +99,32 @@
             android:text="Choose Poster "
             android:textColor="@color/accent_color"
             android:textSize="20sp" />
+
         <ImageView
             android:id="@+id/ivPoster"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:visibility="gone"
+            android:layout_marginTop="15dp"
             android:src="@mipmap/ic_launcher"
-            android:layout_marginTop="15dp"/>
+            android:visibility="gone" />
+
         <ProgressBar
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="100dp"
             android:layout_height="20dp"
-            android:visibility="gone"
             android:layout_marginBottom="35dp"
-            />
+            android:visibility="gone" />
+
         <Button
             android:id="@+id/bEventPoster"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pick an image"
+            android:layout_gravity="center_horizontal"
             android:layout_margin="8dp"
             android:background="@color/accent_color"
+            android:text="Pick an image"
             android:textColor="@android:color/white"
-            android:textSize="20sp"
-            />
+            android:textSize="20sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -131,11 +135,18 @@
             android:textColor="@color/accent_color"
             android:textSize="20sp" />
 
+        <AutoCompleteTextView
+            android:id="@+id/tvAutoVenue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/venue_hint"/>
+
         <EditText
             android:id="@+id/etEventVenue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/venue_hint" />
+            android:hint="@string/venue_hint"
+            android:visibility="gone" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -151,18 +162,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/description_hint"
-            android:minHeight="100dp"/>
+            android:minHeight="100dp" />
 
         <Button
             android:id="@+id/bEventUpload"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/upload_event"
             android:layout_margin="8dp"
             android:background="@color/accent_color"
+            android:text="@string/upload_event"
             android:textColor="@android:color/white"
-            android:textSize="20sp"
-            />
+            android:textSize="20sp" />
 
 
     </LinearLayout>

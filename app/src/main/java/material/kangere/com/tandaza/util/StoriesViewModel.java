@@ -2,6 +2,7 @@ package material.kangere.com.tandaza.util;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -22,7 +23,9 @@ import material.kangere.com.tandaza.ItemData;
 public class StoriesViewModel extends AndroidViewModel {
 
     private static final String TAG = StoriesViewModel.class.getSimpleName();
-    private List<ItemData> stories = new ArrayList<>();
+
+    private MutableLiveData<List<ItemData>> data;
+
 
     private Application application;
 
@@ -31,30 +34,41 @@ public class StoriesViewModel extends AndroidViewModel {
         super(application);
         this.application = application;
 
-        loadStories();
-    }
 
-    public List<ItemData> getStories() {
-        return stories;
     }
 
     public void refresh(){
-        stories.clear();
-        loadStories();
+      loadStories();
+    }
+
+
+    public MutableLiveData<List<ItemData>> getData() {
+        if(data == null){
+            data = new MutableLiveData<>();
+            loadStories();
+        }
+
+        return data;
     }
 
     private void loadStories(){
 
-        if(!CheckNetwork.isInternetAvailable(application))
+        if(!CheckNetwork.isInternetAvailable(application)) {
+            data.setValue(new ArrayList<>());
             return;
+        }
 
 
+
+        List<ItemData> stories = new ArrayList<>();
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(AppConfig.URL_GET_ALL_NOTIFICATIONS, null,
                 response -> {
 
                         try {
                             JSONArray array = response.getJSONArray(ApiFields.TAG_STORIES_NOTIFICATIONS);
+
+
 
 
                             for (int i = 0; i < array.length(); i++) {
@@ -80,11 +94,13 @@ public class StoriesViewModel extends AndroidViewModel {
                                 notificationsTitles.setImagePath(image_path);
                                 notificationsTitles.setTime_stamp(timestamp);
 
+
                                 stories.add(notificationsTitles);
                             }
 
 
 
+                            data.postValue(stories);
                             //store data in cache
                             File cacheDir = application.getCacheDir();
 
@@ -115,7 +131,6 @@ public class StoriesViewModel extends AndroidViewModel {
 
 
         RequestQueueSingleton.getInstance(application).addToRequestQueue(jsonObjectRequest);
-
 
     }
 }

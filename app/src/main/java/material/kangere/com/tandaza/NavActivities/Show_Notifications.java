@@ -2,6 +2,8 @@ package material.kangere.com.tandaza.NavActivities;
 
 
 import android.app.ProgressDialog;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,6 +41,7 @@ import material.kangere.com.tandaza.ItemData;
 import material.kangere.com.tandaza.MakeNotification;
 import material.kangere.com.tandaza.R;
 import material.kangere.com.tandaza.util.ApiFields;
+import material.kangere.com.tandaza.util.StoriesViewModel;
 
 
 public class Show_Notifications extends Fragment implements MyAdapter.ClickListener{
@@ -50,6 +53,7 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
     private TextView noCon;
     private LinearLayout connection;
 
+    private StoriesViewModel model;
 
     private MyAdapter adapter;
     private long NOW = new Date().getTime();
@@ -64,6 +68,7 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
 
         View layout = inflater.inflate(R.layout.content_show__notifications, container, false);
 
+        model = ViewModelProviders.of(getActivity()).get(StoriesViewModel.class);
 
         noCon =  layout.findViewById(R.id.tvShowNoteNoConnection);
         connection = layout.findViewById(R.id.lLConnection);
@@ -99,9 +104,14 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
                 () -> {
                 Log.i(TAG, "Refreshing RecyclerView");
 
-                loadData();
 
-                refreshLayout.setRefreshing(false);
+               model.refresh();
+
+               model.getData().removeObservers(getActivity());
+
+               loadData();
+
+               refreshLayout.setRefreshing(false);
 
         });
 
@@ -129,33 +139,41 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
 
     private void loadData() {
 
+        LiveData<List<ItemData>> liveData = model.getData();
 
-        List<ItemData> stories = MainActivity.getViewModel().getStories();
+        dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Loading news...");
+        dialog.show();
 
-        if (stories.size() > 0) {
+        liveData.observe(getActivity(), stories -> {
 
-            dialog = new ProgressDialog(getActivity());
-            dialog.setMessage("Loading news...");
-            dialog.show();
-
-
-
-            adapter.setNotificationsList(stories);
-
-            new Handler().postDelayed(
-                    () -> {
-
-                        dialog.dismiss();
-
-                    }, 1000);
-        } else {
+            Log.i(TAG, "Observer called list :" + stories.toString());
+            if(stories.size() > 0){
 
 
-            Toast.makeText(getActivity(),"No Internet Connection", Toast.LENGTH_LONG).show();
+                adapter.setNotificationsList(stories);
 
-            LoadCache();
+            } else {
 
-        }
+                Toast.makeText(getActivity(),"No Internet Connection", Toast.LENGTH_LONG).show();
+
+                LoadCache();
+            }
+
+
+        });
+
+        new Handler().postDelayed(
+                () -> {
+
+                    dialog.dismiss();
+
+                }, 1000);
+
+
+
+
+
     }
 
 

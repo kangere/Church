@@ -2,9 +2,8 @@ package material.kangere.com.tandaza.util;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
-import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -16,36 +15,60 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import material.kangere.com.tandaza.ItemData;
 
 public class StoriesViewModel extends AndroidViewModel {
 
     private static final String TAG = StoriesViewModel.class.getSimpleName();
-    private LiveData<List<ItemData>> stories;
+
+    private MutableLiveData<List<ItemData>> data;
+
+
     private Application application;
+
 
     public StoriesViewModel(@NonNull Application application) {
         super(application);
         this.application = application;
-        loadStories();
+
+
     }
 
-    public LiveData<List<ItemData>> getStories() {
-        return stories;
+    public void refresh(){
+      loadStories();
+    }
+
+
+    public MutableLiveData<List<ItemData>> getData() {
+        if(data == null){
+            data = new MutableLiveData<>();
+            loadStories();
+        }
+
+        return data;
     }
 
     private void loadStories(){
+
+        if(!CheckNetwork.isInternetAvailable(application)) {
+            data.setValue(new ArrayList<>());
+            return;
+        }
+
+
+
+        List<ItemData> stories = new ArrayList<>();
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(AppConfig.URL_GET_ALL_NOTIFICATIONS, null,
                 response -> {
 
                         try {
                             JSONArray array = response.getJSONArray(ApiFields.TAG_STORIES_NOTIFICATIONS);
+
+
 
 
                             for (int i = 0; i < array.length(); i++) {
@@ -59,20 +82,9 @@ public class StoriesViewModel extends AndroidViewModel {
                                 String image_path = c.getString(ApiFields.TAG_STORIES_IMAGE_PATH);
                                 String time_stamp = c.getString(ApiFields.TAG_STORIES_TIMESTAMP);
 
-                                Date parsedDate = null;
+                                String timestamp = Dates.getTimeSpan(time_stamp);
 
-                                try {
-                                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                                    parsedDate = dateFormat.parse(time_stamp);
-                                } catch (Exception e) {//this generic but you can control another types of exception
-                                    e.printStackTrace();
-                                }
 
-                                DateUtils.getRelativeTimeSpanString(parsedDate.getTime(), new Date().getTime(), DateUtils.MINUTE_IN_MILLIS);
-
-                                String timestamp = String.valueOf(DateUtils.getRelativeTimeSpanString(parsedDate.getTime(), new Date().getTime(), DateUtils.MINUTE_IN_MILLIS));
-
-                                //storing each variable
                                 ItemData notificationsTitles = new ItemData();
 
                                 notificationsTitles.setNid(nid);
@@ -82,9 +94,13 @@ public class StoriesViewModel extends AndroidViewModel {
                                 notificationsTitles.setImagePath(image_path);
                                 notificationsTitles.setTime_stamp(timestamp);
 
-                                stories.getValue().add(notificationsTitles);
+
+                                stories.add(notificationsTitles);
                             }
 
+
+
+                            data.postValue(stories);
                             //store data in cache
                             File cacheDir = application.getCacheDir();
 
@@ -115,7 +131,6 @@ public class StoriesViewModel extends AndroidViewModel {
 
 
         RequestQueueSingleton.getInstance(application).addToRequestQueue(jsonObjectRequest);
-
 
     }
 }

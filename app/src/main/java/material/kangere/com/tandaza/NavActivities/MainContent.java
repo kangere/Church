@@ -1,16 +1,18 @@
 package material.kangere.com.tandaza.NavActivities;
 
 
-import android.app.Fragment;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import material.kangere.com.tandaza.R;
 
@@ -20,8 +22,8 @@ import material.kangere.com.tandaza.R;
 public class MainContent extends Fragment {
 
 
-    public static  String facebookID = "129991457013820";
-    public static String FACEBOOK_URL = "https://www.facebook.com/K3C.Tandaza";
+    private static  String facebookID = "129991457013820";
+    private static String FACEBOOK_URL = "https://www.facebook.com/K3C.Tandaza";
     private View rootView;
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener(){
@@ -54,7 +56,13 @@ public class MainContent extends Fragment {
         Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
         String facebookUrl = getFacebookPageURL(getActivity());
         facebookIntent.setData(Uri.parse(facebookUrl));
-        startActivity(facebookIntent);
+
+
+        if(facebookIntent.resolveActivity(getActivity().getPackageManager()) != null)
+            startActivity(facebookIntent);
+        else
+            Toast.makeText(getActivity(),"Could not find app to open facebook",Toast.LENGTH_LONG).show();
+
     }
     public String getFacebookPageURL(Context context) {
         PackageManager packageManager = context.getPackageManager();

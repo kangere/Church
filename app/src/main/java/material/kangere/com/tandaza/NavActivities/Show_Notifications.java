@@ -1,13 +1,15 @@
 package material.kangere.com.tandaza.NavActivities;
 
 
-import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,67 +22,45 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Response;
-import com.android.volley.toolbox.JsonObjectRequest;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import material.kangere.com.tandaza.Adapters.MyAdapter;
 import material.kangere.com.tandaza.ItemData;
 import material.kangere.com.tandaza.MakeNotification;
 import material.kangere.com.tandaza.R;
-import material.kangere.com.tandaza.util.AppConfig;
-import material.kangere.com.tandaza.util.CheckNetwork;
-import material.kangere.com.tandaza.util.RequestQueueSingleton;
+import material.kangere.com.tandaza.util.ApiFields;
+import material.kangere.com.tandaza.util.StoriesViewModel;
 
 
-public class Show_Notifications extends Fragment implements MyAdapter.ClickListener {
+public class Show_Notifications extends Fragment implements MyAdapter.ClickListener{
 
     private static final String TAG = Show_Notifications.class.getSimpleName();
-
-
-    // Progress Dialog
-    private ProgressDialog pDialog;
-    // Creating JSON Parser object
-
-
-    //array list to be passed into recycler view adapter
-    private ArrayList<ItemData> notificationsList = new ArrayList<>();
-
-    // JSON Node names
-    private static final String TAG_SUCCESS = "success";
-    private static final String TAG_NOTIFICATIONS = "notifications";
-    private static final String TAG_NID = "id";
-    private static final String TAG_CONTENT = "contents";
-    private static final String TAG_MINISTRY = "ministry";
-    private static final String TAG_TITLE = "title";
-    private static final String TAG_IMAGE_PATH = "imgpath";
-    private static final String TAG_TIMESTAMP = "created_at";
 
     // products JSONArray
     private JSONArray json_notification_cache = new JSONArray();
     private TextView noCon;
     private LinearLayout connection;
 
+    private StoriesViewModel model;
 
     private MyAdapter adapter;
     private long NOW = new Date().getTime();
     private Date parsedDate;
     private ProgressDialog dialog;
 
-    private final int NOTIFICATION_PROGRESS_DELAY = 1000;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,20 +68,19 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
 
         View layout = inflater.inflate(R.layout.content_show__notifications, container, false);
 
-        //clear the notification list
-        notificationsList.clear();
+        model = ViewModelProviders.of(getActivity()).get(StoriesViewModel.class);
+
+        noCon =  layout.findViewById(R.id.tvShowNoteNoConnection);
+        connection = layout.findViewById(R.id.lLConnection);
 
 
-        //Connection/No Connection User Interfaces
-        noCon = (TextView) layout.findViewById(R.id.tvShowNoteNoConnection);
-        connection = (LinearLayout) layout.findViewById(R.id.lLConnection);
 
-
-        //Upload button initialisation
         FloatingActionButton openCreateNote = layout.findViewById(R.id.bUploadNote);
+
         openCreateNote.setOnClickListener(
                 view -> {
                     MakeNotification makeNotification = new MakeNotification();
+
                     getFragmentManager().beginTransaction()
                             .replace(R.id.flContent, makeNotification)
                             .addToBackStack(makeNotification.getClass().getSimpleName())
@@ -109,7 +88,7 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
                 }
         );
 
-        //recycler view initialisation
+
         RecyclerView recyclerView = layout.findViewById(R.id.rvShowNote);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -117,7 +96,6 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 
-        //used to populate recyclerview
         loadData();
 
         final SwipeRefreshLayout refreshLayout =  layout.findViewById(R.id.note_swipeRefresh);
@@ -126,9 +104,14 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
                 () -> {
                 Log.i(TAG, "Refreshing RecyclerView");
 
-                loadData();
 
-                refreshLayout.setRefreshing(false);
+               model.refresh();
+
+               model.getData().removeObservers(getActivity());
+
+               loadData();
+
+               refreshLayout.setRefreshing(false);
 
         });
 
@@ -155,122 +138,42 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
     }
 
     private void loadData() {
-        //check to see if internet connection is available
+
+        LiveData<List<ItemData>> liveData = model.getData();
 
         dialog = new ProgressDialog(getActivity());
         dialog.setMessage("Loading news...");
         dialog.show();
 
-        if (CheckNetwork.isInternetAvailable(getActivity())) {
-            notificationsList.clear();
+        liveData.observe(getActivity(), stories -> {
 
-            //Volley handles network requests
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(AppConfig.URL_GET_ALL_NOTIFICATIONS, null,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                JSONArray array = response.getJSONArray(TAG_NOTIFICATIONS);
+            Log.i(TAG, "Observer called list :" + stories.toString());
+            if(stories.size() > 0){
 
 
-                                for (int i = 0; i < array.length(); i++) {
-                                    JSONObject c = array.getJSONObject(i);
+                adapter.setNotificationsList(stories);
 
-                                    // Storing each json item in variable
-                                    String nid = c.getString(TAG_NID);
-                                    String title = c.getString(TAG_TITLE);
-                                    String content = c.getString(TAG_CONTENT);
-                                    String ministry = c.getString(TAG_MINISTRY);
-                                    String image_path = c.getString(TAG_IMAGE_PATH);
-                                    String time_stamp = c.getString(TAG_TIMESTAMP);
+            } else {
+
+                Toast.makeText(getActivity(),"No Internet Connection", Toast.LENGTH_LONG).show();
+
+                LoadCache();
+            }
 
 
-                                    try {
-                                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                                        parsedDate = dateFormat.parse(time_stamp);
-                                    } catch (Exception e) {//this generic but you can control another types of exception
-                                        e.printStackTrace();
-                                    }
-                                    DateUtils.getRelativeTimeSpanString(parsedDate.getTime(), NOW, DateUtils.MINUTE_IN_MILLIS);
+        });
 
-                                    String timestamp = String.valueOf(DateUtils.getRelativeTimeSpanString(parsedDate.getTime(), NOW, DateUtils.MINUTE_IN_MILLIS));
+        new Handler().postDelayed(
+                () -> {
 
-                                    //storing each variable
-                                    ItemData notificationsTitles = new ItemData();
-
-                                    notificationsTitles.setNid(nid);
-                                    notificationsTitles.setTitle(title);
-                                    notificationsTitles.setContent(content);
-                                    notificationsTitles.setMinistry(ministry);
-                                    notificationsTitles.setImagePath(image_path);
-                                    notificationsTitles.setTime_stamp(timestamp);
-
-
-                                    notificationsList.add(notificationsTitles);
-
-
-
-                                }
-
-                                adapter.setNotificationsList(notificationsList);
-
-                                //store data in cache
-                                File cacheDir = getActivity().getCacheDir();
-
-                                File file = new File(cacheDir.getAbsolutePath(),"stories.txt");
-
-                                //delete file if already exists
-                                //avoids duplicate cache files
-                                if (file.exists() && file.delete()) {
-                                    file = new File(cacheDir.getAbsolutePath(),"stories.txt");
-                                }
-                                Log.d(TAG,array.toString());
-                                //write cache data to file
-                                try (FileOutputStream fos = new FileOutputStream(file))
-                                {
-
-                                    fos.write(array.toString().getBytes());
-
-                                } catch (IOException e) {
-                                    Log.e(TAG,e.getMessage());
-                                }
-
-
-                            } catch (JSONException e) {
-                                Log.e(TAG, e.getMessage());
-                            }
-
-
-                        }
-                    },
-
-                     error -> Log.e(TAG, error.toString())
-                    );
-
-            RequestQueueSingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest);
-            new Handler().postDelayed(
-                    () -> {
-                /* Create an Intent that will start the Menu-Activity. */
                     dialog.dismiss();
 
-            }, NOTIFICATION_PROGRESS_DELAY);
+                }, 1000);
 
 
-        } else {//if not load data from cache in local cache
 
-            //Alert user their is no internet connection
-            Toast.makeText(getActivity(),"No Internet Connection", Toast.LENGTH_LONG).show();
 
-            LoadCache();
 
-            new Handler().postDelayed(
-                    () -> {
-                /* Create an Intent that will start the Menu-Activity. */
-                    dialog.dismiss();
-
-            }, NOTIFICATION_PROGRESS_DELAY);
-
-        }
     }
 
 
@@ -290,9 +193,7 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
     }
 
 
-    /*
-    Function to load stored cache from the local database if device is not connected to the internet
-     */
+
 
     private void LoadCache() {
 
@@ -329,13 +230,14 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
         } else {
             try {
 
-                notificationsList.clear();
+                List<ItemData> stories = new ArrayList<>();
+
 
                 for (int i = 0; i < json_notification_cache.length(); i++) {
                     JSONObject jsonObject = json_notification_cache.optJSONObject(i);
 
                     // Storing date json item in variable
-                    String time_stamp = jsonObject.getString(TAG_TIMESTAMP);
+                    String time_stamp = jsonObject.getString(ApiFields.TAG_STORIES_TIMESTAMP);
 
 
                     try {
@@ -351,19 +253,17 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
                     //storing each variable
                     ItemData notificationsTitles = new ItemData();
 
-                    notificationsTitles.setNid(jsonObject.getString(TAG_NID));
-                    notificationsTitles.setTitle(jsonObject.getString(TAG_TITLE));
-                    notificationsTitles.setContent(jsonObject.getString(TAG_CONTENT));
-                    notificationsTitles.setMinistry(jsonObject.getString(TAG_MINISTRY));
-                    notificationsTitles.setImagePath(jsonObject.getString(TAG_IMAGE_PATH));
+                    notificationsTitles.setNid(jsonObject.getString(ApiFields.TAG_ID));
+                    notificationsTitles.setTitle(jsonObject.getString(ApiFields.TAG_STORIES_TITLE));
+                    notificationsTitles.setContent(jsonObject.getString(ApiFields.TAG_STORIES_CONTENT));
+                    notificationsTitles.setMinistry(jsonObject.getString(ApiFields.TAG_MINISTRY));
+                    notificationsTitles.setImagePath(jsonObject.getString(ApiFields.TAG_STORIES_IMAGE_PATH));
                     notificationsTitles.setTime_stamp(timestamp);
 
-                    notificationsList.add(notificationsTitles);
-
-
+                    stories.add(notificationsTitles);
 
                 }
-                adapter.setNotificationsList(notificationsList);
+                adapter.setNotificationsList(stories);
 
             } catch (JSONException e) {
                 Log.d(TAG, e.toString());
@@ -423,9 +323,4 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
 
     }
 
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
 }

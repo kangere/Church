@@ -1,8 +1,6 @@
 package material.kangere.com.tandaza;
 
 import android.app.ActionBar;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -14,6 +12,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -200,15 +200,11 @@ public class MakeNotification extends Fragment implements View.OnClickListener {
 
                                 //go to previous fragment
                                 Show_Notifications showNotifications = new Show_Notifications();
-                                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                                getFragmentManager().beginTransaction()
+                                        .replace(R.id.flContent,showNotifications)
+                                        .addToBackStack(showNotifications.getClass().getSimpleName())
+                                        .commit();
 
-                                // Replace whatever is in the fragment_container view with this fragment,
-                                // and add the transaction to the back stack
-                                transaction.replace(R.id.flContent, showNotifications);
-                                transaction.addToBackStack(null);
-
-                                // Commit the transaction
-                                transaction.commit();
 
                             } else {
 

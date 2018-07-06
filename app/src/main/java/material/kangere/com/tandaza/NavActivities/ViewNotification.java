@@ -1,13 +1,12 @@
 package material.kangere.com.tandaza.NavActivities;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -63,12 +62,8 @@ public class ViewNotification extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.view_note, container, false);
-        try {
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        } catch (NullPointerException e) {
-            Log.e("ViewNote", e.toString());
-        }
+
+
         TextView title = layout.findViewById(R.id.tvDetailNoteTitle);
         TextView content = layout.findViewById(R.id.tvDetailNoteContent);
         TextView ministry = layout.findViewById(R.id.tvDetailMinistry);

@@ -6,18 +6,30 @@ package material.kangere.com.tandaza.util;
 public interface AppConfig {
 
 
-   String URL_GET_ALL_NOTIFICATIONS = "http://www.kisilokitaka.com/tandaza/get_all_notifications.php";
 
 
-    // Server user register url
-    String URL_DELETE = "http://www.kisilokitaka.com/tandaza/delete_note.php";
+
+    // kisilokitakaServer  url
+    /*String URL_DELETE = "http://www.kisilokitaka.com/tandaza/delete_note.php";
     String URL_UPLOAD = "http://www.kisilokitaka.com/tandaza/upload_note.php";
     String FILE_UPLOAD_URL = "http://www.kisilokitaka.com/tandaza/file_upload.php";
     String URL_UPDATE_EVENT = "http://www.kisilokitaka.com/tandaza/update_event.php";
     String EVENT_UPLOAD_URL = "http://www.kisilokitaka.com/tandaza/upload_event.php";
     String URL_GET_EVENTS = "http://www.kisilokitaka.com/tandaza/get_events.php";
     String URL_UPDATE_NOTE = "http://www.kisilokitaka.com/tandaza/update_note.php";
-   // public static
+    String URL_DELETE_EVENT = "http://www.kisilokitaka.com/tandaza/delete_event.php";
+     String URL_GET_ALL_NOTIFICATIONS = "http://www.kisilokitaka.com/tandaza/get_all_notifications.php";*/
+
+    // Surebet254 Server url
+    String URL_GET_ALL_NOTIFICATIONS = "http://www.surebet254.com/tandaza/get_all_notifications.php";
+    String URL_DELETE = "http://www.surebet254.com/tandaza/delete_note.php";
+    String URL_UPLOAD = "http://www.surebet254.com/tandaza/upload_note.php";
+    String FILE_UPLOAD_URL = "http://www.surebet254.com/tandaza/file_upload.php";
+    String URL_UPDATE_EVENT = "http://www.surebet254.com/tandaza/update_event.php";
+    String EVENT_UPLOAD_URL = "http://www.surebet254.com/tandaza/upload_event.php";
+    String URL_GET_EVENTS = "http://www.surebet254.com/tandaza/get_events.php";
+    String URL_UPDATE_NOTE = "http://www.surebet254.com/tandaza/update_note.php";
+    String URL_DELETE_EVENT = "http://www.surebet254.com/tandaza/delete_event.php";
 
     public static String[] PERMISSIONS_STORAGE = {
             android.Manifest.permission.READ_EXTERNAL_STORAGE,

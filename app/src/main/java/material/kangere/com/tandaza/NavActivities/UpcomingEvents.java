@@ -29,21 +29,23 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import material.kangere.com.tandaza.Adapters.EventAdapter;
 import material.kangere.com.tandaza.EventData;
-import material.kangere.com.tandaza.LocalDB.SQLiteHandler;
 import material.kangere.com.tandaza.R;
 import material.kangere.com.tandaza.util.ApiFields;
 import material.kangere.com.tandaza.util.AppConfig;
 import material.kangere.com.tandaza.util.CheckNetwork;
+import material.kangere.com.tandaza.util.DetailsParcel;
 import material.kangere.com.tandaza.util.RequestQueueSingleton;
 
 
 public class UpcomingEvents extends Fragment implements EventAdapter.EventsClickListener {
 
 
-    private SQLiteHandler db;
+
     private RecyclerView recyclerView;
     private TextView noCon;
 
@@ -78,7 +80,7 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
         //clear eventslist to avoid duplicating data
         eventsList.clear();
 
-        db = new SQLiteHandler(getActivity());
+
         recyclerView =  layout.findViewById(R.id.rvEvents);
         adapter = new EventAdapter(getActivity());
         adapter.setClickListener(this);
@@ -341,15 +343,32 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
         String venue = ((TextView)view.findViewById(R.id.tvGoneEventVenue)).getText().toString();
         String description = ((TextView)view.findViewById(R.id.tvEventDescription)).getText().toString();
 
+        Map<String,String> eventDetails = new HashMap<>();
+
+        eventDetails.put(ApiFields.TAG_EVENT_ID,id);
+        eventDetails.put(ApiFields.TAG_TITLE,title);
+        eventDetails.put(ApiFields.TAG_STORIES_IMAGE_PATH,imgpath);
+        eventDetails.put(ApiFields.TAG_DATE,date);
+        eventDetails.put(ApiFields.TAG_TIME,time);
+        eventDetails.put(ApiFields.TAG_MINISTRY,ministry);
+        eventDetails.put(ApiFields.TAG_VENUE,venue);
+        eventDetails.put(ApiFields.TAG_DESCRIPTION,description);
+
+
         //TODO Use better data structure
                             /*0     1       2   3       4       5       6       7*/
         String [] event = {title,imgpath,date,time,ministry,venue,description,id};
 
         Intent intent = new Intent(getActivity(),ViewEvent.class);
         Bundle bundle = new Bundle();
+
         bundle.putStringArray("single_event",event);
         intent.putExtras(bundle);
+        intent.putExtra("event_details",new DetailsParcel(eventDetails));
         startActivity(intent);
+
+
+
 
     }
 

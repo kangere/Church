@@ -31,6 +31,7 @@ import java.util.Map;
 import material.kangere.com.tandaza.R;
 import material.kangere.com.tandaza.util.ApiFields;
 import material.kangere.com.tandaza.util.AppConfig;
+import material.kangere.com.tandaza.util.DetailsParcel;
 import material.kangere.com.tandaza.util.RequestQueueSingleton;
 
 public class ViewEvent extends AppCompatActivity {
@@ -55,6 +56,19 @@ public class ViewEvent extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         String [] single_event = bundle.getStringArray("single_event");
+
+        DetailsParcel event_details = (DetailsParcel)bundle.getParcelable("event_details");
+
+        if(event_details != null){
+            Log.d(TAG, "Parcel impl working");
+
+
+            Map map = event_details.getMap();
+
+            Log.d(TAG,map.toString());
+        }else{
+            Log.e(TAG,"Parcel not passed");
+        }
 
         TextView title = findViewById(R.id.tvViewEventsTitle);
         ImageView poster = findViewById(R.id.ivViewEventImage);

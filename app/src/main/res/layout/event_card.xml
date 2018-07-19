@@ -11,9 +11,9 @@
     card_view:cardElevation="2dp">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <!-- Views hold data and aren't viewed-->
 
@@ -23,17 +23,6 @@
             android:layout_height="wrap_content"
             android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/tvGoneEventDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/tvGoneEventTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tvGoneEventMinistry"
@@ -41,20 +30,28 @@
             android:layout_height="wrap_content"
             android:visibility="gone" />
 
+
         <TextView
-            android:id="@+id/tvGoneEventVenue"
+            android:id="@+id/tvGoneEventImgpath"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone" />
 
+        <ImageView
+
+            android:id="@+id/ivEventImage"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/youth"
+            android:visibility="gone" />
+
+
         <TextView
+            android:id="@+id/tvEventDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:id="@+id/tvGoneEventImgpath"/>
-
-
-
+            android:visibility="gone" />
 
 
         <!-- Viewed UIs-->
@@ -67,24 +64,58 @@
             android:textIsSelectable="true"
             android:textSize="20sp" />
 
-        <ImageView
-
-            android:id="@+id/ivEventImage"
+        <LinearLayout
+            android:layout_marginTop="8dp"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/youth" />
-
-
-        <TextView
-            android:id="@+id/tvEventDescription"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:linksClickable="true"
-            android:layout_margin="8dp"
-            android:text="@string/dummy_description"
-            android:textIsSelectable="true"
-            android:textSize="15sp" />
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="16dp"
+                android:src="@drawable/ic_schedule_black_24dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvGoneEventDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Date" />
+
+                <TextView
+
+                    android:id="@+id/tvGoneEventTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Time Here" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="16dp"
+                android:src="@drawable/ic_place_black_24dp" />
+
+            <TextView
+                android:id="@+id/tvGoneEventVenue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location Here" />
+        </LinearLayout>
 
 
     </LinearLayout>

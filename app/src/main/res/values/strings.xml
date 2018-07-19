@@ -87,10 +87,8 @@ This is the reason “THE ARK” for the children’s ministry at Kileleshwa Cov
     <string name="noInternet">No Internet Connection. Connect to Internet at least once</string>
     <string name="find_a_group">Find a Group</string>
     <string name="sign_up_to_serve">Sign Up To Serve</string>
+    <string name="details">Details</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-
 </resources>

@@ -16,6 +16,7 @@ import material.kangere.com.tandaza.LocalDB.TablesContract.UserEntry;
 /**
  * Created by user on 10/7/2015.
  */
+@Deprecated
 public class SQLiteHandler extends SQLiteOpenHelper {
     private static final String TAG = SQLiteHandler.class.getSimpleName();
 

@@ -5,6 +5,7 @@ import android.provider.BaseColumns;
 /**
  * Created by user on 12/14/2015.
  */
+@Deprecated
 public class TablesContract  {
 
     public TablesContract()

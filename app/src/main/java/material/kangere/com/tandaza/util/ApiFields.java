@@ -11,7 +11,6 @@ public interface ApiFields {
     String TAG_ID = "id";
 
     //events database fields
-    String TAG_EVENT_ID = "id";
     String TAG_EVENTS = "events";
     String TAG_TITLE = "event_name";
     String TAG_DATE = "event_date";

@@ -198,7 +198,7 @@ public class UpdateEvent extends AppCompatActivity {
 
                 Map<String,String> params = new HashMap<>();
 
-                params.put(ApiFields.TAG_EVENT_ID,id_update);
+                params.put(ApiFields.TAG_ID,id_update);
                 params.put(ApiFields.TAG_TITLE,title);
                 params.put(ApiFields.TAG_VENUE,venue);
                 params.put(ApiFields.TAG_DESCRIPTION,desc);

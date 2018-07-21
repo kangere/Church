@@ -26,7 +26,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import material.kangere.com.tandaza.R;
+import material.kangere.com.tandaza.util.ApiFields;
 import material.kangere.com.tandaza.util.AppConfig;
+import material.kangere.com.tandaza.util.DetailsParcel;
 import material.kangere.com.tandaza.util.RequestQueueSingleton;
 
 /**
@@ -44,14 +46,12 @@ public class UpdateNote extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     private TextView id;
+    private Map singleNote;
     private EditText title,content;
-    private String[] noteContent;
+
     private final String TAG = UpdateNote.class.getSimpleName();
 
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
 //    private OnFragmentInteractionListener mListener;
 
@@ -80,13 +80,13 @@ public class UpdateNote extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
-        noteContent = getArguments().getStringArray("note_array");
+        DetailsParcel parcel = getArguments().getParcelable("note_details");
 
+        if(parcel != null)
+            singleNote = parcel.getMap();
+        else
+            Log.e(TAG, "No Parcel found");
     }
 
     @Override
@@ -100,9 +100,14 @@ public class UpdateNote extends Fragment {
         content = layout.findViewById(R.id.etUpdateContent);
         Button update = layout.findViewById(R.id.bUpdate);
 
-        title.setText(noteContent[0]);
-        content.setText(noteContent[3]);
-        id.setText(noteContent[5]);
+        if(singleNote != null) {
+
+            title.setText((String) singleNote.get(ApiFields.TAG_STORIES_TITLE));
+            content.setText((String) singleNote.get(ApiFields.TAG_STORIES_CONTENT));
+            id.setText((String) singleNote.get(ApiFields.TAG_ID));
+        } else {
+            Log.e(TAG, "No map found in Parcel");
+        }
 
         update.setOnClickListener(
                 view -> updateNote()

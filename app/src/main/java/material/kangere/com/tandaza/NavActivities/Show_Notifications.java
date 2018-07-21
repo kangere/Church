@@ -33,14 +33,17 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import material.kangere.com.tandaza.Adapters.MyAdapter;
 import material.kangere.com.tandaza.ItemData;
 import material.kangere.com.tandaza.MakeNotification;
 import material.kangere.com.tandaza.R;
 import material.kangere.com.tandaza.util.ApiFields;
+import material.kangere.com.tandaza.util.DetailsParcel;
 import material.kangere.com.tandaza.util.StoriesViewModel;
 
 
@@ -283,7 +286,7 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
     @Override
     public void itemClicked(View view, int position) {
 
-        final String NOTE_ID = "note_array";
+        final String NOTE_ID = "note_details";
         //retrieve notification details once clicked
         String id = ((TextView) view.findViewById(R.id.nid)).getText().toString();
         String title = ((TextView) view.findViewById(R.id.title)).getText().toString();
@@ -292,8 +295,17 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
         String content = ((TextView) view.findViewById(R.id.tvContentGone)).getText().toString();
         String img_path = ((TextView) view.findViewById(R.id.tvImgPathGone)).getText().toString();
 
-        //single notification content in an array
-        String[] notification = {title, timeStamp, ministry, content, img_path, id};
+        Map<String,String> details = new HashMap<>();
+
+        details.put(ApiFields.TAG_ID,id);
+        details.put(ApiFields.TAG_STORIES_TITLE,title);
+        details.put(ApiFields.TAG_STORIES_TIMESTAMP,timeStamp);
+        details.put(ApiFields.TAG_MINISTRY,ministry);
+        details.put(ApiFields.TAG_STORIES_CONTENT,content);
+        details.put(ApiFields.TAG_STORIES_IMAGE_PATH,img_path);
+
+
+
 
         //create detail note fragment
         ViewNotification viewNotification = new ViewNotification();
@@ -301,7 +313,7 @@ public class Show_Notifications extends Fragment implements MyAdapter.ClickListe
         Bundle args = new Bundle();
 
         //store single notification in bundle and set viewNotification arguments to bundle
-        args.putStringArray(NOTE_ID, notification);
+        args.putParcelable(NOTE_ID, new DetailsParcel(details));
         viewNotification.setArguments(args);
 
         //begin fragment transaction

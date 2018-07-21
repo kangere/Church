@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -50,25 +49,13 @@ public class ViewEvent extends AppCompatActivity {
         toolbar.setTitleTextColor(ContextCompat.getColor(getBaseContext(), R.color.white));
 
         //enable up navigation
-        ActionBar bar = getSupportActionBar();
-        bar.setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);;
+
 
 
         Bundle bundle = getIntent().getExtras();
-        String [] single_event = bundle.getStringArray("single_event");
 
-        DetailsParcel event_details = (DetailsParcel)bundle.getParcelable("event_details");
-
-        if(event_details != null){
-            Log.d(TAG, "Parcel impl working");
-
-
-            Map map = event_details.getMap();
-
-            Log.d(TAG,map.toString());
-        }else{
-            Log.e(TAG,"Parcel not passed");
-        }
+        DetailsParcel event_details = bundle.getParcelable("event_details");
 
         TextView title = findViewById(R.id.tvViewEventsTitle);
         ImageView poster = findViewById(R.id.ivViewEventImage);
@@ -78,20 +65,26 @@ public class ViewEvent extends AppCompatActivity {
         TextView Venue = findViewById(R.id.tvEventVenue);
         TextView Description = findViewById(R.id.tvViewEventDescription);
 
-        if(single_event != null)
+        if(event_details != null)
         {
-            id = single_event[7];
-            Date date1 = Date.valueOf(single_event[2]);
+
+            Map map = event_details.getMap();
+
+            Log.d(TAG  + " Parcel", map.toString());
+
+            id = (String)map.get(ApiFields.TAG_ID);
+            Date date1 = Date.valueOf((String)map.get(ApiFields.TAG_DATE));
+
             String formatted_date = DateFormat.getDateInstance().format(date1);
 
-            title.setText(single_event[0]);
+            title.setText((String)map.get(ApiFields.TAG_TITLE));
             date.setText(formatted_date);
-            time.setText(single_event[3]);
-            Ministry.setText(single_event[4]);
-            Venue.setText(single_event[5]);
-            Description.setText(single_event[6]);
+            time.setText((String)map.get(ApiFields.TAG_TIME));
+            Ministry.setText((String)map.get(ApiFields.TAG_MINISTRY));
+            Venue.setText((String)map.get(ApiFields.TAG_VENUE));
+            Description.setText((String)map.get(ApiFields.TAG_DESCRIPTION));
 
-            Uri uri = Uri.parse(single_event[1]);
+            Uri uri = Uri.parse((String)map.get(ApiFields.TAG_POSTER));
 
             Glide.with(this).load(uri).into(poster);
 
@@ -185,7 +178,7 @@ public class ViewEvent extends AppCompatActivity {
 
 
                 Map<String,String> param = new HashMap<>();
-                param.put(ApiFields.TAG_EVENT_ID,id);
+                param.put(ApiFields.TAG_ID,id);
 
                 return param;
             }

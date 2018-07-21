@@ -31,14 +31,16 @@ import java.util.Map;
 import material.kangere.com.tandaza.R;
 import material.kangere.com.tandaza.util.ApiFields;
 import material.kangere.com.tandaza.util.AppConfig;
+import material.kangere.com.tandaza.util.DetailsParcel;
 import material.kangere.com.tandaza.util.RequestQueueSingleton;
 
 
 public class ViewNotification extends Fragment {
 
     private final String TAG = ViewNotification.class.getSimpleName();
-    private static final String NOTE_ID = "note_array";
-    private String[] notification;
+
+
+    private Map details;
     private String id;
     private ProgressDialog pDialog;
 //    private JSONParser jsonParser = new JSONParser();
@@ -53,8 +55,14 @@ public class ViewNotification extends Fragment {
         super.onCreate(savedInstanceState);
 
         //get arguments from activity to display
-        notification = getArguments().getStringArray(NOTE_ID);
 
+
+        DetailsParcel parcel = getArguments().getParcelable("note_details");
+
+        if(parcel != null)
+            details = parcel.getMap();
+        else
+            Log.e(TAG, "Error Parcel Empty");
 
     }
 
@@ -73,30 +81,23 @@ public class ViewNotification extends Fragment {
         Button update = layout.findViewById(R.id.bUpdateNote);
 
 
-        if (notification != null) {
-            String titleDummy = notification[0];
-            String timeStampString = notification[1];
-            String ministryString = notification[2];
-            String contentString = notification[3];
-            String imgPath = notification[4];
-            id = notification[5];
+        if (details != null) {
 
+            id = (String)details.get(ApiFields.TAG_ID);
 
-            Uri uri = Uri.parse(imgPath);
+            ministry.setText((String)details.get(ApiFields.TAG_MINISTRY));
+            content.setText((String)details.get(ApiFields.TAG_STORIES_CONTENT));
+            timeStamp.setText((String)details.get(ApiFields.TAG_STORIES_TIMESTAMP));
+            title.setText((String)details.get(ApiFields.TAG_STORIES_TITLE));
 
-            ministry.setText(ministryString);
-            content.setText(contentString);
-            timeStamp.setText(timeStampString);
-            title.setText(titleDummy);
-
+            Uri uri = Uri.parse((String)details.get(ApiFields.TAG_STORIES_IMAGE_PATH));
             try {
                 Glide.with(this).load(uri).into(sourceImage);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
-            throw new NullPointerException(getActivity().toString()
-                    + " array must not be null or empty");
+            Log.e(TAG,"No map found in parcel");
 
         }
 
@@ -122,7 +123,7 @@ public class ViewNotification extends Fragment {
             UpdateNote updateNote = new UpdateNote();
 
             Bundle args = new Bundle();
-            args.putStringArray("note_array", notification);
+            args.putParcelable("note_details", new DetailsParcel(details));
 
             updateNote.setArguments(args);
 

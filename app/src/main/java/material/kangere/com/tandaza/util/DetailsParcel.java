@@ -5,15 +5,25 @@ import android.os.Parcelable;
 
 import java.util.Map;
 
+/**
+ * This is a serializable class that is used to send data between fragments and activities
+ *
+ *
+ * @author Paul Murage
+ */
 public class DetailsParcel implements Parcelable {
 
     private Map map;
 
+    /**
+     * Constructor to create DetailsParcel class
+     * @param map - stores data to be seriliased and sent to activity or Fragment
+     */
     public DetailsParcel(Map map){
         this.map = map;
     }
 
-    public DetailsParcel(Parcel in){
+    private DetailsParcel(Parcel in){
      this.map = in.readHashMap(String.class.getClassLoader());
     }
 

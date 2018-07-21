@@ -140,7 +140,7 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
                                 JSONObject c = array.optJSONObject(i);
 
                                 // Storing each json item in variable
-                                String id = c.getString(ApiFields.TAG_EVENT_ID);
+                                String id = c.getString(ApiFields.TAG_ID);
                                 String title = c.getString(ApiFields.TAG_TITLE);
                                 String date = c.getString(ApiFields.TAG_DATE);
                                 String time = c.getString(ApiFields.TAG_TIME);
@@ -345,9 +345,9 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
 
         Map<String,String> eventDetails = new HashMap<>();
 
-        eventDetails.put(ApiFields.TAG_EVENT_ID,id);
+        eventDetails.put(ApiFields.TAG_ID,id);
         eventDetails.put(ApiFields.TAG_TITLE,title);
-        eventDetails.put(ApiFields.TAG_STORIES_IMAGE_PATH,imgpath);
+        eventDetails.put(ApiFields.TAG_POSTER,imgpath);
         eventDetails.put(ApiFields.TAG_DATE,date);
         eventDetails.put(ApiFields.TAG_TIME,time);
         eventDetails.put(ApiFields.TAG_MINISTRY,ministry);
@@ -355,16 +355,12 @@ public class UpcomingEvents extends Fragment implements EventAdapter.EventsClick
         eventDetails.put(ApiFields.TAG_DESCRIPTION,description);
 
 
-        //TODO Use better data structure
-                            /*0     1       2   3       4       5       6       7*/
-        String [] event = {title,imgpath,date,time,ministry,venue,description,id};
+
 
         Intent intent = new Intent(getActivity(),ViewEvent.class);
-        Bundle bundle = new Bundle();
 
-        bundle.putStringArray("single_event",event);
-        intent.putExtras(bundle);
         intent.putExtra("event_details",new DetailsParcel(eventDetails));
+
         startActivity(intent);
 
 

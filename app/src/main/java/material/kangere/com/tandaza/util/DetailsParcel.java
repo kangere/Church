@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import java.util.Map;
 
 /**
- * This is a serializable class that is used to send data between fragments and activities
+ * This is a serializable class that is used to send data between fragments or activities
  *
  *
  * @author Paul Murage
